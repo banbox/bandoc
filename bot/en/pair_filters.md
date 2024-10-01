@@ -46,7 +46,7 @@ Allows filtering instrument lists by price.
 Volatility filter.
 ```yaml
 - name: RateOfChangeFilter # Volatility filter
-  back_days: 5 # Number of days to review the K-line
+  back_days: 5 # Number of days to review the candle
   min: 0.03 # Minimum price change ratio
   max: 10 # Maximum price change ratio
   refresh_period: 1440 # Cache time, seconds
@@ -71,7 +71,7 @@ Correlation coefficient filter.
 Volatility filter. Formula: std(log(c/c1)) * sqrt(back_days)
 ```yaml
 - name: VolatilityFilter # Volatility filter, formula: std(log(c/c1)) * sqrt(back_days)
-  back_days: 10 # Number of days to review the K-line
+  back_days: 10 # Number of days to review the candle
   max: 1 # Maximum value of the volatility score. The larger the value, the more it allows for some targets that change very drastically at the 1d level
   min: 0.05 # Minimum value of the volatility score. The smaller the value, the more it allows for some targets that change very little at the 1d level
   refresh_period: 1440 # Cache time

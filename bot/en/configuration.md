@@ -28,7 +28,7 @@ put_limit_secs: 120  # Limit order submission time to the exchange within which 
 market_type: spot  # Market type: spot for spot trading, linear for USDT-margined contracts, inverse for coin-margined contracts, option for options contracts
 contract_type: swap  # swap for perpetual contracts, future for expiring contracts
 odbook_ttl: 1000  # Order book expiration time, in milliseconds, default is 500
-concur_num: 2  # Concurrent number of symbol K-line downloads, default is 2 symbols
+concur_num: 2  # Concurrent number of symbol candle downloads, default is 2 symbols
 order_type: market  # Order type: market for market orders, limit for limit orders
 stop_enter_bars: 20  # Cancel the limit entry order if it is not filled within this many candles, default is 0 (disabled)
 prefire: 0  # Whether to trigger 10% ahead of the bar’s completion time
@@ -47,7 +47,7 @@ fatal_stop:  # Global stop loss, forbids order placement when total loss reaches
   '180': 0.2  # 20% loss in 3 hours
   '30': 0.3  # 30% loss in half an hour
 fatal_stop_hours: 8  # Prohibits order placement for this many hours when global stop loss is triggered; default is 8
-timerange: "20230701-20230808"  # K-line data range used for backtesting
+timerange: "20230701-20230808"  # candle data range used for backtesting
 run_timeframes: [5m]  # All allowed timeframes for the bot. The strategy will choose the most suitable minimum timeframe; this setting is lower priority than run_policy
 run_policy:  # The strategy to run, multiple strategies can run simultaneously or a strategy can be run with different parameters
   - name: Demo  # Strategy name
@@ -93,7 +93,7 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     min: 0.001  # Minimum price
     max: 100000  # Maximum price
   - name: RateOfChangeFilter  # Volatility filter
-    back_days: 5  # Number of days to review for K-line data
+    back_days: 5  # Number of days to review for candle data
     min: 0.03  # Minimum price change ratio
     max: 10  # Maximum price change ratio
     refresh_period: 1440  # Cache duration, in seconds
@@ -106,7 +106,7 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     back_num: 70  # Lookback length for correlation data
     top_n: 50  # Return only the top n symbols with the lowest correlation; default is 0 (no limit)
   - name: VolatilityFilter  # Volatility filter, formula: std(log(c/c1)) * sqrt(back_days)
-    back_days: 10  # Number of days to review for K-line data
+    back_days: 10  # Number of days to review for candle data
     max: 1  # Maximum volatility score, higher values allow more volatile symbols on the daily level
     min: 0.05  # Minimum volatility score, lower values allow symbols with less volatility on the daily level
     refresh_period: 1440  # Cache duration

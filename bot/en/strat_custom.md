@@ -47,7 +47,7 @@ The following is the complete definition of `TradeStrat`:
 type TradeStrat struct {
 	Name          string  // The strategy name does not need to be set and will be automatically set to the name used during registration
 	Version       int     
-	WarmupNum     int     // K-line preheating length
+	WarmupNum     int     // candle preheating length
 	MinTfScore    float64 // Minimum time cycle quality, default 0.8 最小时间周期质量，默认0.8
 	WatchBook     bool    // Whether to monitor the real-time depth information of the order book
 	DrawDownExit  bool    // Whether to enable retracement stop loss (i.e. trailing stop loss)
@@ -136,10 +136,10 @@ upper, mid, lower := bbolCols[0], bbolCols[1], bbolCols[2]
 ```
 Then you can execute `Get(i)` for `upper/mid/lower` to get the value.
 ::: tip Indicator operation tips
-`banta` is an event-driven technical indicator library. The `OnBar` function will be executed once for each K-line, which means that each time the technical indicator is called, only the latest value will be updated to `Series`.
+`banta` is an event-driven technical indicator library. The `OnBar` function will be executed once for each candle, which means that each time the technical indicator is called, only the latest value will be updated to `Series`.
 Instead of vectorized calculation like `ta-lib`, all historical series are calculated at once.
 
-`Series` saves the latest status of each indicator calculation. When a new K-line is received, it will be quickly calculated from the last calculation status without repeating all the data of the series.
+`Series` saves the latest status of each indicator calculation. When a new candle is received, it will be quickly calculated from the last calculation status without repeating all the data of the series.
 
 For example, `banta.EMA` requires the previous moving average value when calculating, and the `ta-lib` vector indicator library needs to calculate from scratch given the entire column of historical data, while `banta` will only calculate once from the last cached value.
 :::
@@ -233,7 +233,7 @@ For additional symbols or periods that `OnPairInfos` subscribes to, you can spec
         }
     },
 ```
-The above additional subscription is for the `1h` period K-line of the current product, and the preheating quantity is 30.
+The above additional subscription is for the `1h` period candle of the current product, and the preheating quantity is 30.
 
 ## Save intermediate state
 

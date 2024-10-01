@@ -143,7 +143,7 @@ This will start the backtest according to the `run_policy` in the yml configurat
 
 The default backtest is to run multiple strategy groups configured by `run_policy` at the same time to get a combined backtest report. If you want to test each strategy group in `run_policy` separately, please enable the `-separate` option.
 
-During the backtest, if the K-line of the relevant product does not exist, it will be automatically downloaded and saved to the database.
+During the backtest, if the candle of the relevant product does not exist, it will be automatically downloaded and saved to the database.
 
 After the backtest is completed, the backtest results will be saved in `[data directory]/backtest/task_[TASKID]` by default. If you specify `-nodb`, `[TASKID]` is -1, that is, saved in the `task_-1` directory
 ```text
@@ -215,21 +215,21 @@ Usage of optimize:
   -sampler string
         hyper optimize method, tpe/bayes/random/cmaes/ipop-cmaes/bipop-cmaes (default "bayes")
 ```
-## K-line related tools
+## candle related tools
 **banbot.o kline down**
-Download K-line from the exchange and save to the database
+Download candle from the exchange and save to the database
 
 **banbot.o kline load**
-Import K-line from csv/zip file to database
+Import candle from csv/zip file to database
 
 **banbot.o kline export**
-Export K-line from database to csv file
+Export candle from database to csv file
 
 **banbot.o kline purge**
-Purge K-line from database.
+Purge candle from database.
 
 **banbot.o kline correct**
-Check if there is any error in database K-line and correct it automatically.
+Check if there is any error in database candle and correct it automatically.
 
 **banbot.o kline adj_factor**
 Recalculate the adjustment factor (for the Chinese futures market)
@@ -247,7 +247,7 @@ banbot kline:
 Convert the csv format ticks of the Chinese futures market and then output a csv format file.
 
 **banbot.o tick to_kline**
-Aggregate the tick files of the Chinese futures market into 1m period K-line csv format files.
+Aggregate the tick files of the Chinese futures market into 1m period candle csv format files.
 
 ```text
 banbot tick:

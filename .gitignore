@@ -1,4 +1,5 @@
-**/.vitepress/cache
+**/.vitepress/*
+!**/.vitepress/config.mts
 **/.idea
 
 # Logs
