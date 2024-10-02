@@ -229,16 +229,20 @@ Usage of optimize:
 **banbot.o kline correct**  
 检查数据库K线是否有错误并自动纠正。
 
-**banbot.o kline adj_factor**  
+**banbot.o kline adj_calc**  
 重新计算复权因子（用于中国期货市场）
+
+**banbot.o kline adj_export**  
+导出复权因子到csv文件.
 ```text
 banbot kline:
-        down:   download kline data from exchange
-        load:   load kline data from zip/csv files
-        export: export kline to csv files from db
-        purge:  purge/delete kline data with args
-        correct: sync klines between timeframes
-        adj_factor: recalculate adjust factors
+        down:       download kline data from exchange
+        load:       load kline data from zip/csv files
+        export:     export kline to csv files from db
+        purge:      purge/delete kline data with args
+        correct:    sync klines between timeframes
+        adj_calc:   recalculate adjust factors
+        adj_export: export adjust factors to csv
 ```
 ## Tick相关工具
 **banbot.o tick convert**  
@@ -263,16 +267,24 @@ banbot tick:
 **banbot.o tool load_cal**  
 加载交易日历（针对中国期货市场）
 
-**banbot.o tool com_orders**  
+**banbot.o tool cmp_orders**  
 将从币安导出的订单与本地回测订单记录进行对比，检查回测和实盘是否一致。
 
 **banbot.o tool data_server**  
 启动一个grpc服务器，供其他语言端访问数据和指标结果等。可用于AI机器学习等。
+
+**banbot.o tool calc_perfs**  
+传入一个csv/xlsx文件，每行表示一天，每列表示一个品种的累计收益。为每列计算Shape/Sortino
+
+**banbot.o tool corr**  
+为yaml筛选后的一组品种计算相关系数，可以每隔一段时间输出一个相关矩阵图片，也可以输出平均相关系数csv文件。
 ```text
 banbot tool:
-        collect_opt:    collect result of optimize, and print in order
+        collect_opt:    collect result of optimize, and print in order   
         bt_opt:         backtest over optimize
         load_cal:       load calenders
         cmp_orders:     compare backTest orders with exchange orders
         data_server:    serve a grpc server as data feeder
+        calc_perfs:     calculate sharpe/sortino ratio for input data
+        corr:           calculate correlation matrix for symbols
 ```

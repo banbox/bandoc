@@ -19,7 +19,7 @@ export default defineConfig({
           {
             text: 'Start',
             items: [
-              { text: 'Introduce', link: '/en' },
+              { text: 'Introduce', link: '/en/start' },
               { text: 'Prepare the development environment', link: '/en/install' },
               { text: 'Initialize the project', link: '/en/init_project' },
               { text: 'Banbot Basics', link: '/en/basic' },
@@ -27,7 +27,7 @@ export default defineConfig({
               { text: 'Custom Strategy', link: '/en/strat_custom' },
               { text: 'Symbol Manager', link: '/en/pair_filters' },
               { text: 'Startup Command', link: '/en/bot_usage' },
-              { text: 'Frequently asked questions', link: '/en/faq' }
+              { text: 'Q & A', link: '/en/faq' }
             ]
           }
         ],

@@ -216,23 +216,26 @@ Usage of optimize:
         hyper optimize method, tpe/bayes/random/cmaes/ipop-cmaes/bipop-cmaes (default "bayes")
 ```
 ## candle related tools
-**banbot.o kline down**
+**banbot.o kline down**  
 Download candle from the exchange and save to the database
 
-**banbot.o kline load**
+**banbot.o kline load**  
 Import candle from csv/zip file to database
 
-**banbot.o kline export**
+**banbot.o kline export**  
 Export candle from database to csv file
 
-**banbot.o kline purge**
+**banbot.o kline purge**  
 Purge candle from database.
 
-**banbot.o kline correct**
+**banbot.o kline correct**  
 Check if there is any error in database candle and correct it automatically.
 
-**banbot.o kline adj_factor**
-Recalculate the adjustment factor (for the Chinese futures market)
+**banbot.o kline adj_calc**  
+Recalculate the adjust factor (for the Chinese futures market)
+
+**banbot.o kline adj_export**  
+Export the adjust factor to a CSV file
 ```text
 banbot kline:
         down:   download kline data from exchange
@@ -240,13 +243,13 @@ banbot kline:
         export: export kline to csv files from db
         purge:  purge/delete kline data with args
         correct: sync klines between timeframes
-        adj_factor: recalculate adjust factors
+        adj_calc: recalculate adjust factors
 ```
 ## Tick related tools
-**banbot.o tick convert**
+**banbot.o tick convert**  
 Convert the csv format ticks of the Chinese futures market and then output a csv format file.
 
-**banbot.o tick to_kline**
+**banbot.o tick to_kline**  
 Aggregate the tick files of the Chinese futures market into 1m period candle csv format files.
 
 ```text
@@ -255,23 +258,30 @@ banbot tick:
         to_kline:       build kline from ticks
 ```
 ## Other tools
-**banbot.o tool collect_opt**
+**banbot.o tool collect_opt**  
 Collect hyperparameter tuning results and display them to the console in order.
 
-**banbot.o tool bt_opt**
+**banbot.o tool bt_opt**  
 Tuning hyperparameters in time rolling, and then backtesting. For example, for the data of the last three years. Each year's data is used for hyperparameter tuning, and then the tuned parameters are automatically backtested for the next three months; then the tuning is postponed for three months and repeated; this is repeated to simulate the backtest results in real scenarios.
 
-**banbot.o tool load_cal**
+**banbot.o tool load_cal**  
 Load trading calendar (for Chinese futures market)
 
-**banbot.o tool com_orders**
+**banbot.o tool cmp_orders**  
 Compare the orders exported from Binance with the local backtest order records to check whether the backtest and the real market are consistent.
 
+**banbot.o tool calc_perfs**  
+Input in a CSV/XLSX file, where each row represents one day and each column represents the cumulative income of a variety. Calculate Shape/Sortino for each column
+
+**banbot.o tool corr**  
+Calculate the correlation coefficient for a group of varieties selected by YAML, a correlation matrix image can be output at regular intervals, or an average correlation coefficient CSV file can be output.
 ```text
 banbot tool:
-        collect_opt:    collect result of optimize, and print in order
+        collect_opt:    collect result of optimize, and print in order   
         bt_opt:         backtest over optimize
         load_cal:       load calenders
         cmp_orders:     compare backTest orders with exchange orders
         data_server:    serve a grpc server as data feeder
+        calc_perfs:     calculate sharpe/sortino ratio for input data
+        corr:           calculate correlation matrix for symbols
 ```
