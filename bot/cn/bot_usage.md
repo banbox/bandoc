@@ -48,6 +48,7 @@ please run with a subcommand:
         backtest:   backtest with strategies and data
         spider:     start the spider
         optimize:   run hyper parameters optimization
+        bt_opt:     rolling backtest with hyperparameter optimization
         kline:      run kline commands
         tick:       run tick commands
         tool:       run tools
@@ -177,42 +178,7 @@ Usage of backtest:
   -timerange string
         Specify what timerange of data to use
 ```
-## 超参数调优
-```shell
-banbot.o optimize -out PATH [-opt-rounds 30] [-sampler bayes] 
-```
-您在策略中使用`pol.Def`定义好超参数及其范围后，您可以对其进行超参数调优。调优时将固定使用`-nodb`参数。
 
-您可通过`-opt-rounds`指定调优的执行次数，以及`-sampler`指定采样优化器。
-```text
-Usage of optimize:
-  -concur int
-        Concurrent Number (default 1)
-  -config value
-        config path to use, Multiple -config options may be used
-  -datadir string
-        Path to data dir.
-  -each-pairs
-        run for each pairs
-  -level string
-        set logging level to debug (default "info")
-  -logfile string
-        Log to the file specified
-  -max-pool-size int
-        max pool size for db
-  -no-compress
-        disable compress for hyper table
-  -no-default
-        ignore default: config.yml, config.local.yml
-  -nodb
-        dont save orders to database
-  -opt-rounds int
-        rounds num for single optimize job (default 30)
-  -out string
-        output file or directory
-  -sampler string
-        hyper optimize method, tpe/bayes/random/cmaes/ipop-cmaes/bipop-cmaes (default "bayes")
-```
 ## K线相关工具
 **banbot.o kline down**  
 从交易所下载K线保存到数据库
@@ -280,8 +246,7 @@ banbot tick:
 为yaml筛选后的一组品种计算相关系数，可以每隔一段时间输出一个相关矩阵图片，也可以输出平均相关系数csv文件。
 ```text
 banbot tool:
-        collect_opt:    collect result of optimize, and print in order   
-        bt_opt:         backtest over optimize
+        collect_opt:    collect result of optimize, and print in order
         load_cal:       load calenders
         cmp_orders:     compare backTest orders with exchange orders
         data_server:    serve a grpc server as data feeder

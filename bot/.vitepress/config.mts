@@ -27,6 +27,8 @@ export default defineConfig({
               { text: 'Custom Strategy', link: '/en/strat_custom' },
               { text: 'Symbol Manager', link: '/en/pair_filters' },
               { text: 'Startup Command', link: '/en/bot_usage' },
+              { text: 'Hyperparameter optimization', link: '/en/hyperopt' },
+              { text: 'Rolling optimization backtesting', link: '/en/roll_btopt' },
               { text: 'Q & A', link: '/en/faq' }
             ]
           }
@@ -60,6 +62,8 @@ export default defineConfig({
               { text: '自定义策略', link: '/cn/strat_custom' },
               { text: '品种管理器', link: '/cn/pair_filters' },
               { text: '启动命令', link: '/cn/bot_usage' },
+              { text: '超参数优化', link: '/cn/hyperopt' },
+              { text: '滚动优化回测', link: '/cn/roll_btopt' },
               { text: '常见问题', link: '/cn/faq' }
             ]
           }

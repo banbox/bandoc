@@ -48,6 +48,7 @@ please run with a subcommand:
         backtest:   backtest with strategies and data
         spider:     start the spider
         optimize:   run hyper parameters optimization
+        bt_opt:         backtest over optimize
         kline:      run kline commands
         tick:       run tick commands
         tool:       run tools
@@ -179,42 +180,7 @@ Usage of backtest:
   -timerange string
         Specify what timerange of data to use
 ```
-## Hyperparameter tuning
-```shell
-banbot.o optimize -out PATH [-opt-rounds 30] [-sampler bayes]
-```
-After you define the hyperparameters and their ranges in the strategy using `pol.Def`, you can perform hyperparameter tuning. The `-nodb` parameter will be used when tuning.
 
-You can specify the number of executions of the tuning with `-opt-rounds` and the sampling optimizer with `-sampler`.
-```text 
-Usage of optimize:
-  -concur int
-        Concurrent Number (default 1)
-  -config value
-        config path to use, Multiple -config options may be used
-  -datadir string
-        Path to data dir.
-  -each-pairs
-        run for each pairs
-  -level string
-        set logging level to debug (default "info")
-  -logfile string
-        Log to the file specified
-  -max-pool-size int
-        max pool size for db
-  -no-compress
-        disable compress for hyper table
-  -no-default
-        ignore default: config.yml, config.local.yml
-  -nodb
-        dont save orders to database
-  -opt-rounds int
-        rounds num for single optimize job (default 30)
-  -out string
-        output file or directory
-  -sampler string
-        hyper optimize method, tpe/bayes/random/cmaes/ipop-cmaes/bipop-cmaes (default "bayes")
-```
 ## candle related tools
 **banbot.o kline down**  
 Download candle from the exchange and save to the database
@@ -278,7 +244,6 @@ Calculate the correlation coefficient for a group of varieties selected by YAML,
 ```text
 banbot tool:
         collect_opt:    collect result of optimize, and print in order   
-        bt_opt:         backtest over optimize
         load_cal:       load calenders
         cmp_orders:     compare backTest orders with exchange orders
         data_server:    serve a grpc server as data feeder
