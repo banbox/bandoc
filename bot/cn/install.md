@@ -14,8 +14,43 @@ banbot开箱即用地支持[banta](https://github.com/banbox/banta)高性能指�
 执行docker run时，请添加`-v /your/data/dir:/home/postgres/pgdata/data`参数，以便将数据映射到主机目录。
 :::
 
+### 时区设置
+banbot中所有时间戳全部使用UTC时区，在TimeScaledb中也需要设置为UTC时区。
+
+您可用文本编辑器打开postgresql的配置文件：
+::: code-group
+```text [linux]
+/var/lib/pgsql/<version>/data/postgresql.conf
+/etc/postgresql/<version>/main/postgresql.conf
+/usr/local/pgsql/data/postgresql.conf
+```
+```text [windows]
+C:\Program Files\PostgreSQL\<version>\data\postgresql.conf
+```
+```text [MacOS]
+/usr/local/var/postgres/postgresql.conf
+```
+:::
+将其中的`timezone`改为`UTC`即可：
+```shell
+timezone = 'UTC'
+```
+重启postgresql服务生效：
+::: code-group
+```shell [linux]
+sudo systemctl restart postgresql
+```
+```shell [windows]
+# press Win + R, input: services.msc
+# find `postgresql` and restart it
+```
+```shell [MacOS]
+brew services restart postgresql
+```
+:::
+
 ### 初始化表结构
-下载[sql文件](/sql.zip)，解压缩准备执行。  
+下载[sql文件](/sql.zip?v=1)，解压缩准备执行。  
 
 使用`psql`工具登录数据库
 ```shell

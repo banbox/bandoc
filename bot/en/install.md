@@ -14,8 +14,44 @@ It is recommended to install the latest stable version according to the official
   When executing docker run, please add the `-v /your/data/dir:/home/postgres/pgdata/data` parameter to map the data to the host directory.
   :::
 
+### Set TimeZone
+All timestamps in Banbot are in UTC time zone, and it is also necessary to set them to UTC time zone in Timestampdb.
+
+You can use a text editor to open the configuration file for PostgreSQL:
+::: code-group
+```text [linux]
+/var/lib/pgsql/<version>/data/postgresql.conf
+/etc/postgresql/<version>/main/postgresql.conf
+/usr/local/pgsql/data/postgresql.conf
+```
+```text [windows]
+C:\Program Files\PostgreSQL\<version>\data\postgresql.conf
+```
+```text [MacOS]
+/usr/local/var/postgres/postgresql.conf
+```
+:::
+
+Change the `timezone` to `UTC`:
+```shell
+timezone = 'UTC'
+```
+Restarting PostgreSQL service takes effect:
+::: code-group
+```shell [linux]
+sudo systemctl restart postgresql
+```
+```shell [windows]
+# press Win + R, input: services.msc
+# find `postgresql` and restart it
+```
+```shell [MacOS]
+brew services restart postgresql
+```
+:::
+
 ### Initialize the table structure
-Download the [sql file](/sql.zip), unzip it and prepare for execution.
+Download the [sql file](/sql.zip?v=1), unzip it and prepare for execution.
 
 Use the `psql` tool to log in to the database
 ```shell
