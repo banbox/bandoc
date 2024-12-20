@@ -52,6 +52,7 @@ please run with a subcommand:
         kline:      run kline commands
         tick:       run tick commands
         tool:       run tools
+        web:        run web dashboard
 ```
 ## Common command parameters
 **Data directory (-datadir)**

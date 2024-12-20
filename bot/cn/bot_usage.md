@@ -52,6 +52,7 @@ please run with a subcommand:
         kline:      run kline commands
         tick:       run tick commands
         tool:       run tools
+        web:        run web dashboard
 ```
 ## 通用命令参数
 **数据目录(-datadir)**

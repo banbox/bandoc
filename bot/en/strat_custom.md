@@ -68,8 +68,8 @@ type TradeStrat struct {
 	OnTrades            func(s *StratJob, trades []*banexg.Trade)          // Transaction by transaction data 逐笔交易数据
 	OnBatchJobs         func(jobs []*StratJob)                             // All target jobs at the current time, used for bulk opening/closing of orders 当前时间所有标的job，用于批量开单/平仓
 	OnBatchInfos        func(jobs map[string]*StratJob)                    // All info marked jobs at the current time, used for batch processing 当前时间所有info标的job，用于批量处理
-	OnCheckExit         func(s *StratJob, od *orm.InOutOrder) *ExitReq     // Custom order exit logic 自定义订单退出逻辑
-	OnOrderChange       func(s *StratJob, od *orm.InOutOrder, chgType int) // Order update callback 订单更新回调
+	OnCheckExit         func(s *StratJob, od *ormo.InOutOrder) *ExitReq     // Custom order exit logic 自定义订单退出逻辑
+	OnOrderChange       func(s *StratJob, od *ormo.InOutOrder, chgType int) // Order update callback 订单更新回调
 	GetDrawDownExitRate CalcDDExitRate                                     // Calculate the ratio of tracking profit taking, drawdown, and exit 计算跟踪止盈回撤退出的比率
 	PickTimeFrame       PickTimeFrameFunc                                  // Choose a suitable trading cycle for the specified currency 为指定币选择适合的交易周期
 	OnShutDown          func(s *StratJob)                                  // Callback when the robot stops 机器人停止时回调
@@ -356,14 +356,14 @@ In addition to setting the stop loss and take profit of an order when entering t
 if len(s.LongOrders) > 0 {
     od := s.LongOrders[0]
     ma5Val := ma5.Get(0)
-    od.SetStopLoss(&orm.ExitTrigger{Price: ma5Val * 0.97})
-    od.SetTakeProfit(&orm.ExitTrigger{Price: ma5Val * 1.03})
+    od.SetStopLoss(&ormo.ExitTrigger{Price: ma5Val * 0.97})
+    od.SetTakeProfit(&ormo.ExitTrigger{Price: ma5Val * 1.03})
 }
 ```
 You can also set stop loss and take profit for all orders:
 ```go
 ma5Val := ma5.Get(0)
-s.SetAllStopLoss(core.OdDirtLong, &orm.ExitTrigger{
+s.SetAllStopLoss(core.OdDirtLong, &ormo.ExitTrigger{
     Price: ma5Val * 0.97,
     Limit: ma5Val * 0.975,
     Rate:  0.5,
@@ -453,7 +453,7 @@ func CustomExitDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 				s.CloseOrders(&strat.ExitReq{Tag: "close"})
 			}
 		},
-		OnCheckExit: func(s *strat.StratJob, od *orm.InOutOrder) *strat.ExitReq {
+		OnCheckExit: func(s *strat.StratJob, od *ormo.InOutOrder) *strat.ExitReq {
 			if od.ProfitRate > 0.1 {
 				// Exit if profit exceeds 10%
 				return &strat.ExitReq{Tag: "profit"}
@@ -476,7 +476,7 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 				s.OpenOrder(&strat.EnterReq{Tag: "long"})
 			}
 		},
-		GetDrawDownExitRate: func(s *strat.StratJob, od *orm.InOutOrder, maxChg float64) float64 {
+		GetDrawDownExitRate: func(s *strat.StratJob, od *ormo.InOutOrder, maxChg float64) float64 {
 			if maxChg > 0.1 {
 				// After the best profit of the order exceeds 10%, withdraw 50% and exit
 				return 0.5

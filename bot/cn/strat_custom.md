@@ -67,8 +67,8 @@ type TradeStrat struct {
 	OnTrades            func(s *StratJob, trades []*banexg.Trade)          // 逐笔交易数据
 	OnBatchJobs         func(jobs []*StratJob)                             // 当前时间所有标的job，用于批量开单/平仓
 	OnBatchInfos        func(jobs map[string]*StratJob)                    // 当前时间所有info标的job，用于批量处理
-	OnCheckExit         func(s *StratJob, od *orm.InOutOrder) *ExitReq     // 自定义订单退出逻辑
-	OnOrderChange       func(s *StratJob, od *orm.InOutOrder, chgType int) // 订单更新回调
+	OnCheckExit         func(s *StratJob, od *ormo.InOutOrder) *ExitReq     // 自定义订单退出逻辑
+	OnOrderChange       func(s *StratJob, od *ormo.InOutOrder, chgType int) // 订单更新回调
 	GetDrawDownExitRate CalcDDExitRate                                     // 计算跟踪止盈回撤退出的比率
 	PickTimeFrame       PickTimeFrameFunc                                  // 为指定币选择适合的交易周期
 	OnShutDown          func(s *StratJob)                                  // 机器人停止时回调
@@ -357,14 +357,14 @@ type ExitReq struct {
 if len(s.LongOrders) > 0 {
     od := s.LongOrders[0]
     ma5Val := ma5.Get(0)
-    od.SetStopLoss(&orm.ExitTrigger{Price: ma5Val * 0.97})
-    od.SetTakeProfit(&orm.ExitTrigger{Price: ma5Val * 1.03})
+    od.SetStopLoss(&ormo.ExitTrigger{Price: ma5Val * 0.97})
+    od.SetTakeProfit(&ormo.ExitTrigger{Price: ma5Val * 1.03})
 }
 ```
 您也可以设置全部订单的止损止盈：
 ```go
 ma5Val := ma5.Get(0)
-s.SetAllStopLoss(core.OdDirtLong, &orm.ExitTrigger{
+s.SetAllStopLoss(core.OdDirtLong, &ormo.ExitTrigger{
     Price: ma5Val * 0.97,
     Limit: ma5Val * 0.975,
     Rate:  0.5,
@@ -454,7 +454,7 @@ func CustomExitDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 				s.CloseOrders(&strat.ExitReq{Tag: "close"})
 			}
 		},
-		OnCheckExit: func(s *strat.StratJob, od *orm.InOutOrder) *strat.ExitReq {
+		OnCheckExit: func(s *strat.StratJob, od *ormo.InOutOrder) *strat.ExitReq {
 			if od.ProfitRate > 0.1 {
 				// 盈利超过10%退出
 				return &strat.ExitReq{Tag: "profit"}
@@ -477,7 +477,7 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 				s.OpenOrder(&strat.EnterReq{Tag: "long"})
 			}
 		},
-		GetDrawDownExitRate: func(s *strat.StratJob, od *orm.InOutOrder, maxChg float64) float64 {
+		GetDrawDownExitRate: func(s *strat.StratJob, od *ormo.InOutOrder, maxChg float64) float64 {
 			if maxChg > 0.1 {
 				// 订单最佳盈利超过10%后，回撤50%退出
 				return 0.5
