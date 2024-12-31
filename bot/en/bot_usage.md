@@ -36,6 +36,33 @@ If these two have already covered the parameters you need this time, you do not 
 
 You can display help information by adding `-help` or `-h` parameters after the command.
 
+## Start WebUI Research & Backtesting
+To facilitate your strategy research and backtesting, we provide WebUI visualization. You can edit strategies online, start backtesting, view profit and loss curves, analyze orders, etc. through WebUI.
+
+This is a WebUI only for the strategy research stage. By default, only your local computer is allowed to access it, so you can access it without authentication. If you need to access it from the external network, please set `-host 0.0.0.0`.
+
+If you need to access the Dashboard UI during real-time trading in banbot, please refer to [Real-time Trading](#start-real-time-trading-simulated-tradingreal-trading)。
+
+```text
+Usage of web:
+  -host string
+        bind host ip (default "127.0.0.1")
+  -port int
+        port to listen (default 8000)
+  -config value
+        config path to use, Multiple -config options may be used
+  -datadir string
+        Path to data dir.
+  -db string
+        db file path (default "dev.db")
+  -level string
+        log level (default "info")
+  -logfile string
+        log file path, default: system temp dir
+  -tz string
+        timezone (default "utc")
+```
+
 ## Start the crawler process
 ```shell
 banbot.o spider [-datadir PATH] [-c PATH] [-c PATH]
@@ -73,6 +100,21 @@ When `env` is set to `prod` or `test`, it will be submitted to the production en
 You can configure `spider_addr` in yml, and the robot will automatically try to connect to the crawler when it starts, and subscribe to the current exchange, market and related product data.
 
 You can also add the `-spider` parameter to automatically start the crawler in this process when starting the robot.
+
+When you enable `api_server` in the `yml` configuration file and set the access account and password, you can view and manage your real-time trading robot with the Dashboard UI.
+
+```yaml
+api_server:
+  enabled: true  # enable here
+  bind_ip: 0.0.0.0
+  port: 8001
+  jwt_secret_key: '123456789'  # This should be complicated enough
+  users:
+    - user: ban
+      pwd: '123'
+      acc_roles: {user1: admin}  # allow bot accounts and role
+```
+
 ```text 
 Usage of trade:
   -config value

@@ -35,6 +35,33 @@ please run with a subcommand:
 
 您可以通过在命令后面添加`-help`或`-h`参数，显示帮助信息。
 
+## 启动WebUI研究&回测
+为方便您的策略研究和回测，我们提供了WebUI可视化。您可通过WebUI在线编辑策略、开始回测、查看盈亏曲线、分析订单等。
+
+这是仅针对策略研究阶段的WebUI，默认只允许您本地计算机访问，故无需鉴权即可访问，如需外网访问，请设置`-host 0.0.0.0`。
+
+如果您需要在banbot实时交易时访问Dashboard UI，请参考[实时交易](#启动实时交易模拟交易实盘)。
+
+```text
+Usage of web:
+  -host string
+        bind host ip (default "127.0.0.1")
+  -port int
+        port to listen (default 8000)
+  -config value
+        config path to use, Multiple -config options may be used
+  -datadir string
+        Path to data dir.
+  -db string
+        db file path (default "dev.db")
+  -level string
+        log level (default "info")
+  -logfile string
+        log file path, default: system temp dir
+  -tz string
+        timezone (default "utc")
+```
+
 ## 启动爬虫进程
 ```shell
 banbot.o spider [-datadir PATH] [-c PATH] [-c PATH]
@@ -71,6 +98,21 @@ banbot.o trade [-spider] [-pairs PAIRS] ...
 
 您可以在yml配置`spider_addr`，机器人启动时会自动尝试连接爬虫，并订阅当前交易所、市场和相关品种数据。
 您也可以添加`-spider`参数，启动机器人时自动在本进程中启动爬虫。
+
+当您在`yml`配置文件中启用`api_server`，且设置访问账号密码时，即可通过Dashboard UI查看并管理您的实时交易机器人。
+
+```yaml
+api_server:
+  enabled: true  # enable here
+  bind_ip: 0.0.0.0
+  port: 8001
+  jwt_secret_key: '123456789'  # This should be complicated enough
+  users:
+    - user: ban
+      pwd: '123'
+      acc_roles: {user1: admin}  # allow bot accounts and role
+```
+
 ```text
 Usage of trade:
   -config value
