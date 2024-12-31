@@ -20,13 +20,14 @@ export default defineConfig({
             text: 'Start',
             items: [
               { text: 'Introduce', link: '/en/start' },
-              { text: 'Prepare the development environment', link: '/en/install' },
+              { text: 'Quick Start', link: '/en/quick_start' },
+              { text: 'Install', link: '/en/install' },
               { text: 'Initialize the project', link: '/en/init_project' },
+              { text: 'Commands', link: '/en/bot_usage' },
               { text: 'Banbot Basics', link: '/en/basic' },
               { text: 'Configuration', link: '/en/configuration' },
               { text: 'Custom Strategy', link: '/en/strat_custom' },
               { text: 'Symbol Manager', link: '/en/pair_filters' },
-              { text: 'Startup Command', link: '/en/bot_usage' },
               { text: 'Hyperparameter optimization', link: '/en/hyperopt' },
               { text: 'Rolling optimization backtesting', link: '/en/roll_btopt' },
               { text: 'Q & A', link: '/en/faq' }
@@ -55,13 +56,14 @@ export default defineConfig({
             text: '开始',
             items: [
               { text: '介绍', link: '/cn/start' },
-              { text: '准备开发环境', link: '/cn/install' },
+              { text: '快速开始', link: '/cn/quick_start' },
+              { text: '安装', link: '/cn/install' },
               { text: '初始化项目', link: '/cn/init_project' },
+              { text: '命令行', link: '/cn/bot_usage' },
               { text: 'Banbot基础', link: '/cn/basic' },
               { text: '配置', link: '/cn/configuration' },
               { text: '自定义策略', link: '/cn/strat_custom' },
               { text: '品种管理器', link: '/cn/pair_filters' },
-              { text: '启动命令', link: '/cn/bot_usage' },
               { text: '超参数优化', link: '/cn/hyperopt' },
               { text: '滚动优化回测', link: '/cn/roll_btopt' },
               { text: '常见问题', link: '/cn/faq' }

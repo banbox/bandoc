@@ -18,6 +18,9 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 * websocket：交易所逐笔交易+订单簿数据
 * 指标库：内置[banta](https://github.com/banbox/banta)高性能指标库，您可基于其快速开发自定义指标
 
+## WebUI
+![image](https://www.banbot.site/uidev.gif)
+
 ## 支持的交易所
 基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前仅支持币安交易所，但也能比较容易对接其他交易所。
 

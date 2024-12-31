@@ -5,9 +5,36 @@
 
 首先实现一个`func Demo1(pol *config.RunPolicyConfig) *strat.TradeStrat`的策略函数。
 
-其次，您只需在当前go package的`init`中注册此策略即可：`strat.StratMake["ma:demo1"] = Demo1`
+其次，您只需在当前go package的`init`函数中注册此策略即可。
 
 下面我们看看在策略函数中应该如何实现我们的自定义逻辑。
+
+::: tip
+强烈推荐您使用Cursor或Claude等AI工具将其他语言的交易策略转为banbot策略，只需附加[知识库](/banbot_cn.txt){target="_self"}
+:::
+
+## 策略命名
+推荐的命名格式是`文件夹:策略名称`。您可能会有很多不同类别的交易策略，为方便长期维护，建议您将类似的策略放在同一个文件夹中。深度不限。
+
+比如：
+```text
+root
+ |-org
+ |  |-ma
+ |  |  |-demo.go
+ |  |  |-trend.go
+ | grid
+ |  |-inv.go
+ |-main.go
+```
+上面有`ma`和`grid`两个有效的策略组，您也可以在`ma`中继续创建子文件夹管理策略。注意，所有策略组都需要在根目录的`main.go`中注册：
+```go
+import (
+	"github.com/banbox/banbot/entry"
+	_ "github.com/banbox/banstrats/org/ma"
+	_ "github.com/banbox/banstrats/grid"
+)
+```
 
 ## RunPolicyConfig参数 
 
@@ -89,7 +116,9 @@ import (
 func init() {
 	// 注册策略到banbot中，后续在配置文件中使用ma:demo即可引用此策略
 	// `init`函数是go中的特殊函数，会在当前包被导入时立刻执行
-	strat.StratMake["ma:demo"] = Demo
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
 }
 
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {

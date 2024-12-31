@@ -1,5 +1,14 @@
 You can quickly start from the sample strategy project or create a new project directly.
 
+You don't need to download the source code of banbot, but just create a project for managing trading strategies. By adding the banbot dependency with `go get`, you can enjoy all the conveniences brought by banbot.
+
+## Environment variables
+For the convenience of subsequent use, you need to set the environment variables `BanDataDir` and `BanStratDir`.
+
+`BanDataDir` is the directory where the backtest results and front-end UI resource files are saved during the operation of banbot.
+
+`BanStratDir` is the path of your trading strategy project. Each time you backtest, banbot will automatically save the strategy code version corresponding to your backtest, so that you can restore to a previous version in time.
+
 ## Start from the sample project
 The sample project implements the grid strategy, classic moving average strategy, etc. You can quickly implement your custom strategy based on this.
 
@@ -11,6 +20,9 @@ cd banstrats
 # Initialize dependencies
 go mod tidy
 ```
+::: tip TIP
+It is highly recommended that you start directly with this sample project
+:::
 
 ## Initialize a new project
 Open the terminal and enter the following command:
@@ -34,7 +46,9 @@ import (
 func init() {
 	// Register the policy in Banbot, and use ma: demo in the configuration file to reference this policy later
 	// The `init`function is a special function in Go that will be executed immediately when the current package is imported
-	strat.StratMake["ma:demo"] = Demo
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
 }
 
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {

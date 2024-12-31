@@ -1,5 +1,14 @@
 您可从示例策略项目快速开始，也可直接创建新项目。
 
+您无需下载banbot的源代码，而只需创建一个用于管理交易策略的项目，通过`go get`添加banbot依赖，您即可享受banbot带来的全部便利。
+
+## 环境变量
+为方便后续使用，您需要设置环境变量`BanDataDir`和`BanStratDir`。
+
+`BanDataDir`是banbot运行过程中回测结果、前端UI资源文件保存的目录。
+
+`BanStratDir`即您的交易策略项目的路径，每次回测时，banbot会自动保存您此次回测对应的策略代码版本，方便您及时恢复到之前的某个版本。
+
 ## 从示例项目开始
 示例项目实现了网格策略、经典均线策略等，您可基于此快速实现您的自定义策略。
 
@@ -11,6 +20,9 @@ cd banstrats
 # 初始化依赖
 go mod tidy
 ```
+::: tip TIP
+强烈建议您直接使用此示例项目开始
+:::
 
 ## 初始化新项目
 打开终端，输入以下命令：
@@ -34,7 +46,9 @@ import (
 func init() {
 	// 注册策略到banbot中，后续在配置文件中使用ma:demo即可引用此策略
 	// `init`函数是go中的特殊函数，会在当前包被导入时立刻执行
-	strat.StratMake["ma:demo"] = Demo
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
 }
 
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {

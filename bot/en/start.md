@@ -18,6 +18,9 @@ We strongly recommend that you have basic golang programming knowledge and under
 * Websocket: Exchange transaction by transaction + order book data
 * Indicator library: Built-in [banta](https://github.com/banbox/banta) high-performance indicator library, you can quickly develop custom indicators based on it
 
+## WebUI
+![image](https://www.banbot.site/uidev.gif)
+
 ## Supported exchanges
 Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently only supports Binance Exchange, but it can also be easily connected to other exchanges.
 

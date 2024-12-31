@@ -5,9 +5,36 @@ To start a new strategy, there are only two steps.
 
 First, implement a strategy function of `func Demo1(pol *config.RunPolicyConfig) *strat.TradeStrat`.
 
-Second, you only need to register this strategy in the current go package's `init`: `strat.StratMake["ma:demo1"] = Demo1`
+Second, you only need to register this strategy in the current go package's `init` function.
 
 Let's see how to implement our custom logic in the strategy function.
+
+::: tip
+It is strongly recommended that you use AI tools such as Cursor or Claude to convert trading strategies in other languages ​​into banbot strategies. Just attach the [knowledge base](/banbot_en.txt){target="_self"}
+:::
+
+## Strategy Naming
+The recommended naming format is `folder:strategy_name`. You may have many different categories of trading strategies. For easy long-term maintenance, it is recommended to put similar strategies in the same folder. The depth is not limited.
+
+For example:
+```text
+root
+ |-org
+ |  |-ma
+ |  |  |-demo.go
+ |  |  |-trend.go
+ | grid
+ |  |-inv.go
+ |-main.go
+```
+Above there are two valid strategy groups `ma` and `grid`. You can also continue to create subfolders in `ma` to manage strategies. Note that all strategy groups need to be registered in `main.go` in the root directory:
+```go
+import (
+	"github.com/banbox/banbot/entry"
+	_ "github.com/banbox/banstrats/org/ma"
+	_ "github.com/banbox/banstrats/grid"
+)
+```
 
 ## RunPolicyConfig parameters
 
@@ -90,7 +117,9 @@ import (
 func init() {
 	// Register the policy in Banbot, and use ma: demo in the configuration file to reference this policy later
 	// `init`The function is a special function in Go that will be executed immediately when the current package is imported
-	strat.StratMake["ma:demo"] = Demo
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
 }
 
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
@@ -485,4 +514,3 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 		},
 	}
 }
-```

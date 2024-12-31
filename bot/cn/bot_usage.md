@@ -1,46 +1,13 @@
-编写好策略后，您可以在项目根目录下，运行以下命令启动机器人：
+编写好策略后，您可以将策略和banbot打包为单个可执行文件：
 ```shell
-go run .
+go build -o bot
+# go build -o bot.exe
 ```
-您也可以将整个项目打包为单个可执行文件：
-::: code-group
-```shell [Windows Power Shell]
-# build for windows
-$env:GOARCH="amd64"
-$env:GOOS="windows"
-go build -o banbot.exe
+然后您可将此可执行文件直接用于启动UI、回测、超参数优化、实盘交易等！
 
-# build for linux
-$env:GOARCH="amd64"
-$env:GOOS="linux"
-go build -o banbot.o
-```
+您直接执行`bot`将启动WebUI界面，您可访问`http://localhost:8000`进行策略管理、回测、分析交易等。
 
-```shell [Windows CMD]
-# build for windows
-set GOARCH=amd64
-set GOOS=windows
-go build -o banbot.exe
-
-# build for linux
-set GOARCH=amd64
-set GOOS=linux
-go build -o banbot.o
-```
-
-```shell [Linux/MacOS]
-# build for linux
-export GOARCH="amd64"
-export GOOS="linux"
-go build -o banbot.o
-
-# build for windows
-export GOARCH="amd64"
-export GOOS="windows"
-go build -o banbot.exe
-```
-:::
-运行后默认将显示一些子命令帮助列表：
+运行`bot -help`将显示一些子命令帮助列表：
 ```text
 banbot 0.1.5
 please run with a subcommand:

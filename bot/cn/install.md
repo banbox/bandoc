@@ -13,10 +13,13 @@ banbot开箱即用地支持[banta](https://github.com/banbox/banta)高性能指�
 ::: warning Docker安装提示
 执行docker run时，请添加`-v /your/data/dir:/home/postgres/pgdata/data`参数，以便将数据映射到主机目录。
 :::
+您无需手动创建数据库和表结构，banbot启动时会根据您在yml配置的`database.url`自动创建数据库和表结构。
+
+banbot仅使用TimeScaledb用于存储K线或品种等公开数据，您回测或实盘时的订单等数据将通过`gob`或`sqlite`方式存储到文件。
 
 ## 安装golang
 请从golang的官网下载[安装](https://go.dev/doc/install)
 
-您可以使用`Visual Studio Code`或`GoLand`作为开发IDE
+我们推荐使用`Cursor`作为IDE；您也可以使用`Visual Studio Code`或`GoLand`
 
 

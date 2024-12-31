@@ -1,46 +1,13 @@
-Once you have written your strategy, you can start the bot by running the following command in the project root directory:
+After writing the strategy, you can package the strategy and banbot into a single executable file:
 ```shell
-go run .
+go build -o bot
+# go build -o bot.exe
 ```
-You can also package the entire project into a single executable file:
-::: code-group
-```shell [Windows Power Shell]
-# build for windows
-$env:GOARCH="amd64"
-$env:GOOS="windows"
-go build -o banbot.exe
+Then you can use this executable file directly to start the UI, backtest, hyperparameter optimization, real trading, etc.!
 
-# build for linux
-$env:GOARCH="amd64"
-$env:GOOS="linux"
-go build -o banbot.o
-```
+Directly executing `bot` will start the WebUI interface at `http://localhost:8000`, through which you can manage strategies, backtest, analyze transactions, etc.
 
-```shell [Windows CMD]
-# build for windows
-set GOARCH=amd64
-set GOOS=windows
-go build -o banbot.exe
-
-# build for linux
-set GOARCH=amd64
-set GOOS=linux
-go build -o banbot.o
-```
-
-```shell [Linux/MacOS]
-# build for linux
-export GOARCH="amd64"
-export GOOS="linux"
-go build -o banbot.o
-
-# build for windows
-export GOARCH="amd64"
-export GOOS="windows"
-go build -o banbot.exe
-```
-:::
-By default, some subcommand help lists will be displayed after running:
+Running `bot -help` will display a list of subcommand help:
 ```text
 banbot 0.1.5
 please run with a subcommand:
@@ -48,7 +15,7 @@ please run with a subcommand:
         backtest:   backtest with strategies and data
         spider:     start the spider
         optimize:   run hyper parameters optimization
-        bt_opt:         backtest over optimize
+        bt_opt:     backtest over optimize
         kline:      run kline commands
         tick:       run tick commands
         tool:       run tools
