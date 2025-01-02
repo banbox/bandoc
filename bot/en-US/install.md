@@ -1,5 +1,5 @@
 This page describes how to install the environment to run the robot. You mainly need to prepare the following parts:
-* TimeScaleDB: a high-performance time series database based on postgresql, used to store candles, orders and so on.
+* TimeScaleDB: a high-performance time series database based on postgresql, Used to store public data such as candlestick (orders, etc. are stored using sqlite).
 * golang: it is recommended to use the latest version
 
 Banbot supports the high-performance indicator library [banta](https://github.com/banbox/banta) out of the box, and you can quickly develop custom indicators based on it.

@@ -13,3 +13,6 @@ You can also pass in the `OrderID` parameter to exit only half of the position o
 
 ## Do I need to restart the robot after changing the configuration?
 Currently, after you change the configuration, you need to restart the robot for it to take effect. However, after the robot restarts, it will automatically detect the relevant positions and orders and will not be lost.
+
+## Error when starting: read tcp 127.0.0.1:xxx->host:5432: wsarecv: An existing connection was forcibly closed by the remote host.
+Please make sure that the TimeScaledb plugin has been correctly installed (you can see the TimeScaledb plugin by executing `\dx` in `psql`).

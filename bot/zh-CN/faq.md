@@ -14,3 +14,5 @@ banbot支持仓位或订单的部分退出。只需要`CloseOrders(&strat.ExitRe
 ## 修改配置后需要重新启动机器人吗？
 目前您修改配置后，需要重新启动机器人才能生效。不过机器人重新启动后，会自动检测相关仓位和订单，不会丢失。
 
+## 启动时错误：read tcp 127.0.0.1:xxx->host:5432: wsarecv: An existing connection was forcibly closed by the remote host.
+请确认已正确安装TimeScaledb插件（在`psql`中执行`\dx`能看到TimeScaledb插件）。

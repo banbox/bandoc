@@ -1,5 +1,5 @@
 本页介绍如何安装运行机器人的环境。您主要需要准备以下几个部分：
-* TimeScaleDB：基于postgresql的高性能时序数据库，用于存储K线和订单等数据。
+* TimeScaleDB：基于postgresql的高性能时序数据库，用于存储K线等公开数据（订单等使用sqlite存储）。
 * golang：建议使用最新版本
 
 banbot开箱即用地支持[banta](https://github.com/banbox/banta)高性能指标库，您可基于其快速开发自定义指标。
