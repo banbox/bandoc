@@ -64,7 +64,7 @@ Usage of web:
 
 ## 启动爬虫进程
 ```shell
-banbot.o spider [-datadir PATH] [-c PATH] [-c PATH]
+bot spider [-datadir PATH] [-c PATH] [-c PATH]
 ```
 当您要启动实时交易时，需要先启动爬虫进程。爬虫进程默认监听`6789`端口，只接受本地的请求。您可以将yml配置`spider_addr`改为`0.0.0.0:6789`，以便接受来自外部的监听请求。
 
@@ -90,7 +90,7 @@ Usage of spider:
 ```
 ## 启动实时交易(模拟交易/实盘)
 ```shell
-banbot.o trade [-spider] [-pairs PAIRS] ...
+bot trade [-spider] [-pairs PAIRS] ...
 ```
 当您在yml配置文件指定`env`为`dry_run`时，订单不会提交到交易所，而是在本地模拟撮合。
 
@@ -146,7 +146,7 @@ Usage of trade:
 ```
 ## 回测
 ```shell
-banbot.o backtest [-nodb] [-separate] ...
+bot backtest [-nodb] [-separate] ...
 ```
 这将按yml配置中的`run_policy`启动回测，由于回测可能生产大量订单，建议您启用`-nodb`选项，不将订单记录到数据库，而是只保存到csv文件。
 
@@ -190,25 +190,27 @@ Usage of backtest:
 ```
 
 ## K线相关工具
-**banbot.o kline down**  
+[详细介绍](/zh-CN/advanced/kline_tools.md)
+
+**bot kline down**  
 从交易所下载K线保存到数据库
 
-**banbot.o kline load**  
+**bot kline load**  
 从csv/zip文件中导入K线到数据库
 
-**banbot.o kline export**  
+**bot kline export**  
 从数据库导出K线到csv文件
 
-**banbot.o kline purge**  
+**bot kline purge**  
 从数据库中清空K线。
 
-**banbot.o kline correct**  
+**bot kline correct**  
 检查数据库K线是否有错误并自动纠正。
 
-**banbot.o kline adj_calc**  
+**bot kline adj_calc**  
 重新计算复权因子（用于中国期货市场）
 
-**banbot.o kline adj_export**  
+**bot kline adj_export**  
 导出复权因子到csv文件.
 ```text
 banbot kline:
@@ -221,10 +223,10 @@ banbot kline:
         adj_export: export adjust factors to csv
 ```
 ## Tick相关工具
-**banbot.o tick convert**  
+**bot tick convert**  
 对中国期货市场的csv格式tick进行转换，然后输出csv格式文件。
 
-**banbot.o tick to_kline**  
+**bot tick to_kline**  
 对中国期货市场的tick文件聚合为1m周期的K线csv格式文件。
 
 ```text
@@ -234,25 +236,25 @@ banbot tick:
 ```
 
 ## 其他工具
-**banbot.o tool collect_opt**  
+**bot tool collect_opt**  
 收集超参数调优结果，并按顺序显示到控制台。
 
-**banbot.o tool bt_opt**  
+**bot tool bt_opt**  
 按时间滚动进行超参数调优，然后回测。比如对于最近3年的数据。每1年的数据用于超参数调优，然后用调优后的参数自动回测接下来的3个月；然后推迟3个月重复进行调优；如此反复，模拟真实场景下回测结果。
 
-**banbot.o tool load_cal**  
+**bot tool load_cal**  
 加载交易日历（针对中国期货市场）
 
-**banbot.o tool cmp_orders**  
+**bot tool cmp_orders**  
 将从币安导出的订单与本地回测订单记录进行对比，检查回测和实盘是否一致。
 
-**banbot.o tool data_server**  
+**bot tool data_server**  
 启动一个grpc服务器，供其他语言端访问数据和指标结果等。可用于AI机器学习等。
 
-**banbot.o tool calc_perfs**  
+**bot tool calc_perfs**  
 传入一个csv/xlsx文件，每行表示一天，每列表示一个品种的累计收益。为每列计算Shape/Sortino
 
-**banbot.o tool corr**  
+**bot tool corr**  
 为yaml筛选后的一组品种计算相关系数，可以每隔一段时间输出一个相关矩阵图片，也可以输出平均相关系数csv文件。
 ```text
 banbot tool:

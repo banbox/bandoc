@@ -1,5 +1,5 @@
 ```shell
-banbot.o optimize -out PATH [-opt-rounds 30] [-sampler bayes] 
+bot optimize -out PATH [-opt-rounds 30] [-sampler bayes] 
 ```
 
 您在策略中使用`pol.Def`定义好超参数及其范围后，您可以对其进行超参数调优。
@@ -95,7 +95,7 @@ banbot内置的`picker`有：
 * good0t7: 筛选盈利的组按分数降序，对前70%的所有组，取平均值得到一组参数。
 * good3t10: 筛选盈利的组按分数降序，对前30%之后的所有组，取平均值得到一组参数。
 
-您可以使用`banbot.o tool test_pickers`测试所有picker在未来回测时的分数。  
+您可以使用`bot tool test_pickers`测试所有picker在未来回测时的分数。  
 
 我们经过多次测试后发现`good3`在大多数情况下略好于其他挑选器。
 比`good3`略差一点的是：`good0t3/goodAvg/good1t4/good4`；

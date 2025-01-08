@@ -6,7 +6,8 @@ export default defineConfig({
     themeConfig: {
         nav: [
             { text: 'Home', link: '/en-US' },
-            { text: 'Document', link: '/en-US/start' }
+            { text: 'Document', link: '/en-US/start' },
+            { text: 'API', link: '/en-US/api' }
         ],
 
         sidebar: [
@@ -25,6 +26,12 @@ export default defineConfig({
                     { text: 'Hyperparameter optimization', link: '/en-US/hyperopt' },
                     { text: 'Rolling optimization backtesting', link: '/en-US/roll_btopt' },
                     { text: 'Q & A', link: '/en-US/faq' }
+                ]
+            },{
+                text: 'Advanced',
+                items: [
+                    {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
+                    {text: 'AI', link: '/en-US/advanced/ai'}
                 ]
             }
         ],

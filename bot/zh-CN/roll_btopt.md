@@ -12,7 +12,7 @@
 
 在banbot中，您只需要使用下面命令就可实现这一过程：
 ```shell
-banbot.o bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker score
+bot bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker score
 ```
 滚动优化回测结束后，我们会得到一个包含每次优化日志的文件夹：
 
@@ -55,7 +55,7 @@ loss:  -81.46  bigRate: 2.69, lenSml: 21.28, midRate: 3.71  odNum: 258, profit: 
 
 如何避免过拟合呢？或许可以将所有收益为正的参数组取平均值，用于回测后2个月？让我们试一下滚动优化测试（我们只需要将picker从score改为goodAvg）：
 ```shell
-banbot.o bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker goodAvg
+bot bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker goodAvg
 ```
 ![image](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Y7XFsHHODiee9DyFXVaZgw.png)
 
@@ -64,7 +64,7 @@ banbot.o bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker goodAvg
 
 我们可以依然用滚动测试的方法，对banbot内置的几个挑选器进行测试，将不同挑选器2个月的回测分数进行比较，我们应该可以得到17组分数：
 ```shell
-banbot.o tool test_pickers -review-period 12M -run-period 2M -opt-rounds 20
+bot tool test_pickers -review-period 12M -run-period 2M -opt-rounds 20
 ```
 执行结束后，我们可以在输出目录得到一个pickerScores.csv文件，让我们用excel打开，然后绘制一个折线图：
 ![image](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*lADeuVcb6PdPYYgvxw4nRw.png)

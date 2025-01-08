@@ -7,7 +7,7 @@ For the convenience of subsequent use, you need to set the environment variables
 
 `BanDataDir` is the directory where the backtest results and front-end UI resource files are saved during the operation of banbot.
 
-`BanStratDir` is the path of your trading strategy project. Each time you backtest, banbot will automatically save the strategy code version corresponding to your backtest, so that you can restore to a previous version in time.
+`BanStratDir` is the path of your trading strategy project(banstrats). Each time you backtest, banbot will automatically save the strategy code version corresponding to your backtest, so that you can restore to a previous version in time.
 
 ## Start from the sample project
 The sample project implements the grid strategy, classic moving average strategy, etc. You can quickly implement your custom strategy based on this.

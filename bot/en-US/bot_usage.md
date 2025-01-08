@@ -65,7 +65,7 @@ Usage of web:
 
 ## Start the crawler process
 ```shell
-banbot.o spider [-datadir PATH] [-c PATH] [-c PATH]
+bot spider [-datadir PATH] [-c PATH] [-c PATH]
 ```
 When you want to start real-time trading, you need to start the crawler process first. The crawler process listens to the `6789` port by default and only accepts local requests. You can change the yml configuration `spider_addr` to `0.0.0.0:6789` to accept external listening requests.
 
@@ -91,7 +91,7 @@ Usage of spider:
 ```
 ## Start real-time trading (simulated trading/real trading)
 ```shell
-banbot.o trade [-spider] [-pairs PAIRS] ...
+bot trade [-spider] [-pairs PAIRS] ...
 ```
 When you specify `env` as `dry_run` in the yml configuration file, the order will not be submitted to the exchange, but simulated matching locally.
 
@@ -148,7 +148,7 @@ Usage of trade:
 ```
 ## Backtesting
 ```shell
-banbot.o backtest [-nodb] [-separate] ...
+bot backtest [-nodb] [-separate] ...
 ```
 This will start the backtest according to the `run_policy` in the yml configuration. Since the backtest may generate a large number of orders, it is recommended that you enable the `-nodb` option to not record the orders in the database, but only save them in a csv file.
 
@@ -191,26 +191,28 @@ Usage of backtest:
         Specify what timerange of data to use
 ```
 
-## candle related tools
-**banbot.o kline down**  
+## CandleStick related tools
+[Detail Document](/en-US/advanced/kline_tools.md)
+
+**bot kline down**  
 Download candle from the exchange and save to the database
 
-**banbot.o kline load**  
+**bot kline load**  
 Import candle from csv/zip file to database
 
-**banbot.o kline export**  
+**bot kline export**  
 Export candle from database to csv file
 
-**banbot.o kline purge**  
+**bot kline purge**  
 Purge candle from database.
 
-**banbot.o kline correct**  
+**bot kline correct**  
 Check if there is any error in database candle and correct it automatically.
 
-**banbot.o kline adj_calc**  
+**bot kline adj_calc**  
 Recalculate the adjust factor (for the Chinese futures market)
 
-**banbot.o kline adj_export**  
+**bot kline adj_export**  
 Export the adjust factor to a CSV file
 ```text
 banbot kline:
@@ -222,10 +224,10 @@ banbot kline:
         adj_calc: recalculate adjust factors
 ```
 ## Tick related tools
-**banbot.o tick convert**  
+**bot tick convert**  
 Convert the csv format ticks of the Chinese futures market and then output a csv format file.
 
-**banbot.o tick to_kline**  
+**bot tick to_kline**  
 Aggregate the tick files of the Chinese futures market into 1m period candle csv format files.
 
 ```text
@@ -234,22 +236,22 @@ banbot tick:
         to_kline:       build kline from ticks
 ```
 ## Other tools
-**banbot.o tool collect_opt**  
+**bot tool collect_opt**  
 Collect hyperparameter tuning results and display them to the console in order.
 
-**banbot.o tool bt_opt**  
+**bot tool bt_opt**  
 Tuning hyperparameters in time rolling, and then backtesting. For example, for the data of the last three years. Each year's data is used for hyperparameter tuning, and then the tuned parameters are automatically backtested for the next three months; then the tuning is postponed for three months and repeated; this is repeated to simulate the backtest results in real scenarios.
 
-**banbot.o tool load_cal**  
+**bot tool load_cal**  
 Load trading calendar (for Chinese futures market)
 
-**banbot.o tool cmp_orders**  
+**bot tool cmp_orders**  
 Compare the orders exported from Binance with the local backtest order records to check whether the backtest and the real market are consistent.
 
-**banbot.o tool calc_perfs**  
+**bot tool calc_perfs**  
 Input in a CSV/XLSX file, where each row represents one day and each column represents the cumulative income of a variety. Calculate Shape/Sortino for each column
 
-**banbot.o tool corr**  
+**bot tool corr**  
 Calculate the correlation coefficient for a group of varieties selected by YAML, a correlation matrix image can be output at regular intervals, or an average correlation coefficient CSV file can be output.
 ```text
 banbot tool:

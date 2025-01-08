@@ -8,7 +8,8 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: '主页', link: '/zh-CN' },
-            { text: '文档', link: '/zh-CN/start' }
+            { text: '文档', link: '/zh-CN/start' },
+            { text: 'API', link: '/zh-CN/api' }
         ],
 
         sidebar: [
@@ -27,6 +28,12 @@ export default defineConfig({
                     { text: '超参数优化', link: '/zh-CN/hyperopt' },
                     { text: '滚动优化回测', link: '/zh-CN/roll_btopt' },
                     { text: '常见问题', link: '/zh-CN/faq' }
+                ]
+            },{
+                text: '进阶',
+                items: [
+                    {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
+                    {text: 'AI', link: '/zh-CN/advanced/ai'}
                 ]
             }
         ],

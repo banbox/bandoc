@@ -1,5 +1,5 @@
 ```shell
-banbot.o optimize -out PATH [-opt-rounds 30] [-sampler bayes] 
+bot optimize -out PATH [-opt-rounds 30] [-sampler bayes] 
 ```
 After defining hyperparameters and their ranges using `pol.Def` in your strategy, you can perform hyperparameter tuning.
 
@@ -93,7 +93,7 @@ The built-in `pickers` in banbot are:
 * **good0t7**: Filter profitable groups by descending score, taking the average of all groups in the top 70%.
 * **good3t10**: Filter profitable groups by descending score, taking the average of all groups beyond the top 30%.
 
-You can use `banbot.o tool test_pickers` to test the scores of all pickers in future backtesting.
+You can use `bot tool test_pickers` to test the scores of all pickers in future backtesting.
 
 After multiple tests, we found that `good3` slightly outperforms other pickers in most cases. The ones that perform slightly worse than `good3` are: `good0t3/goodAvg/good1t4/good4`; most of the other pickers generally perform poorly or average.
 

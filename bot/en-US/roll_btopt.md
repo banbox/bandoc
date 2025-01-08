@@ -13,7 +13,7 @@ In the real world, we might prefer to perform hyperparameter optimization every 
 In banbot, you can achieve this process using the command below:
 
 ```shell
-banbot.o bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker score
+bot bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker score
 ```
 After the rolling optimization backtest is completed, we will obtain a folder containing the logs of each optimization:
 
@@ -57,7 +57,7 @@ From the combined report, the overall return is -7%, which is even far worse tha
 How can we avoid overfitting? Perhaps we can take the average of all parameter sets that yielded positive returns for the backtest over the next 2 months? Let's try the rolling optimization test (we just need to change the picker from `score` to `goodAvg`):
 
 ```shell
-banbot.o bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker goodAvg
+bot bt_opt -review-period 12M -run-period 2M -opt-rounds 20 -picker goodAvg
 ```
 ![image](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Y7XFsHHODiee9DyFXVaZgw.png)
 
@@ -65,7 +65,7 @@ This modification achieved great results, with a cumulative return of 12.4%, far
 
 We can still use the rolling test method to test several built-in pickers in banbot, comparing the backtest scores of different pickers over 2 months. We should be able to obtain 17 sets of scores:
 ```shell
-banbot.o tool test_pickers -review-period 12M -run-period 2M -opt-rounds 20
+bot tool test_pickers -review-period 12M -run-period 2M -opt-rounds 20
 ```
 
 After execution, we can find a `pickerScores.csv` file in the output directory. Let's open it with Excel and then plot a line chart:
