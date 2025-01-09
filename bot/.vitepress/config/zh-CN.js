@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import {getApiMenus} from './share'
 
 export default defineConfig({
     label: '简体中文',
@@ -8,35 +9,38 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: '主页', link: '/zh-CN' },
-            { text: '文档', link: '/zh-CN/start' },
+            { text: '文档', link: '/zh-CN/guide/start' },
             { text: 'API', link: '/zh-CN/api' }
         ],
 
-        sidebar: [
-            {
-                text: '开始',
-                items: [
-                    { text: '介绍', link: '/zh-CN/start' },
-                    { text: '快速开始', link: '/zh-CN/quick_start' },
-                    { text: '安装', link: '/zh-CN/install' },
-                    { text: '初始化项目', link: '/zh-CN/init_project' },
-                    { text: '命令行', link: '/zh-CN/bot_usage' },
-                    { text: 'Banbot基础', link: '/zh-CN/basic' },
-                    { text: '配置', link: '/zh-CN/configuration' },
-                    { text: '自定义策略', link: '/zh-CN/strat_custom' },
-                    { text: '品种管理器', link: '/zh-CN/pair_filters' },
-                    { text: '超参数优化', link: '/zh-CN/hyperopt' },
-                    { text: '滚动优化回测', link: '/zh-CN/roll_btopt' },
-                    { text: '常见问题', link: '/zh-CN/faq' }
-                ]
-            },{
-                text: '进阶',
-                items: [
-                    {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
-                    {text: 'AI', link: '/zh-CN/advanced/ai'}
-                ]
-            }
-        ],
+        sidebar: {
+            '/zh-CN/': [
+                {
+                    text: '开始',
+                    items: [
+                        { text: '介绍', link: '/zh-CN/guide/start' },
+                        { text: '快速开始', link: '/zh-CN/guide/quick_start' },
+                        { text: '安装', link: '/zh-CN/guide/install' },
+                        { text: '初始化项目', link: '/zh-CN/guide/init_project' },
+                        { text: '命令行', link: '/zh-CN/guide/bot_usage' },
+                        { text: 'Banbot基础', link: '/zh-CN/guide/basic' },
+                        { text: '配置', link: '/zh-CN/guide/configuration' },
+                        { text: '自定义策略', link: '/zh-CN/guide/strat_custom' },
+                        { text: '品种管理器', link: '/zh-CN/guide/pair_filters' },
+                        { text: '超参数优化', link: '/zh-CN/guide/hyperopt' },
+                        { text: '滚动优化回测', link: '/zh-CN/guide/roll_btopt' },
+                        { text: '常见问题', link: '/zh-CN/guide/faq' }
+                    ]
+                },{
+                    text: '进阶',
+                    items: [
+                        {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
+                        {text: 'AI', link: '/zh-CN/advanced/ai'}
+                    ]
+                }
+            ],
+            '/zh-CN/api/': getApiMenus('/zh-CN')
+        },
 
         docFooter: {
             prev: '上一篇',

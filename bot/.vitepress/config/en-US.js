@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import {getApiMenus} from "./share";
 
 export default defineConfig({
     label: 'English',
@@ -6,35 +7,38 @@ export default defineConfig({
     themeConfig: {
         nav: [
             { text: 'Home', link: '/en-US' },
-            { text: 'Document', link: '/en-US/start' },
+            { text: 'Document', link: '/en-US/guide/start' },
             { text: 'API', link: '/en-US/api' }
         ],
 
-        sidebar: [
-            {
-                text: 'Start',
-                items: [
-                    { text: 'Introduce', link: '/en-US/start' },
-                    { text: 'Quick Start', link: '/en-US/quick_start' },
-                    { text: 'Install', link: '/en-US/install' },
-                    { text: 'Initialize the project', link: '/en-US/init_project' },
-                    { text: 'Commands', link: '/en-US/bot_usage' },
-                    { text: 'Banbot Basics', link: '/en-US/basic' },
-                    { text: 'Configuration', link: '/en-US/configuration' },
-                    { text: 'Custom Strategy', link: '/en-US/strat_custom' },
-                    { text: 'Symbol Manager', link: '/en-US/pair_filters' },
-                    { text: 'Hyperparameter optimization', link: '/en-US/hyperopt' },
-                    { text: 'Rolling optimization backtesting', link: '/en-US/roll_btopt' },
-                    { text: 'Q & A', link: '/en-US/faq' }
-                ]
-            },{
-                text: 'Advanced',
-                items: [
-                    {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
-                    {text: 'AI', link: '/en-US/advanced/ai'}
-                ]
-            }
-        ],
+        sidebar: {
+            '/en-US/': [
+                {
+                    text: 'Start',
+                    items: [
+                        { text: 'Introduce', link: '/en-US/guide/start' },
+                        { text: 'Quick Start', link: '/en-US/guide/quick_start' },
+                        { text: 'Install', link: '/en-US/guide/install' },
+                        { text: 'Initialize the project', link: '/en-US/guide/init_project' },
+                        { text: 'Commands', link: '/en-US/guide/bot_usage' },
+                        { text: 'Banbot Basics', link: '/en-US/guide/basic' },
+                        { text: 'Configuration', link: '/en-US/guide/configuration' },
+                        { text: 'Custom Strategy', link: '/en-US/guide/strat_custom' },
+                        { text: 'Symbol Manager', link: '/en-US/guide/pair_filters' },
+                        { text: 'Hyperparameter optimization', link: '/en-US/guide/hyperopt' },
+                        { text: 'Rolling optimization backtesting', link: '/en-US/guide/roll_btopt' },
+                        { text: 'Q & A', link: '/en-US/guide/faq' }
+                    ]
+                },{
+                    text: 'Advanced',
+                    items: [
+                        {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
+                        {text: 'AI', link: '/en-US/advanced/ai'}
+                    ]
+                }
+            ],
+            '/en-US/api/': getApiMenus('/en-US')
+        },
         editLink: {
             pattern: 'https://github.com/banbox/bandoc/edit/master/bot/:path',
             text: 'Edit this page on GitHub'

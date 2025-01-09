@@ -9,10 +9,10 @@ hero:
   actions:
     - theme: brand
       text: Document
-      link: /en-US/start
+      link: /en-US/guide/start
     - theme: brand
       text: 中文文档
-      link: /zh-CN/start
+      link: /zh-CN/guide/start
 
 features:
   - title: High Performance

@@ -28,7 +28,7 @@
 &emsp;optmize live data 
 
 
-# 各个Go包中的重要全局变量
+## 各个Go包中的重要全局变量
 ```text
 core
     Ctx  // 全局上下文，可select <- core.Ctx响应全局退出事件

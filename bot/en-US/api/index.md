@@ -26,7 +26,7 @@
 #### [entry](entry.md)
 &emsp;optmize live data 
 
-# Important Global Variables in Each Go Package
+## Important Global Variables in Each Go Package
 ```text
 core
     Ctx  // Global context, can use select <- core.Ctx to respond to global exit events
