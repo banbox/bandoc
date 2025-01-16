@@ -8,7 +8,7 @@ docker run -d --name timescaledb -p 127.0.0.1:5432:5432 \
   -v /opt/pgdata:/var/lib/postgresql/data \
   -e POSTGRES_PASSWORD=123 timescale/timescaledb:latest-pg17
 ```
-It is recommended to enable `-v` data directory mapping to avoid re-downloading K-lines when upgrading the image later.
+It is recommended to enable `-v` data directory mapping to avoid re-downloading candlesticks when upgrading the image later.
 
 If you are using Windows, you need to modify the host data directory `/opt/pgdata`.
 

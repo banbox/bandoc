@@ -22,4 +22,6 @@ banbot仅使用TimeScaledb用于存储K线或品种等公开数据，您回测�
 
 我们推荐使用`Cursor`作为IDE；您也可以使用`Visual Studio Code`或`GoLand`
 
-
+::: tip TIP
+如果您的网络环境不能直接访问golang.org，请配置[国内源](https://learnku.com/go/wikis/38122)
+:::

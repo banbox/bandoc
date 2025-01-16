@@ -2,6 +2,27 @@
 
 data 包提供了数据处理和管理相关的功能。
 
+此package的重要概念如下：
+* Provider：K线数据提供者，可包含多个有相同起止时间的Feeder
+* Feeder：对应一个品种的数据源，可以包含多个周期的数据
+* Spider：实时监听多个交易所数据、存储数据库，并TCP通知订阅方
+* Miner：每个交易所+市场对应一个Miner
+* KLineWatcher：用于和Spider通信的客户端
+
+## Provider和Feeder
+回测和实盘时都需要订阅K线数据，也可能同时运行多个策略，每个策略同时订阅多个时间周期；故提出接口`IProvider`支持回测(HistProvider)和实盘(LiveProvider)。
+
+每个品种的K线数据可能被多个策略同时使用，为避免每个策略重复获取，提出接口`IKlineFeeder`支持回测(DBKlineFeeder)和实盘(KlineFeeder+KLineWatcher)。
+
+每个KlineFeeder对应一个品种，可包含多个周期的数据，比如品种BTC/USDT可能被多个策略使用，订阅的周期有5m,1h,1d三个；为避免冗余数据读取，只会对最小周期(这里是5m)获取K线数据；其他更大周期数据会从最小周期聚合得到。
+
+#### Provider和Feeder适合的场景
+**起止时间一致的多品种、多周期数据读取**；比如回测或实盘都是对特定一段时间，运行一组策略，涉及一些品种的不同周期数据，建议使用Provider+Feeder。如果需要对多组不同的时间段分别获取数据，应实例化多个Provider+Feeder分开进行。
+
+#### Provider和Feeder不适合的场景
+**不同周期数据起止时间不一致**，比如对BTC/USDT的1m和1h都希望获得最近1k个K线用于回测或其他任务，如果强制使用Feeder，则1m实际会读取60*1k个K线，不如直接调用`orm.GetOHLCV`逐周期获取，或者分两次初始化Feeder分开读取。
+
+
 ## 重要结构体
 
 ### Feeder

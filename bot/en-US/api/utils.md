@@ -430,10 +430,10 @@ Returns:
 - `error` - Error information
 
 ### CalcEnvsCorr
-Calculate correlation between multiple K-line environments.
+Calculate correlation between multiple candlestick environments.
 
 Parameters:
-- `envs []*ta.BarEnv` - List of K-line environments
+- `envs []*ta.BarEnv` - List of indicator environments
 - `hisNum int` - Number of historical data points
 
 Returns:
@@ -574,10 +574,10 @@ Returns:
 - `*errs.Error` - Error information
 
 ### KlineToStr
-Convert K-line data to string array.
+Convert candlestick data to string array.
 
 Parameters:
-- `klines []*banexg.Kline` - K-line data array
+- `klines []*banexg.Kline` - candlestick data array
 - `loc *time.Location` - Timezone information
 
 Returns:

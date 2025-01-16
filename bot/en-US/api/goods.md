@@ -41,7 +41,7 @@ Price filter configuration structure.
 
 ### RateOfChangeFilter
 Price change ratio filter, calculates (high-low)/low ratio over a period.
-- `BackDays int` - Number of K-line days to look back
+- `BackDays int` - Number of candlestick days to look back
 - `Min float64` - Minimum price change ratio
 - `Max float64` - Maximum price change ratio
 - `RefreshPeriod int` - Cache time in seconds
@@ -61,7 +61,7 @@ Correlation filter.
 
 ### VolatilityFilter
 Volatility filter using StdDev(ln(close / prev_close)) * sqrt(num).
-- `BackDays int` - Number of K-line days to look back
+- `BackDays int` - Number of candlestick days to look back
 - `Max float64` - Maximum volatility score
 - `Min float64` - Minimum volatility score
 

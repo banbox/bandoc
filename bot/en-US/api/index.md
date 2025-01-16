@@ -1,4 +1,11 @@
+* In GO, a folder containing GO source code is called a package, which is the smallest unit for organizing code;
+* Packages can import each other, but they cannot form dependency cycles;
+* The dependency relationship between packages is independent of folder inclusion, and all packages are equal in terms of dependencies; (A package corresponding to a deeply nested folder can even serve as the entry point of the project)
+* The `import` statement for packages must be placed at the top of the file; it cannot be imported within functions, nor can it be dynamically imported;
+* The dependency relationships of all packages within the entire Go project should form a directed acyclic tree.
+
 ## Go Package Dependencies
+Banbot has divided several different packages according to functional features and dependency relationships, while some commonly used global variables are mostly scattered across multiple packages. Below is the dependency relationship of all packages:
 #### [core](core.md)
 &emsp;--
 #### [btime](btime.md)
@@ -54,9 +61,10 @@ exg
 strat
     StagyMap // Strategy registration map
     Versions // Strategy versions
-    Envs // All K-line environments involved: Pair+TimeFrame
-    PairTFStags // Symbol+TF+Strategy
-    AccJobs // All symbols involved
-    AccInfoJobs // All auxiliary information symbols involved
+    Envs // All candlestick environments involved: Pair+TimeFrame
+    PairTFStags // Symbol+TF+Strategy. pair:[stratID]TradeStrat
+    AccJobs // All symbols involved. account: pair_tf: [stratID]StratJob
+    AccInfoJobs // All auxiliary information symbols involved. account: pair_tf: [stratID]StratJob
+    ForbidJobs // forbid policy jobs for creation. pair_TF: stratID: empty
 ```
 Note: All variables starting with Acc are maps that support multiple accounts

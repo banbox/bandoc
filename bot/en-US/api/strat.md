@@ -10,14 +10,14 @@ Core structure for trading strategy, defines basic properties and behaviors of a
 Public fields:
 - `Name string` - Strategy name
 - `Version int` - Strategy version number
-- `WarmupNum int` - Number of K-lines needed for warmup
+- `WarmupNum int` - Number of candlesticks needed for warmup
 - `MinTfScore float64` - Minimum time frame quality, default 0.8
 - `WatchBook bool` - Whether to monitor order book
 - `DrawDownExit bool` - Whether to enable drawdown exit
 - `BatchInOut bool` - Whether to batch execute entry/exit
 - `BatchInfo bool` - Whether to perform batch processing after OnInfoBar
 - `StakeRate float64` - Relative basic amount billing rate
-- `StopEnterBars int` - Timeout K-line number for limit entry orders
+- `StopEnterBars int` - Timeout candlestick number for limit entry orders
 - `EachMaxLong int` - Maximum number of long orders per trading pair, -1 to disable
 - `EachMaxShort int` - Maximum number of short orders per trading pair, -1 to disable
 - `AllowTFs []string` - Allowed running time periods, use global configuration when not provided
@@ -29,7 +29,7 @@ Strategy task instance, responsible for executing specific trading operations.
 
 Public fields:
 - `Strat *TradeStrat` - Parent strategy
-- `Env *ta.BarEnv` - K-line environment
+- `Env *ta.BarEnv` - Indicator environment
 - `Entrys []*EnterReq` - Entry request list
 - `Exits []*ExitReq` - Exit request list
 - `LongOrders []*ormo.InOutOrder` - Long order list

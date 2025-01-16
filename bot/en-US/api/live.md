@@ -29,18 +29,18 @@ Features:
 - Check against configured `FatalStop` threshold
 
 ### CronKlineDelays
-Scheduled task for checking K-line delays.
+Scheduled task for checking candlestick delays.
 
 Features:
 - Execute check every 30 seconds
-- Monitor K-line data delays to ensure data timeliness
+- Monitor candlestick data delays to ensure data timeliness
 
 ### CronKlineSummary
-Scheduled task for generating K-line data summary.
+Scheduled task for generating candlestick data summary.
 
 Features:
 - Execute every 5 minutes
-- Generate statistical summary of K-line data
+- Generate statistical summary of candlestick data
 
 ### CronCheckTriggerOds
 Scheduled task for checking trigger orders.

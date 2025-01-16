@@ -12,7 +12,7 @@ Base order manager class that provides basic order management functionality.
 
 Main fields:
 - `Account`: Account name
-- `BarMS`: Current K-line timestamp (milliseconds)
+- `BarMS`: Current candlestick timestamp (milliseconds)
 
 ### IOrderMgr
 Order manager interface that defines basic order management methods.
@@ -22,7 +22,7 @@ Main methods:
 - `EnterOrder`: Process entry orders
 - `ExitOpenOrders`: Process exit orders
 - `ExitOrder`: Process single order exit
-- `UpdateByBar`: Update order status based on K-line
+- `UpdateByBar`: Update order status based on candlestick
 - `OnEnvEnd`: Handle environment end
 - `CleanUp`: Clean up resources
 
@@ -160,7 +160,7 @@ Reset variables.
 
 Implementation Details:
 - Reset various global mappings and variables
-- Including order managers, wallets, K-line environments, etc.
+- Including order managers, wallets, candlestick environments, etc.
 - Used for cleaning up state during system restart or reset
 
 ### InitDataDir
@@ -233,7 +233,7 @@ Verify trigger orders.
 Start live order manager.
 
 ### LoadZipKline
-Load K-line data from ZIP file.
+Load candlestick data from ZIP file.
 
 Parameters:
 - `inPath`: string - Input path
@@ -245,7 +245,7 @@ Returns:
 - `*errs.Error` - Error information
 
 Implementation Details:
-- Parse K-line data from ZIP file
+- Parse candlestick data from ZIP file
 - Support multiple data formats
 - Handle timestamps and price data
 - Used for historical data import
@@ -266,7 +266,7 @@ Implementation Details:
 - Used for managing trading calendars
 
 ### ExportKlines
-Export K-line data.
+Export candlestick data.
 
 Parameters:
 - `args`: *config.CmdArgs - Command line arguments
@@ -276,13 +276,13 @@ Returns:
 - `*errs.Error` - Error information
 
 Implementation Details:
-- Export K-line data for specified trading pairs
+- Export candlestick data for specified trading pairs
 - Support multiple time periods
 - Support adjustment factor processing
 - Used for data analysis and backup
 
 ### PurgeKlines
-Clean up K-line data.
+Clean up candlestick data.
 
 Parameters:
 - `args`: *config.CmdArgs - Command line arguments
@@ -291,7 +291,7 @@ Returns:
 - `*errs.Error` - Error information
 
 Implementation Details:
-- Delete K-line data based on specified conditions
+- Delete candlestick data based on specified conditions
 - Support filtering by trading pair and time period
 - Requires user confirmation before execution
 - Used for data cleanup and maintenance

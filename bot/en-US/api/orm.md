@@ -37,7 +37,7 @@ Fields:
 - `DelistMs int64` - Delisting timestamp (milliseconds)
 
 ### InsKline
-K-line insertion task structure, used to manage K-line data insertion operations.
+candlestick insertion task structure, used to manage candlestick data insertion operations.
 
 Fields:
 - `ID int32` - Task ID
@@ -47,7 +47,7 @@ Fields:
 - `StopMs int64` - End timestamp (milliseconds)
 
 ### KHole
-K-line data gap structure, used to record missing periods in K-line data.
+candlestick data gap structure, used to record missing periods in candlestick data.
 
 Fields:
 - `ID int64` - Gap record ID
@@ -58,7 +58,7 @@ Fields:
 - `NoData bool` - Whether confirmed no data exists
 
 ### KInfo
-K-line information structure, used to record basic information about K-line data.
+candlestick information structure, used to record basic information about candlestick data.
 
 Fields:
 - `Sid int32` - Trading pair ID
@@ -67,7 +67,7 @@ Fields:
 - `Stop int64` - End timestamp (milliseconds)
 
 ### KlineUn
-Unadjusted K-line data structure, containing raw K-line data.
+Unadjusted candlestick data structure, containing raw candlestick data.
 
 Fields:
 - `Sid int32` - Trading pair ID
@@ -82,10 +82,10 @@ Fields:
 - `Info float64` - Additional information
 
 ### InfoKline
-K-line data structure with additional information.
+candlestick data structure with additional information.
 
 Fields:
-- `PairTFKline *banexg.PairTFKline` - Base K-line data
+- `PairTFKline *banexg.PairTFKline` - Base candlestick data
 - `Adj *AdjInfo` - Price adjustment information
 - `IsWarmUp bool` - Whether it's warm-up data
 
@@ -100,7 +100,7 @@ Fields:
 - `StopMS int64` - End timestamp (milliseconds)
 
 ### KlineAgg
-K-line data aggregation configuration structure, used to manage K-line aggregation for different time periods.
+candlestick data aggregation configuration structure, used to manage candlestick aggregation for different time periods.
 
 Fields:
 - `TimeFrame string` - Time period
@@ -315,10 +315,10 @@ Returns:
 - `map[int32]*ExSymbol` - Mapping from trading pair ID to trading pair information
 - `*errs.Error` - Error information
 
-## K-line Data Related
+## candlestick Data Related
 
 ### AutoFetchOHLCV
-Automatically fetch K-line data, supporting data completion and unfinished K-lines.
+Automatically fetch candlestick data, supporting data completion and unfinished candlesticks.
 
 Parameters:
 - `exchange banexg.BanExchange` - Exchange interface
@@ -327,16 +327,16 @@ Parameters:
 - `startMS int64` - Start time (milliseconds)
 - `endMS int64` - End time (milliseconds)
 - `limit int` - Limit count
-- `withUnFinish bool` - Whether to include unfinished K-lines
+- `withUnFinish bool` - Whether to include unfinished candlesticks
 - `pBar *utils.PrgBar` - Progress bar
 
 Returns:
 - `[]*AdjInfo` - Price adjustment information
-- `[]*banexg.Kline` - K-line data
+- `[]*banexg.Kline` - candlestick data
 - `*errs.Error` - Error information
 
 ### GetOHLCV
-Get K-line data.
+Get candlestick data.
 
 Parameters:
 - `exs *ExSymbol` - Trading pair information
@@ -344,15 +344,15 @@ Parameters:
 - `startMS int64` - Start time (milliseconds)
 - `endMS int64` - End time (milliseconds)
 - `limit int` - Limit count
-- `withUnFinish bool` - Whether to include unfinished K-lines
+- `withUnFinish bool` - Whether to include unfinished candlesticks
 
 Returns:
 - `[]*AdjInfo` - Price adjustment information
-- `[]*banexg.Kline` - K-line data
+- `[]*banexg.Kline` - candlestick data
 - `*errs.Error` - Error information
 
 ### BulkDownOHLCV
-Bulk download K-line data.
+Bulk download candlestick data.
 
 Parameters:
 - `exchange banexg.BanExchange` - Exchange interface

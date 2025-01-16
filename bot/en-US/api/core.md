@@ -61,7 +61,7 @@ Set time parameters for trading pair.
 
 Parameters:
 - `pair string` - Trading pair name
-- `barMS int64` - K-line time interval (milliseconds)
+- `barMS int64` - candlestick time interval (milliseconds)
 - `waitMS int64` - Wait time (milliseconds)
 
 ### Sleep

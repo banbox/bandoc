@@ -36,9 +36,13 @@ margin_add_rate: 0.66  # For futures contracts, add margin when the loss reaches
 stake_amount: 15  # Default amount per order, lower priority than stake_pct
 stake_pct: 50  # Percentage of account to use for each order, based on the nominal value
 max_stake_amt: 5000  # Max order amount of 5k, valid only if stake_pct is specified
+charge_on_bomb: false # Automatically recharge to continue backtesting when backtesting liquidation occurs
 open_vol_rate: 1  # Maximum allowed open order quantity / average candle volume ratio when not specifying order quantity, default is 1
 min_open_rate: 0.5  # Minimum open order ratio, allows order if balance / per order amount exceeds this ratio when balance is insufficient, default is 0.5 (50%)
+max_simul_open: 0 # Maximum number of simultaneously open orders on one candlestick
 bt_net_cost: 15  # Order delay in backtest, can be used to simulate slippage, in seconds, default is 15
+relay_sim_unfinish: false  # When trading a new symbol (backtesting/live trading), whether to trading from the open order relay at the beginning time
+order_bar_max: 500  # Find the maximum number of bars for forward simulation from the open orders at the start time.
 wallet_amounts:  # Wallet balance, used for backtesting
   USDT: 10000
 stake_currency: [USDT, TUSD]  # Limit trading pairs to those priced in these currencies
@@ -58,14 +62,17 @@ run_policy:  # The strategy to run, multiple strategies can run simultaneously o
       limit: 30  # Take up to 30 items
     max_pair: 999  # Maximum number of symbols allowed for this strategy
     max_open: 10  # Maximum number of open orders for this strategy
+    max_simul_open: 0  # Maximum number of orders opened simultaneously on a candlestick
+    order_bar_max: 0  # Overrides the global default order_bar_max when non-zero
+    stake_rate: 1 # The stake amount rate for this strategy
     dirt: any  # any/long/short
     pairs: [BTC/USDT:USDT]
     params: {atr: 15}
     pair_params:
       BTC/USDT:USDT: {atr:14}
-    strtg_perf:  # Same as root-level strtg_perf configuration
+    strat_perf:  # Same as root-level strat_perf configuration
       enable: false
-strtg_perf:
+strat_perf:
   enable: false  # Whether to enable strategy symbol performance tracking, automatically reduces order size for symbols with significant losses
   min_od_num: 5  # Minimum of 5 orders, default is 5; performance will not be calculated if fewer than 5
   max_od_num: 30  # Maximum number of orders in a job, minimum is 8, default is 30
@@ -80,9 +87,12 @@ pairmgr:
   cron: '25 1 0 */2 * *' # Second Minute Hour Day Month Weekday
   offset: 0  # Ignore the first n symbols in the list
   limit: 999  # Keep a maximum of n symbols in the list
+  force_filters: false  # apply pairlists to static pairs force; default: false
+  pos_on_rotation: hold  # hold/close the position when rotating the symbol list, default: hold
 pairlists:  # Filters for trading pairs, applied sequentially in top-down order
   - name: VolumePairList  # Sort all pairs by trading volume in descending order
     limit: 100  # Take the top 100 pairs
+    limit_rate: 1 # Cut limit by the rate
     min_value: 100000  # Minimum trading volume value
     refresh_secs: 7200  # Cache duration
     back_timeframe: 1d  # Timeframe for calculating trading volume, default is 1 day
@@ -104,6 +114,7 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     max: 1  # Filter symbols based on correlation to the market average; default is 0 (disabled)
     timeframe: 5m  # Timeframe for calculating correlation
     back_num: 70  # Lookback length for correlation data
+    sort: asc  # asc/desc/""
     top_n: 50  # Return only the top n symbols with the lowest correlation; default is 0 (no limit)
   - name: VolatilityFilter  # Volatility filter, formula: std(log(c/c1)) * sqrt(back_days)
     back_days: 10  # Number of days to review for candle data
@@ -113,7 +124,9 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
   - name: AgeFilter  # Filter symbols based on listing days
     min: 5
   - name: OffsetFilter  # Offset limit filter, typically used last
+    reverse: false  # reverse array
     offset: 10  # Start from the 10th item
+    rate: 0.5  # 50% of array
     limit: 30  # Take up to 30 items
   - name: ShuffleFilter  # Random shuffle
     seed: 42  # Random seed, optional
@@ -134,7 +147,44 @@ exchange:  # Exchange configuration
       default:
         api_key: xxx
         api_secret: bbb
-    options:  # Parameters for initializing the exchange via banexg, keys will be automatically converted from snake_case to camelCase.
+    options:  # Parameters for initializing the exchange via banexg, keys will be automatically converted from snake_case to CamelCase.
+database:
+  retention: all
+  max_pool_size: 50
+  auto_create: true  # Whether to automatically create the database if it does not exist
+  url: postgresql://postgres:123@[127.0.0.1]:5432/ban
+spider_addr: 127.0.0.1:6789  # Port and address monitored by the spider process
+rpc_channels:  # RPC channels for sending message notifications
+  wx_notify:  # Name of the RPC channel
+    corp_id: ww0f12345678b7e
+    agent_id: '1000005'
+    corp_secret: b123456789_1Cx1234YB9K-MuVW1234
+    touser: '@all'
+    type: wework  # RPC type, supports: wework
+    msg_types: [exception]  # Allowed message types to send
+    accounts: []  # Allowed accounts, allows all if empty
+    keywords: []  # Message filter keywords
+    retry_num: 0
+    retry_delay: 1000
+    disable: true
+webhook:  # Message types that can be sent via RPC
+  entry:
+    content: "{name} {action}\\nSymbol: {pair} {timeframe}\\nTag: {strategy}  {enter_tag}\\nPrice: {price:.5f}\\nCost: {value:.2f}"
+  exit:
+    content: "{name} {action}\\nSymbol: {pair} {timeframe}\\nTag: {strategy}  {exit_tag}\\nPrice: {price:.5f}\\nCost: {value:.2f}\\nProfit: {profit:.2f}"
+  status:  # Bot status messages: start, stop, etc.
+    content: '{name}: {status}'
+  exception:
+    content: '{name}: {status}'
+api_server:  # For external control of the bot or access to dashboard via API
+  enabled: true
+  bind_ip: 0.0.0.0
+  port: 8001
+  jwt_secret_key: fn234njkcu89234nbf
+  users:
+    - user: ban
+      pwd: 123
+      acc_roles: {user1: admin}
 ```
 
 ## Important details configuration

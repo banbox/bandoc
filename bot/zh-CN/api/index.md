@@ -1,5 +1,11 @@
+* GO中一个包含go源码的文件夹即包(package)，是组织代码的最小单元；
+* 包之间可以互相导入，但不能形成依赖环；
+* 包的依赖关系和文件夹包含无关，所有包在依赖上都是平等的；（层级很深的文件夹对应包甚至可以作为项目入口包）
+* 包的导入`import`语句必须放在文件顶部，不能在函数中导入，也不能动态导入;
+* 整个go项目的所有包依赖关系应形成一个单向无环树。
 
 ## Go包依赖关系
+banbot按功能特性和依赖关系划分了若干不同的包，而常用的一些全局变量大多分散在多个包，下面是全部包的依赖关系：
 #### [core](core.md)
 &emsp;--
 #### [btime](btime.md)
@@ -57,8 +63,9 @@ strat
     StagyMap // 策略注册map
     Versions // 策略版本
     Envs // 涉及的所有K线环境：Pair+TimeFrame
-    PairTFStags // 标的+TF+策略
-    AccJobs // 涉及的所有标的
-    AccInfoJobs // 涉及的所有辅助信息标的
+    PairTFStags // 标的+TF+策略 pair:[stratID]TradeStrat
+    AccJobs // 涉及的所有标的 account: pair_tf: [stratID]StratJob
+    AccInfoJobs // 涉及的所有辅助信息标的 account: pair_tf: [stratID]StratJob
+    ForbidJobs // 禁止创建的策略任务 pair_TF: stratID: empty
 ```
 注意：所有Acc开头的变量都是支持多账户的map
