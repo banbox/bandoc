@@ -29,7 +29,7 @@ Banbot has divided several different packages according to functional features a
 #### [opt](opt.md)
 &emsp;biz data orm goods strat
 #### [live](live.md)
-&emsp;biz data orm goods strat
+&emsp;biz data orm goods strat opt
 #### [entry](entry.md)
 &emsp;optmize live data 
 

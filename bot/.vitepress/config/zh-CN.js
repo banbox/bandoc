@@ -34,6 +34,7 @@ export default defineConfig({
                 },{
                     text: '进阶',
                     items: [
+                        {text: '自定义CMD', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
                         {text: 'AI', link: '/zh-CN/advanced/ai'}
                     ]

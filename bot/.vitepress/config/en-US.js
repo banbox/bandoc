@@ -32,6 +32,7 @@ export default defineConfig({
                 },{
                     text: 'Advanced',
                     items: [
+                        {text: 'Custom commands', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
                         {text: 'AI', link: '/en-US/advanced/ai'}
                     ]

@@ -29,7 +29,7 @@ banbot按功能特性和依赖关系划分了若干不同的包，而常用的�
 #### [opt](opt.md)
 &emsp;biz data orm goods strat
 #### [live](live.md)
-&emsp;biz data orm goods strat
+&emsp;biz data orm goods strat opt
 #### [entry](entry.md)
 &emsp;optmize live data 
 

@@ -35,6 +35,7 @@ stake_amount: 15  # 单笔订单默认本金，优先级低于stake_pct
 stake_pct: 50 # 单笔开单金额百分比，名义价值
 max_stake_amt: 5000 # 单笔上限5k，仅stake_pct有值时有效
 charge_on_bomb: false # 回测爆仓时自动充值继续回测
+take_over_strat: ma:demo # 实盘时接管用户开单的策略，默认为空
 open_vol_rate: 1 # 未指定数量开单时，最大允许开单数量/平均蜡烛成交量的比值，默认1
 min_open_rate: 0.5 # 最小开单比率，余额不足单笔金额时，余额/单笔金额高于此比率允许开单，默认0.5即50%
 max_simul_open: 0 # 在一个bar上最大同时打开订单数量

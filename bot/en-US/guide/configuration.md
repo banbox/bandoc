@@ -37,6 +37,7 @@ stake_amount: 15  # Default amount per order, lower priority than stake_pct
 stake_pct: 50  # Percentage of account to use for each order, based on the nominal value
 max_stake_amt: 5000  # Max order amount of 5k, valid only if stake_pct is specified
 charge_on_bomb: false # Automatically recharge to continue backtesting when backtesting liquidation occurs
+take_over_strat: ma:demo # The strategy for taking over user orders during real trading, empty by default
 open_vol_rate: 1  # Maximum allowed open order quantity / average candle volume ratio when not specifying order quantity, default is 1
 min_open_rate: 0.5  # Minimum open order ratio, allows order if balance / per order amount exceeds this ratio when balance is insufficient, default is 0.5 (50%)
 max_simul_open: 0 # Maximum number of simultaneously open orders on one candlestick
