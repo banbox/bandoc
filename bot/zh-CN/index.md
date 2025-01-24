@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 文档
-      link: /zh-CN/start
+      link: /zh-CN/guide/start
 
 features:
   - title: 高性能

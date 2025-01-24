@@ -27,8 +27,7 @@ export default defineConfig({
                         { text: '配置', link: '/zh-CN/guide/configuration' },
                         { text: '自定义策略', link: '/zh-CN/guide/strat_custom' },
                         { text: '品种管理器', link: '/zh-CN/guide/pair_filters' },
-                        { text: '超参数优化', link: '/zh-CN/guide/hyperopt' },
-                        { text: '滚动优化回测', link: '/zh-CN/guide/roll_btopt' },
+                        { text: '实时交易', link: '/zh-CN/guide/live_trading' },
                         { text: '常见问题', link: '/zh-CN/guide/faq' }
                     ]
                 },{
@@ -36,6 +35,8 @@ export default defineConfig({
                     items: [
                         {text: '自定义CMD', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
+                        { text: '超参数优化', link: '/zh-CN/guide/hyperopt' },
+                        { text: '滚动优化回测', link: '/zh-CN/guide/roll_btopt' },
                         {text: 'AI', link: '/zh-CN/advanced/ai'}
                     ]
                 }

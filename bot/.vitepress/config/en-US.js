@@ -25,8 +25,7 @@ export default defineConfig({
                         { text: 'Configuration', link: '/en-US/guide/configuration' },
                         { text: 'Custom Strategy', link: '/en-US/guide/strat_custom' },
                         { text: 'Symbol Manager', link: '/en-US/guide/pair_filters' },
-                        { text: 'Hyperparameter optimization', link: '/en-US/guide/hyperopt' },
-                        { text: 'Rolling optimization backtesting', link: '/en-US/guide/roll_btopt' },
+                        { text: 'Live Trading', link: '/en-US/guide/live_trading' },
                         { text: 'Q & A', link: '/en-US/guide/faq' }
                     ]
                 },{
@@ -34,6 +33,8 @@ export default defineConfig({
                     items: [
                         {text: 'Custom commands', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
+                        { text: 'Hyperparameter optimization', link: '/en-US/guide/hyperopt' },
+                        { text: 'Rolling optimization backtesting', link: '/en-US/guide/roll_btopt' },
                         {text: 'AI', link: '/en-US/advanced/ai'}
                     ]
                 }

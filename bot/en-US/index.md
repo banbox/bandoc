@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Document
-      link: /en-US/start
+      link: /en-US/guide/start
 
 features:
   - title: High Performance
