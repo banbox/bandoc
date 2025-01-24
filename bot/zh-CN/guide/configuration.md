@@ -38,6 +38,7 @@ charge_on_bomb: false # 回测爆仓时自动充值继续回测
 take_over_strat: ma:demo # 实盘时接管用户开单的策略，默认为空
 open_vol_rate: 1 # 未指定数量开单时，最大允许开单数量/平均蜡烛成交量的比值，默认1
 min_open_rate: 0.5 # 最小开单比率，余额不足单笔金额时，余额/单笔金额高于此比率允许开单，默认0.5即50%
+low_cost_action: ignore # 开单金额不足最小金额时的动作：ignore/keepBig/keepAll
 max_simul_open: 0 # 在一个bar上最大同时打开订单数量
 bt_net_cost: 15 # 回测时下单延迟，可用于模拟滑点，单位：秒，默认15
 relay_sim_unfinish: false  # 交易新品种时(回测/实盘)，是否从开始时间未平仓订单接力开始交易

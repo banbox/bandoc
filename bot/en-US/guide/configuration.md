@@ -40,6 +40,7 @@ charge_on_bomb: false # Automatically recharge to continue backtesting when back
 take_over_strat: ma:demo # The strategy for taking over user orders during real trading, empty by default
 open_vol_rate: 1  # Maximum allowed open order quantity / average candle volume ratio when not specifying order quantity, default is 1
 min_open_rate: 0.5  # Minimum open order ratio, allows order if balance / per order amount exceeds this ratio when balance is insufficient, default is 0.5 (50%)
+low_cost_action: ignore # Action when stake amount < the minimum amount: ignore/keepBig/keepAll
 max_simul_open: 0 # Maximum number of simultaneously open orders on one candlestick
 bt_net_cost: 15  # Order delay in backtest, can be used to simulate slippage, in seconds, default is 15
 relay_sim_unfinish: false  # When trading a new symbol (backtesting/live trading), whether to trading from the open order relay at the beginning time
