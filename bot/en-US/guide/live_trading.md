@@ -88,8 +88,22 @@ You can configure `rpc_channels` in the YML file for notifications. Messages wil
 
 You can follow the WeCom plugin in WeChat (scan the QR code from the WeCom PC management console) to receive these messages in WeChat.
 
-**DashBoard**  
-You can configure `api_server` in the YML file. This will start a web server when the bot starts. After the bot is running, you can access the bot's DashBoard using the configured account credentials to view trading summaries and manage the bot.
+**DashBoard**
+
+You can configure `api_server` in the yml file, which will start a web service simultaneously when the robot is started. Then you can access the robot's DashBoard through the configured account and password after the robot is started, to view the trading overview and manage the robot.
+
+The web service above is started with http, it is recommended that you set `bind_ip` to local or LAN ip to avoid unauthorized access.
+
+If you need to access the Dashboard from other hosts, you can connect to the server running the robot via ssh, and then map the web service port to other hosts through port forwarding:
+```shell
+ssh -L [local port]:[remote host]:[remote port] [username]@[remote server address]
+# e.g.
+ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
+```
+
+::: tip Tip
+If you need to expose the dashboard to the Internet, it is strongly recommended that you configure https through nginx and set a strong account and password.
+:::
 
 **Monitoring**  
 You can use `crontab` to periodically execute the [check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh) script to check the bot's status and send email notifications.

@@ -89,7 +89,20 @@ nohup /ban/bot trade -config $/demo.yml > /root/logs/trade.log 2>&1 &
 您微信中关注企业微信插件（登录企业微信PC管理后台查看二维码），即可从微信收到上面消息。
 
 **DashBoard**  
-您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务器，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。
+您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。
+
+上面的web服务是以http启动的，建议您将`bind_ip`设为本地或局域网ip，以避免未授权的访问。
+
+如果您需要从其他主机访问Dashboard，您可通过ssh连接到运行机器人的服务器，然后通过端口转发映射web服务端口到其他主机：
+```shell
+ssh -L [本地端口]:[远程主机]:[远程端口] [用户名]@[远程服务器地址]
+# e.g. 
+ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
+```
+
+::: tip Tip 
+如果您需要将dashboard暴露到互联网，强烈建议您通过nginx等配置https，并设置一个较强的账号和密码。
+:::
 
 **监控存活**  
 您可使用`crontab`定期执行[check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh)脚本，检查机器人存活情况，发送邮件通知。
