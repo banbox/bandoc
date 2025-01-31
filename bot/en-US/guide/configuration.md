@@ -96,9 +96,8 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     limit: 100  # Take the top 100 pairs
     limit_rate: 1 # Cut limit by the rate
     min_value: 100000  # Minimum trading volume value
-    refresh_secs: 7200  # Cache duration
-    back_timeframe: 1d  # Timeframe for calculating trading volume, default is 1 day
-    back_period: 1  # Multiplier for the trading volume period, back_timeframe * back_period gives the time range
+    cache_secs: 7200  # Cache duration
+    back_period: 3d  # TimePeriod for calculating trading volume
   - name: PriceFilter  # Price filter
     max_unit_value: 100  # Max allowed unit price change value (based on quote currency, usually USDT)
     precision: 0.0015  # Filter pairs based on price precision, default requires price changes to be at least 0.1%
@@ -108,7 +107,7 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     back_days: 5  # Number of days to review for candle data
     min: 0.03  # Minimum price change ratio
     max: 10  # Maximum price change ratio
-    refresh_period: 1440  # Cache duration, in seconds
+    cache_secs: 1440  # Cache duration, in seconds
   - name: SpreadFilter  # Liquidity filter
     max_ratio: 0.005  # Formula: 1 - bid/ask, max price spread ratio allowed
   - name: CorrelationFilter  # Correlation filter
@@ -122,7 +121,6 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     back_days: 10  # Number of days to review for candle data
     max: 1  # Maximum volatility score, higher values allow more volatile symbols on the daily level
     min: 0.05  # Minimum volatility score, lower values allow symbols with less volatility on the daily level
-    refresh_period: 1440  # Cache duration
   - name: AgeFilter  # Filter symbols based on listing days
     min: 5
   - name: OffsetFilter  # Offset limit filter, typically used last

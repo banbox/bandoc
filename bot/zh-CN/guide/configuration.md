@@ -94,9 +94,8 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
     limit: 100  # 取前100个
     limit_rate: 1 # 按比例截取
     min_value: 100000  # 最低成交量价值
-    refresh_secs: 7200  # 缓存时间
-    back_timeframe: 1d  # 计算成交量时间周期，默认：天
-    back_period: 1  # 计算成交量的乘数，和back_timeframe相乘得到时间范围
+    cache_secs: 7200  # 缓存时间
+    back_period: 3d  # 计算成交量时间周期
   - name: PriceFilter  # 价格过滤器
     max_unit_value: 100  # 最大允许的单位价格变动对应的价值(针对定价货币，一般是USDT)。
     precision: 0.0015  # 按价格精度过滤交易对，默认要求价格变动最小单位是0.1%
@@ -106,7 +105,7 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
     back_days: 5  # 回顾的K线天数
     min: 0.03  # 最小价格变动比率
     max: 10  # 最大价格变动比率
-    refresh_period: 1440  # 缓存时间，秒
+    cache_secs: 1440  # 缓存时间，秒
   - name: SpreadFilter  # 流动性过滤器
     max_ratio: 0.005  # 公式：1-bid/ask，买卖价差占价格的最大比率
   - name: CorrelationFilter  # 相关性过滤器
@@ -120,7 +119,6 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
     back_days: 10  # 回顾的K线天数
     max: 1  # 波动分数最大值，此值越大，允许一些在1d级别上变化非常剧烈的标的
     min: 0.05  # 波动分数最小值，此值越小，允许一些在1d级别上变化非常小的标的
-    refresh_period: 1440  # 缓存时间
   - name: AgeFilter  # 按标的的上市天数过滤
     min: 5
   - name: OffsetFilter  # 偏移限定数量选择。一般用在最后

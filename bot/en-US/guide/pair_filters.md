@@ -24,14 +24,13 @@ The corn expression will also be executed during backtesting to refresh the inst
   The first of the yaml instrument filter list must be `VolumePairList`, which can return a list of instruments from all instruments in the market.
 
 ## VolumePairList
-Sort/filter currency pairs by volume. When it is the first, it will calculate the volume of all instruments in the period specified by `back_timeframe` and `back_period` and return it in descending order.
+Sort/filter currency pairs by volume. When it is the first, it will calculate the volume of all instruments in the period specified by `back_period` and return it in descending order.
 ```yaml
 - name: VolumePairList # Sort all trading pairs by volume value in descending order
   limit: 100 # Take the first 100
   min_value: 100000 # Minimum volume value
-  refresh_secs: 7200 # Cache time
-  back_timeframe: 1d # Calculate volume time period, default: day
-  back_period: 1 # Calculate volume multiplier, multiply with back_timeframe to get time range
+  cache_secs: 7200 # Cache time
+  back_period: 3d # TimePeriod for calculating trading volume
 ```
 ## PriceFilter
 Allows filtering instrument lists by price.
@@ -49,7 +48,7 @@ Volatility filter.
   back_days: 5 # Number of days to review the candle
   min: 0.03 # Minimum price change ratio
   max: 10 # Maximum price change ratio
-  refresh_period: 1440 # Cache time, seconds
+  cache_secs: 1440 # Cache time, seconds
 ```
 ## SpreadFilter
 Liquidity filter. Formula: 1-bid/ask, the maximum ratio of bid-ask spread to price
@@ -74,7 +73,6 @@ Volatility filter. Formula: std(log(c/c1)) * sqrt(back_days)
   back_days: 10 # Number of days to review the candle
   max: 1 # Maximum value of the volatility score. The larger the value, the more it allows for some targets that change very drastically at the 1d level
   min: 0.05 # Minimum value of the volatility score. The smaller the value, the more it allows for some targets that change very little at the 1d level
-  refresh_period: 1440 # Cache time
 ```
 ## AgeFilter
 Filter by the listing time of the product.

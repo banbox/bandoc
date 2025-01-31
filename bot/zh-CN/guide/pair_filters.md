@@ -22,14 +22,13 @@
 yaml的品种过滤器列表的第一个必须是`VolumePairList`，它可以从市场所有品种返回一个品种列表。
 
 ## VolumePairList
-根据交易量对货币对进行排序/过滤。当其处于第一个时，会计算由`back_timeframe`和`back_period`指定的周期内，所有品种的交易量，并降序返回。
+根据交易量对货币对进行排序/过滤。当其处于第一个时，会计算由`back_period`指定的周期内，所有品种的交易量，并降序返回。
 ```yaml
   - name: VolumePairList  # 按成交量价值倒序排序所有交易对
     limit: 100  # 取前100个
     min_value: 100000  # 最低成交量价值
-    refresh_secs: 7200  # 缓存时间
-    back_timeframe: 1d  # 计算成交量时间周期，默认：天
-    back_period: 1  # 计算成交量的乘数，和back_timeframe相乘得到时间范围
+    cache_secs: 7200  # 缓存时间
+    back_period: 3d  # 计算成交量时间周期
 ```
 ## PriceFilter
 允许按价格筛选品种列表。
@@ -47,7 +46,7 @@ yaml的品种过滤器列表的第一个必须是`VolumePairList`，它可以从
     back_days: 5  # 回顾的K线天数
     min: 0.03  # 最小价格变动比率
     max: 10  # 最大价格变动比率
-    refresh_period: 1440  # 缓存时间，秒
+    cache_secs: 1440  # 缓存时间，秒
 ```
 ## SpreadFilter
 流动性过滤器。公式：1-bid/ask，买卖价差占价格的最大比率
@@ -72,7 +71,6 @@ yaml的品种过滤器列表的第一个必须是`VolumePairList`，它可以从
     back_days: 10  # 回顾的K线天数
     max: 1  # 波动分数最大值，此值越大，允许一些在1d级别上变化非常剧烈的标的
     min: 0.05  # 波动分数最小值，此值越小，允许一些在1d级别上变化非常小的标的
-    refresh_period: 1440  # 缓存时间
 ```
 ## AgeFilter
 按品种上市时间过滤。

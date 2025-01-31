@@ -28,7 +28,7 @@ sid+timeframe应在此表中唯一对应一条记录。若当前是10:37分，�
 
 您可执行下面命令导出K线：
 
-`bot data export -config $/export.yml -out $/data -concur 4`
+`bot data export -config $export.yml -out $data -concur 4`
 
 其中`-config`和`-out`是必填参数，您可使用`-config`同时指定机器人配置和导出配置，banbot会将最后一个yml配置文件作为导出配置文件，导出配置示例：
 ```yaml
@@ -55,7 +55,7 @@ klines:
 
 您可执行下面命令导出：
 
-`bot kline export -out $/data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
+`bot kline export -out $data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
 
 其中`-out`和`-timeframes`是必填参数，`-out`应当是一个目录，当您未指定`pairs`时，banbot将使用当前yaml配置的交易所和市场下所有的品种。
 
@@ -66,7 +66,7 @@ klines:
 ## 导入K线(protobuf)
 您可指定下面命令从导出数据导入到当前数据库：
 
-`bot data import -in $/data -concur 4`
+`bot data import -in $data -concur 4`
 
 其中`-in`是必填参数，`-concur`是并发导入线程数量，默认1，此设置无需与导出时保持一致。
 
@@ -75,7 +75,7 @@ banbot保存品种信息时，其`sid`在每个数据库都是随机的，故在
 ## 导入K线(csv.zip)
 您可使用下面命令导入zip数据到数据库：
 
-`bot kline load -in $/data`
+`bot kline load -in $data`
 
 其中`-in`是必填参数，其路径可以是zip文件，也可以是包含zip文件的文件夹。
 

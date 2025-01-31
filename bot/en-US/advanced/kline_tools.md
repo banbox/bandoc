@@ -28,7 +28,7 @@ When you need to synchronize candlestick data to another banbot's TimeScaledb da
 
 You can execute the following command to export candlesticks:
 
-`bot data export -config $/export.yml -out $/data -concur 4`
+`bot data export -config $export.yml -out $data -concur 4`
 
 Where `-config` and `-out` are required parameters. You can use `-config` to specify both robot configuration and export configuration. banbot will use the last yml configuration file as the export configuration file. Export configuration example:
 ```yaml
@@ -55,7 +55,7 @@ When you need to export candlesticks for further reading by other programs, it's
 
 You can execute the following command to export:
 
-`bot kline export -out $/data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
+`bot kline export -out $data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
 
 Where `-out` and `-timeframes` are required parameters. `-out` should be a directory. When `pairs` is not specified, banbot will use all symbols under the current yaml configured exchange and market.
 
@@ -66,7 +66,7 @@ During export, data will be saved in the export directory with the naming format
 ## Importing Candlesticks (protobuf)
 You can specify the following command to import from exported data into the current database:
 
-`bot data import -in $/data -concur 4`
+`bot data import -in $data -concur 4`
 
 Where `-in` is a required parameter, `-concur` is the number of concurrent import threads, default 1. This setting doesn't need to match the export setting.
 
@@ -75,7 +75,7 @@ When banbot saves symbol information, its `sid` is random in each database, so d
 ## Importing Candlesticks (csv.zip)
 You can use the following command to import zip data into the database:
 
-`bot kline load -in $/data`
+`bot kline load -in $data`
 
 Where `-in` is a required parameter. The path can be a zip file or a folder containing zip files.
 

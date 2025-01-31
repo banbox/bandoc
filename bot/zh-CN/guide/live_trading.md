@@ -74,13 +74,18 @@ config.local.yml的优先级高于config.yml，您可在这两个配置文件中
 **启动爬虫**  
 执行`bot spider`即可立即启动爬虫进程，推荐后台启动并转储日志：
 ```shell
-nohup /ban/bot spider > /root/logs/spider.log 2>&1 &
+nohup /ban/bot spider > /tmp/spider.log 2>&1 &
 ```
 **启动交易机器人**  
 执行`bot trade`即可启动实时交易机器人，推荐后台启动并转储日志：
 ```shell
-nohup /ban/bot trade -config $/demo.yml > /root/logs/trade.log 2>&1 &
+nohup /ban/bot trade -config $demo.yml > /tmp/trade.log 2>&1 &
 ```
+::: tip Tip
+spider进程日志会自动保存到`$logs/spider.log`；机器人进程日志会自动保存到`$logs/[bot_name].log`；日志文件大小超过300M会自动轮换。
+
+故您可以直接将spider和机器人的stdout,stderr输出重定向到`/dev/null`
+:::
 
 ### 5. 消息通知、DashBoard和监控
 **消息通知**  
