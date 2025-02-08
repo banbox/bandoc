@@ -17,7 +17,7 @@ features:
   - title: Easy to use
     details: one version of the strategy, supporting backtesting, simulated real-time trading and real trading at the same time
   - title: Flexible
-    details: Freely combine different products, strategies and time periods
+    details: Freely combine different symbols, strategies and time periods
   - title: Event-driven
     details: No lookahead and implement your strategy logic more freely
   - title: Scalability

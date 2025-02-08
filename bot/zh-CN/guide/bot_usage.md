@@ -1,4 +1,4 @@
-编写好策略后，您可以将策略和banbot打包为单个可执行文件：
+编写好策略后，您可以将策略和banbot打包为单个可执行文件（注意需在策略项目根目录下执行）：
 ```shell
 go build -o bot
 # go build -o bot.exe

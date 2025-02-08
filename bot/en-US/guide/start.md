@@ -11,7 +11,7 @@ We strongly recommend that you have basic golang programming knowledge and under
 ## Main features
 * High performance: 1 second backtesting 1 year of data (based on 5m test, the specific time depends on the characteristics of the strategy)
 * Easy to use: one version of the strategy, supporting backtesting, simulated real-time trading and real trading at the same time
-* Flexible: Freely combine different products, strategies and time periods
+* Flexible: Freely combine different symbols, strategies and time periods
 * Event-driven: No lookahead and implement your strategy logic more freely
 * Scalability: A batch of strategies can be applied to multiple exchange accounts at the same time
 * Hyperparameter tuning: Support bayes/tpe/random/cmaes/ipop-cmaes/bipop-cmaes

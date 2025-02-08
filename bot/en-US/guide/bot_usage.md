@@ -1,4 +1,4 @@
-After writing the strategy, you can package the strategy and banbot into a single executable file:
+After writing the strategy, you can package the strategy and banbot into a single executable file (Please ensure that you execute the command in the root directory of your strategy project):
 ```shell
 go build -o bot
 # go build -o bot.exe
@@ -69,7 +69,7 @@ bot spider [-datadir PATH] [-c PATH] [-c PATH]
 ```
 When you want to start real-time trading, you need to start the crawler process first. The crawler process listens to the `6789` port by default and only accepts local requests. You can change the yml configuration `spider_addr` to `0.0.0.0:6789` to accept external listening requests.
 
-After the crawler process is started, it does not listen to any exchange, market, or product by default. It will automatically connect to the specified exchange, market, and listen to the required information based on the client request received.
+After the crawler process is started, it does not listen to any exchange, market, or symbol by default. It will automatically connect to the specified exchange, market, and listen to the required information based on the client request received.
 ```text
 Usage of spider:
   -config value
@@ -97,7 +97,7 @@ When you specify `env` as `dry_run` in the yml configuration file, the order wil
 
 When `env` is set to `prod` or `test`, it will be submitted to the production environment or test network of the exchange respectively (some exchanges do not support test networks).
 
-You can configure `spider_addr` in yml, and the robot will automatically try to connect to the crawler when it starts, and subscribe to the current exchange, market and related product data.
+You can configure `spider_addr` in yml, and the robot will automatically try to connect to the crawler when it starts, and subscribe to the current exchange, market and related symbol data.
 
 You can also add the `-spider` parameter to automatically start the crawler in this process when starting the robot.
 
@@ -154,7 +154,7 @@ This will start the backtest according to the `run_policy` in the yml configurat
 
 The default backtest is to run multiple strategy groups configured by `run_policy` at the same time to get a combined backtest report. If you want to test each strategy group in `run_policy` separately, please enable the `-separate` option.
 
-During the backtest, if the candle of the relevant product does not exist, it will be automatically downloaded and saved to the database.
+During the backtest, if the candle of the relevant symbol does not exist, it will be automatically downloaded and saved to the database.
 
 After the backtest is completed, the backtest results will be saved in `[data directory]/backtest/task_[TASKID]` by default. If you specify `-nodb`, `[TASKID]` is -1, that is, saved in the `task_-1` directory
 ```text

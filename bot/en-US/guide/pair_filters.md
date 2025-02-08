@@ -75,13 +75,13 @@ Volatility filter. Formula: std(log(c/c1)) * sqrt(back_days)
   min: 0.05 # Minimum value of the volatility score. The smaller the value, the more it allows for some targets that change very little at the 1d level
 ```
 ## AgeFilter
-Filter by the listing time of the product.
+Filter by the listing time of the symbol.
 ```yaml
 - name: AgeFilter # Filter by the listing days of the target
   min: 5
 ```
 ## OffsetFilter
-According to the given offset, take the specified number of products. Usually used at the end
+According to the given offset, take the specified number of symbols. Usually used at the end
 ```yaml
 - name: OffsetFilter # Offset limit selection. Usually used at the end
   offset: 10 # Start from the 10th

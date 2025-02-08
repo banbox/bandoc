@@ -40,7 +40,7 @@ import (
 
 The parameter `pol` of the strategy function is an item in the `run_policy` list in the yaml configuration file.
 
-You can get the parameters passed in from the configuration file through `atrLen := pol.Param("atrLen", 9)` so that different parameters can be used for different products.
+You can get the parameters passed in from the configuration file through `atrLen := pol.Param("atrLen", 9)` so that different parameters can be used for different symbols.
 You can also define a hyperparameter using `atrLen := pol.Def("atrLen", 9, core.PNorm(7, 20))`, which works exactly the same as `pol.Param` during backtesting, but when switching to hyperparameter tuning mode, the value of `atrLen` will be randomly generated using a normal distribution with a default value of the mean and upper and lower limits of `(7, 20)`.
 You can also replace `core.PNorm` with `core.PNormF` to specify a different mean and multiplier.
 Similarly, you can also use `core.PUniform` to specify a uniform linear distribution hyperparameter.
@@ -144,9 +144,9 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 ```
 ## banta.BarEnv and banta.Series
 
-`banta.BarEnv` is the operating environment of a technical indicator, which stores information such as the current exchange, market, product, time period, etc.
-A strategy task will require at least one `banta.BarEnv`. If other products or time periods are subscribed through `OnPairInfos`, multiple operating environments will be required.
-But it should be noted that only one operating environment `BarEnv` will be created for each exchange, each market, each product, and each time period.
+`banta.BarEnv` is the operating environment of a technical indicator, which stores information such as the current exchange, market, symbol, time period, etc.
+A strategy task will require at least one `banta.BarEnv`. If other symbols or time periods are subscribed through `OnPairInfos`, multiple operating environments will be required.
+But it should be noted that only one operating environment `BarEnv` will be created for each exchange, each market, each symbol, and each time period.
 
 `banta.BarEnv` has several built-in original `Series`, namely: `Open`, `High`, `Low`, `Close`, `Volume`, which respectively save the sequence information of opening price, highest price, lowest price, closing price, and trading volume.
 
@@ -262,11 +262,12 @@ For additional symbols or periods that `OnPairInfos` subscribes to, you can spec
         }
     },
 ```
-The above additional subscription is for the `1h` period candle of the current product, and the preheating quantity is 30.
+The above additional subscription is for the `1h` period candle of the current symbol, and the preheating quantity is 30.
 
-## Save intermediate state
+## Use CandleSticks of other periods/symbols {#info_bar}
 
-Sometimes you may need to save some intermediate states for the next calculation; or you may need to synchronize some information between different callback functions.
+Your strategy may not only require a single symbol and a single period, but sometimes you may need candlesticks of other periods or other symbols. You can subscribe and use them through `OnPairInfos` and `OnInfoBar`.
+
 ```go
 package ma
 
@@ -316,7 +317,19 @@ func Demo2(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
-As shown above, this is a moving average crossover strategy combining large and small periods. When the short moving average of the large period is above the long moving average and the short moving average of the small period crosses the long moving average, the market will be entered.
+The above is a moving average crossover strategy that combines both large and small timeframes. It enters the market only when the short moving average is above the long moving average on the larger timeframe, and the short moving average crosses above the long moving average on the smaller timeframe.
+
+This strategy can be configured in the YML file to run on a `5m` small timeframe, while internally it specifies the subscription to `1h` large timeframe data. In `OnPairInfos`, `_cur_` represents the current trading pair. If other trading pairs are needed, you can hardcode the value in this section.
+
+::: tip Tip
+`OnInfoBar` is solely intended for the consumption of additional candlestick data. Please refrain from executing logic related to opening/closing positions or updating stop-loss orders within this function.
+:::
+
+## Save temp variables
+
+Sometimes you may need to save some temp variables for the next calculation; or you may need to synchronize some information between different callback functions.
+
+As mentioned in the [previous section](#info_bar), if you need to use the information from `OnInfoBar` within `OnBar`, it must be relayed through `StratJob.More`.
 
 First, initialize `StratJob.More` in `OnStartUp`.
 Then perform type conversion in `OnBar` and `OnInfoBar` and assign it to the `m` variable:
@@ -402,7 +415,7 @@ s.SetAllStopLoss(core.OdDirtLong, &ormo.ExitTrigger{
 For all open long orders, a stop loss of 50% of the position is set. When the price triggers 0.97 times the 5-period moving average, half of the position is closed with a limit order stop loss of 0.975 times.
 
 ## Batch task processing
-Sometimes you may need to perform some calculations (such as correlation coefficients) for all products of the current strategy together, get some intermediate states to save, or open or close orders together.
+Sometimes you may need to perform some calculations (such as correlation coefficients) for all symbols of the current strategy together, get some intermediate states to save, or open or close orders together.
 In this case, you can use the `OnBatchJobs` or `OnBatchInfos` callback function.
 ```go
 func calcCorrs(jobs []*strat.StratJob, isBig bool) {

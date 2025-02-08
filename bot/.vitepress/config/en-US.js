@@ -17,7 +17,7 @@ export default defineConfig({
                     text: 'Start',
                     items: [
                         { text: 'Introduce', link: '/en-US/guide/start' },
-                        { text: 'Quick Start', link: '/en-US/guide/quick_start' },
+                        { text: 'Quick Start(Docker)', link: '/en-US/guide/quick_start' },
                         { text: 'Install', link: '/en-US/guide/install' },
                         { text: 'Initialize the project', link: '/en-US/guide/init_project' },
                         { text: 'Commands', link: '/en-US/guide/bot_usage' },

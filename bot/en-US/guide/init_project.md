@@ -2,6 +2,8 @@ You can quickly start from the sample strategy project or create a new project d
 
 You don't need to download the source code of banbot, but just create a project for managing trading strategies. By adding the banbot dependency with `go get`, you can enjoy all the conveniences brought by banbot.
 
+When you execute `go build` under your strategy project, your strategy will be compiled into a single executable file along with the banbot source code. You can use this file for backtesting, live trading, or launching the WebUI, among other tasks.
+
 ## Environment variables
 For the convenience of subsequent use, you need to set the environment variables `BanDataDir` and `BanStratDir`.
 
