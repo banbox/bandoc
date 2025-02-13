@@ -231,7 +231,7 @@ Returns:
 - `float64` - Leverage multiplier
 
 ### ParsePath
-Parse path, replacing paths starting with `$` with absolute path of data directory.
+Parse path, replacing paths starting with `$` or `@` with absolute path of data directory.
 
 Parameters:
 - `path`: string - Original path

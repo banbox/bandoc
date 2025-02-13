@@ -79,10 +79,10 @@ nohup /ban/bot spider > /tmp/spider.log 2>&1 &
 **Starting the Trading Bot**  
 Execute `bot trade` to start the real-time trading bot. It is recommended to start it in the background and dump the logs:
 ```shell
-nohup /ban/bot trade -config $demo.yml > /tmp/trade.log 2>&1 &
+nohup /ban/bot trade -config @demo.yml > /tmp/trade.log 2>&1 &
 ```
 ::: tip Tip
-The logs for the spider process will be automatically saved to `$logs/spider.log`; the logs for the bot process will be automatically saved to `$logs/[bot_name].log`. Log files will be rotated automatically when they exceed 300MB in size.
+The logs for the spider process will be automatically saved to `@logs/spider.log`; the logs for the bot process will be automatically saved to `@logs/[bot_name].log`. Log files will be rotated automatically when they exceed 300MB in size.
 
 Therefore, you can directly redirect the stdout and stderr of both the spider and the bot to `/dev/null`.
 :::
