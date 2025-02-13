@@ -17,10 +17,10 @@ To prevent unauthorized access to your database, it is recommended to only allow
 ## Start Banbot
 Create a local configuration file `/root/config.yaml`:
 ```yaml
-exchange:
-  binance:
-    account_prods:
-      user1:  # you can change this
+accounts:
+  user1:  # you can change this
+    binance:
+      prod:
         api_key: your_api_key_here
         api_secret: your_secret_here
 #database:

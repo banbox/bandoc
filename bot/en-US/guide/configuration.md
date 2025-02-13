@@ -130,24 +130,35 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     limit: 30  # Take up to 30 items
   - name: ShuffleFilter  # Random shuffle
     seed: 42  # Random seed, optional
+accounts:
+  user1:  # Account name, can be any name, used in rpc messages
+    no_trade: false  # whether to forbid trading in this account
+    stake_rate: 1  # stake amount multiplier, based on default
+    leverage: 0  # contract leverage, overwrite the default
+    max_stake_amt: 0  #  Max allowed stake amount per order
+    max_pair: 0  # max pairs number for this account
+    max_open_orders: 0  # max open orders for this account
+    binance:
+      prod:  # API key and secret for production network, required when env is set to prod
+        api_key: vvv
+        api_secret: vvv
+      test:  # API key and secret for test network, required when env is set to test
+        api_key: vvv
+        api_secret: vvv
+    rpc_channels:  # send msg to social app(or control with commands)
+      - name: wx_bot
+        to_user: ChannelUserID
+    api_server:  # password & role for dashboard ui
+      pwd: abc
+      role: admin
 exchange:  # Exchange configuration
   name: binance  # The exchange being used
-  binance:
-    account_prods:  # API key and secret for production network, required when env is set to prod
-      user1: # Account name, can be any name, used when sending rpc messages
-        api_key: xxx
-        api_secret: bbb
-        max_stake_amt: 1000  # Max allowed amount per order
-        stake_rate: 1  # Order amount multiplier, relative to default
-        leverage: 0  # Futures leverage, takes priority over the default
-      user2: # Another account
-        api_key: xxx
-        api_secret: bbb
-    account_tests:  # API key and secret for test network, required when env is set to test
-      default:
-        api_key: xxx
-        api_secret: bbb
-    options:  # Parameters for initializing the exchange via banexg, keys will be automatically converted from snake_case to CamelCase.
+  binance:  # Parameters for initializing the exchange via banexg, keys will be automatically converted from snake_case to CamelCase.
+    # proxy: http://127.0.0.1:10808
+    fees:
+      linear:  # linear/inverse/main(spot or margin)
+        taker: 0.0005
+        maker: 0.0002
 database:
   retention: all
   max_pool_size: 50

@@ -128,29 +128,35 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
     limit: 30  # 最多取30个
   - name: ShuffleFilter  # 随机打乱
     seed: 42  # 随机数种子，可选
+accounts:
+  user1:  # 这里是账户名字，可任意，会在rpc消息中使用
+    no_trade: false  # 是否禁止此账户交易
+    stake_rate: 1  # 开单金额倍率，相对于默认的
+    leverage: 0  # 合约杠杆，优先级高于默认的
+    max_stake_amt: 0  # 允许的单笔最大金额
+    max_pair: 0  # 此账户允许的最大品种数量
+    max_open_orders: 0  # 此账户允许的最大同时持仓订单数
+    binance:
+      prod:  # 生产网络的key和secret，指定env: prod时此项必填
+        api_key: vvv
+        api_secret: vvv
+      test:  # 测试网络的key和secret，指定env: test时此项必填
+        api_key: vvv
+        api_secret: vvv
+    rpc_channels:  # 通过社交app控制，或发通知到社交app
+      - name: wx_bot
+        to_user: ChannelUserID
+    api_server:  # 通过Dashboard访问的密码和角色
+      pwd: abc
+      role: admin
 exchange:  # 交易所配置
   name: binance  # 当前使用的交易所
-  binance:
-    account_prods:  # 生产网络的key和secret，指定env: prod时此项必填
-      user1: # 这里是账户名字，可任意，会在rpc发消息时使用
-        api_key: xxx
-        api_secret: bbb
-        max_stake_amt: 1000 # 允许的单笔最大金额
-        stake_rate: 1 # 开单金额倍率，相对于默认的
-        leverage: 0  # 期货杠杆，优先级高于默认的
-      user2: # 这里是账户名字
-        api_key: xxx
-        api_secret: bbb
-    account_tests:  # 测试网络的key和secret，指定env: test时此项必填
-      default:
-        api_key: xxx
-        api_secret: bbb
-    options:  # 这里传入banexg初始化交易所的参数，key会自动从蛇形转为驼峰。
-      proxy: http://127.0.0.1:10808
-      fees:
-        linear:  # 键可以是：linear/inverse/main(spot or margin)
-          taker: 0.0005
-          maker: 0.0002
+  binance:  # 这里传入banexg初始化交易所的参数，key会自动从蛇形转为驼峰。
+    # proxy: http://127.0.0.1:10808
+    fees:
+      linear:  # 键可以是：linear/inverse/main(spot or margin)
+        taker: 0.0005
+        maker: 0.0002
 database:  # 数据库配置
   retention: all
   max_pool_size: 50  # 连接池最大大小

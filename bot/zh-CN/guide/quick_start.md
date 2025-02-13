@@ -17,10 +17,10 @@ docker run -d --name timescaledb -p 127.0.0.1:5432:5432 \
 ## 启动Banbot
 创建一个本地配置文件 `/root/config.yaml`:
 ```yaml
-exchange:
-  binance:
-    account_prods:
-      user1:  # you can change this
+accounts:
+  user1:  # 账户名，可修改
+    binance:
+      prod:
         api_key: your_api_key_here
         api_secret: your_secret_here
 #database:
