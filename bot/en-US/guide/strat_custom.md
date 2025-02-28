@@ -157,11 +157,9 @@ You can also use `Series.Range(0,5)` to get the 5 most recent values ​​of a 
 
 When performing multiple repeated calculations at the same bar time (such as running the same batch of strategies on multiple accounts in real trading), `Series` will automatically use cached results to avoid repeated calculations.
 
-For the Bollinger Bands indicator `banta.BBANDS` that returns the three parts of `upper/mid/lower`, the only `Series` it returns is an aggregate, and the value cannot be obtained through `Get(i)`.
-Instead, it should be extracted into 3 series objects in the following way:
+For the Bollinger Bands indicator `banta.BBANDS`, which returns three parts `upper/mid/lower`, you need to extract them into three sequence objects as follows:
 ```go
-bbolCols := ta.BBANDS(e.Close, 10, 2, 2).Cols
-upper, mid, lower := bbolCols[0], bbolCols[1], bbolCols[2]
+    upper, mid, lower := ta.BBANDS(e.Close, 10, 2, 2)
 ```
 Then you can execute `Get(i)` for `upper/mid/lower` to get the value.
 ::: tip Indicator operation tips

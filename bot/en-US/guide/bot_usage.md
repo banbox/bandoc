@@ -1,7 +1,10 @@
 After writing the strategy, you can package the strategy and banbot into a single executable file (Please ensure that you execute the command in the root directory of your strategy project):
 ```shell
+# for linux/macos
 go build -o bot
-# go build -o bot.exe
+
+# for windows
+go build -o bot.exe
 ```
 Then you can use this executable file directly to start the UI, backtest, hyperparameter optimization, real trading, etc.!
 

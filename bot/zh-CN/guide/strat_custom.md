@@ -156,11 +156,9 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 
 当在同一个bar时间执行多次重复的计算时（如实盘多个账号运行同一批策略），`Series`会自动使用缓存的结果，避免重复计算。
 
-对于布林带指标`banta.BBANDS`这样返回`upper/mid/lower`三个部分的指标，其返回的唯一一个`Series`是一个聚合体，不能通过`Get(i)`来获取值。
-而应当通过以下方式提取为3个序列对象：
+对于布林带指标`banta.BBANDS`这样返回`upper/mid/lower`三个部分的指标，您需要通过以下方式提取为3个序列对象：
 ```go
-    bbolCols := ta.BBANDS(e.Close, 10, 2, 2).Cols
-    upper, mid, lower := bbolCols[0], bbolCols[1], bbolCols[2]
+    upper, mid, lower := ta.BBANDS(e.Close, 10, 2, 2)
 ```
 然后您可对`upper/mid/lower`分别执行`Get(i)`来获取值。
 ::: tip 指标运行提示

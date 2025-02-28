@@ -1,7 +1,10 @@
 编写好策略后，您可以将策略和banbot打包为单个可执行文件（注意需在策略项目根目录下执行）：
 ```shell
+# for linux/macos
 go build -o bot
-# go build -o bot.exe
+
+# for windows
+go build -o bot.exe
 ```
 然后您可将此可执行文件直接用于启动UI、回测、超参数优化、实盘交易等！
 

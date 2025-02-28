@@ -1,6 +1,8 @@
-You can quickly experience banbot's UI and perform strategy development, backtesting, etc. with Docker. You need to start two containers: TimeScaledb and banbot. 
+You can quickly experience banbot's UI and perform strategy development, backtesting, etc. with Docker. You need to start two containers: TimeScaledb and banbot.
 
+::: tip tip
 For a better strategy development experience, it is recommended to install the golang environment locally and use `Cursor` to assist with strategy development.
+:::
 
 ## Start TimeScaledb
 ```bash

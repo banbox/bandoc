@@ -11,23 +11,28 @@
 
 `BanStratDir`即您的交易策略项目(banstrats)的路径，每次回测时，banbot会自动保存您此次回测对应的策略代码版本，方便您及时恢复到之前的某个版本。
 
-## 从示例项目开始
+## 从示例项目开始(推荐)
 示例项目实现了网格策略、经典均线策略等，您可基于此快速实现您的自定义策略。
 
 打开终端，运行以下命令：
 ```shell
 # 拉取示例项目代码
 git clone https://github.com/banbox/banstrats
+
 cd banstrats
 # 初始化依赖
 go mod tidy
 ```
+如果您没有安装git工具，也可直接打开[banstrats](https://github.com/banbox/banstrats)网页，下载zip压缩包并解压。
+
 ::: tip TIP
 强烈建议您直接使用此示例项目开始
 :::
 
-## 初始化新项目
-打开终端，输入以下命令：
+## 初始化新项目(专家可选)
+如果您对banbot没有足够了解，请按照上面指引直接使用示例策略项目。
+
+如您确定创建一个空白的策略项目，可打开终端，输入以下命令：
 ```shell
 # mystrats是项目名称，可随意更换
 mkdir mystrats

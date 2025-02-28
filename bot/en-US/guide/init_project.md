@@ -11,23 +11,28 @@ For the convenience of subsequent use, you need to set the environment variables
 
 `BanStratDir` is the path of your trading strategy project(banstrats). Each time you backtest, banbot will automatically save the strategy code version corresponding to your backtest, so that you can restore to a previous version in time.
 
-## Start from the sample project
+## Start from the sample project (Recommended)
 The sample project implements the grid strategy, classic moving average strategy, etc. You can quickly implement your custom strategy based on this.
 
 Open the terminal and run the following command:
 ```shell
 # Pull the sample project code
 git clone https://github.com/banbox/banstrats
+
 cd banstrats
 # Initialize dependencies
 go mod tidy
 ```
+If you do not have the git tool installed, you can also directly open the [banstrats](https://github.com/banbox/banstrats) webpage, download the zip file, and extract it.
+
 ::: tip TIP
 It is highly recommended that you start directly with this sample project
 :::
 
-## Initialize a new project
-Open the terminal and enter the following command:
+## Initialize a new project (For experts)
+If you are not sufficiently familiar with banbot, please follow the above instructions to directly use the sample strategy project.
+
+If you are certain about creating a blank strategy project, you can open the terminal and enter the following command:
 ```shell
 # mystrats is the project name, which can be changed at will
 mkdir mystrats

@@ -25,6 +25,7 @@ env: prod  # Running environment, prod represents production network, test repre
 leverage: 2  # Leverage ratio, only valid in the futures market
 limit_vol_secs: 5  # The expiration time for the order book price based on trading volume, in seconds, default is 10
 put_limit_secs: 120  # Limit order submission time to the exchange within which it is expected to be filled, in seconds, default is 120
+account_pull_secs: 60  # The interval in seconds for regularly updating account balance and positions, default is 60 seconds.
 market_type: spot  # Market type: spot for spot trading, linear for USDT-margined contracts, inverse for coin-margined contracts, option for options contracts
 contract_type: swap  # swap for perpetual contracts, future for expiring contracts
 odbook_ttl: 1000  # Order book expiration time, in milliseconds, default is 500

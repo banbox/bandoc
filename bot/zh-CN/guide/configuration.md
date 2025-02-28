@@ -23,6 +23,7 @@ env: prod  # 运行环境，prod表示生产网络，test表示测试网络（�
 leverage: 2  # 杠杆倍数，仅期货合约市场有效
 limit_vol_secs: 5  # 按成交量取订单簿价格的过期时间，单位：秒，默认10
 put_limit_secs: 120  # 在此预期时间内能成交的限价单，才提交到交易所，单位：秒，默认120
+account_pull_secs: 60  # 定期更新账户余额和持仓的间隔秒数，默认60秒
 market_type: spot  # 市场：spot现货，linear：U本位合约，inverse：币本位合约，option：期权合约
 contract_type: swap # swao永续合约，future到期合约
 odbook_ttl: 1000  # 订单簿过期时间，单位毫秒，默认500

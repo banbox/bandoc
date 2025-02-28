@@ -19,7 +19,8 @@ export default defineConfig({
                     text: '开始',
                     items: [
                         { text: '介绍', link: '/zh-CN/guide/start' },
-                        { text: '快速开始(Docker)', link: '/zh-CN/guide/quick_start' },
+                        { text: '快速体验(Docker)', link: '/zh-CN/guide/quick_docker' },
+                        { text: '快速开始', link: '/zh-CN/guide/quick_local' },
                         { text: '安装', link: '/zh-CN/guide/install' },
                         { text: '初始化项目', link: '/zh-CN/guide/init_project' },
                         { text: '命令行', link: '/zh-CN/guide/bot_usage' },

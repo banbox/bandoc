@@ -1,6 +1,8 @@
 您可通过docker快速体验banbot的UI，并进行策略开发、回测等。您需要启动TimeScaledb和banbot两个容器。
 
+::: tip tip
 为获得更好的策略开发体验，建议您本地安装golang环境并使用`Cursor`辅助策略开发。
+:::
 
 ## 启动TimeScaledb
 ```bash

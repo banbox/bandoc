@@ -1,7 +1,6 @@
-banbot allows you to perform real-time simulated trading or live trading without modifying your strategies.
+banbot allows you to perform real-time simulated trading or live trading without modifying your strategies. This document helps you deploy a trading bot to a production environment.
 
-## Deploying the Trading Bot
-### 1. Compilation
+## 1. Compilation
 **Compiling from WebUI**  
 You can execute `bot` to start the WebUI directly, then navigate to [/en-US/setting/](http://127.0.0.1:8000/en-US/setting/). On the left side, select 【Compile Code】, and on the right side, choose the target system and architecture. Proceed with the compilation and download.
 
@@ -41,7 +40,7 @@ go build -o bot
 ```
 :::
 
-### 2. Preparing the Database
+## 2. Preparing the Database
 Install and start TimeScaledb. It is recommended to use Docker for a quick setup. Refer to the [documentation](https://docs.timescale.com/self-hosted/latest/install/).
 
 Save your database connection string: `postgresql://postgres:123@[host.docker.internal]:5432/ban` (You may need to modify the password or database name, etc.)
@@ -50,7 +49,7 @@ Save your database connection string: `postgresql://postgres:123@[host.docker.in
 You do not need to create the database or related table structures. banbot will automatically initialize the database and related table structures upon startup.
 :::
 
-### 3. Editing Configuration
+## 3. Editing Configuration
 Upload the compiled executable file to the `/ban` directory on the target server. Create a directory `/ban/data` as the data directory and set the environment variable `BanDataDir=/ban/data`.
 
 Then execute `/ban/bot init` to generate a YML configuration file in `/ban/data`.
@@ -65,7 +64,7 @@ For detailed configuration, refer to the [Configuration File](./configuration.md
 `config.local.yml` takes precedence over `config.yml`. You can modify your configuration in either of these files. There is no need to specify these configuration file paths during startup; they will be automatically read.
 :::
 
-### 4. Starting the Trading Bot
+## 4. Starting the Trading Bot
 You need to start both the spider process and the bot process. The spider process is used to subscribe to and update public data such as candlestick charts and order books, saving them to the database.
 The bot process subscribes to candlestick data and other information from the spider process and executes trading strategies. You can start multiple bot processes to run different strategies.
 
@@ -87,7 +86,7 @@ The logs for the spider process will be automatically saved to `@logs/spider.log
 Therefore, you can directly redirect the stdout and stderr of both the spider and the bot to `/dev/null`.
 :::
 
-### 5. Notifications, DashBoard, and Monitoring
+## 5. Notifications, DashBoard, and Monitoring
 **Notifications**  
 You can configure `rpc_channels` in the YML file for notifications. Messages will be sent to your social apps (currently supporting WeCom) when the bot starts, stops, enters a position, or exits a position.
 
