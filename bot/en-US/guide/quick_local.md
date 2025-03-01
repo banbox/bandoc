@@ -30,9 +30,15 @@ go build -o bot.exe
 ## Step 3. Configure environment variables
 For convenience in subsequent use, you need to set the environment variables `BanDataDir` and `BanStratDir`.
 
-`BanDataDir` is the directory where backtest results and frontend UI resource files are saved during the operation of banbot.
+`BanDataDir` is the directory where backtest results and frontend UI resource files are saved during the operation of banbot. It is recommended to set it to an empty directory.
 
 `BanStratDir` is the path to your trading strategy project (banstrats). Each time you run a backtest, banbot will automatically save the corresponding strategy code version for that backtest, making it easy for you to revert to a previous version.
+
+For example, set the environment variables as follows:
+```text
+BanDataDir=E:\quant\bandata
+BanStratDir=E:\quant\banstrats
+```
 
 ## Step 4. Modify the configuration file
 In the strategy project, simply execute `bot.exe init` to automatically initialize the configuration files `config.yml` and `config.local.yml` in the `BanDataDir`.

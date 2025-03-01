@@ -66,7 +66,8 @@ You can download the [GitHub repository](https://github.com/banbox/bandoc/) of t
 For any questions not covered in the documentation, or if you need more information about the robot, or just want to communicate with each other, 
 please join our [Discord server](https://discord.com/invite/XXjA8ctqga)
 
+[telegram group](https://t.me/banbot_quant)
+
 ### Other communities
 Due to time difference or network problems in China, your message in Discord may not be replied in time. You can also add the developer in WeChat, note banbot, and join the group chat.
 <img style="width:180px;margin-top:10px" src="/img/wechat.jpg"/>
-

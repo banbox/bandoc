@@ -69,3 +69,4 @@ golang的哲学是将一切（banbot和您的策略代码）编译为单个可�
 ### 其他社群
 [Discord服务器](https://discord.com/invite/XXjA8ctqga)
 
+[telegram群组](https://t.me/banbot_quant)

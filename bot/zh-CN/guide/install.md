@@ -25,3 +25,6 @@ banbot仅使用TimeScaledb用于存储K线或品种等公开数据，您回测�
 ::: tip TIP
 如果您的网络环境不能直接访问golang.org，请配置[国内源](https://learnku.com/go/wikis/38122)
 :::
+
+## 下一步
+安装好后您可继续参考[快速开始](./quick_local.md)中的指引，也可逐个查看更详细的文档：[初始化项目](./init_project.md)、[命令行](./bot_usage.md)

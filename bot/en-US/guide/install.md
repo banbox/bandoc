@@ -21,3 +21,6 @@ banbot only uses TimeScaledb to store public data such as candlestick or symbols
 Please download and install from the official golang website (https://go.dev/doc/install)
 
 We recommend using `Cursor` as IDE, You can also use `Visual Studio Code` or `GoLand`
+
+## Next Steps
+After installation, you can continue to follow the instructions in the [Quick Start](./quick_local.md), or review the more detailed documentation one by one: [Initialize Project](./init_project.md), [Command Line](./bot_usage.md)

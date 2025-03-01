@@ -30,9 +30,15 @@ go build -o bot.exe
 ## Step 3. 配置环境变量
 为方便后续使用，您需要设置环境变量`BanDataDir`和`BanStratDir`。
 
-`BanDataDir`是banbot运行过程中回测结果、前端UI资源文件保存的目录。
+`BanDataDir`是banbot运行过程中回测结果、前端UI资源文件保存的目录。建议设置为一个空目录。
 
 `BanStratDir`即您的交易策略项目(banstrats)的路径，每次回测时，banbot会自动保存您此次回测对应的策略代码版本，方便您及时恢复到之前的某个版本。
+
+比如设置环境变量如下：
+```text
+BanDataDir=E:\quant\bandata
+BanStratDir=E:\quant\banstrats
+```
 
 ## Step 4. 修改配置文件
 在策略项目下，只需执行`bot.exe init`即可在`BanDataDir`下自动初始化配置文件`config.yml`和`config.local.yml`
