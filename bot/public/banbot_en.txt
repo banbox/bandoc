@@ -30,7 +30,7 @@ type BarEnv struct {
 	MarketType string
 	Symbol string
 	TimeFrame string
-	TFMSecs int64 //msecs for timeframe
+	TFMSecs int64 //周期的毫秒间隔
 	BarNum int
 	MaxCache int
 	VNum int
@@ -50,13 +50,13 @@ type Series struct {
 	Time int64
 	More interface{}
 	Subs map[string]map[int]*Series // 由此序列派生的；function：hash：object
-	XLogs map[int]*CrossLog // cross log for Series
+	XLogs map[int]*CrossLog // 此序列交叉记录
 	subLock *sync.Mutex
 }
 type CrossLog struct {
 	Time int64
 	PrevVal float64
-	Hist []*XState // Positive indicate upCross, negative indicate downCross, and the absolute value indicates BarNum
+	Hist []*XState // 正数表示上穿，负数下穿，绝对值表示BarNum
 }
 type XState struct {
 	Sign int
@@ -69,6 +69,9 @@ func (e *BarEnv) NewSeries(data []float64) *Series {
 	res := &Series{e.VNum, e, data, nil, e.TimeStart, nil, subs, xlogs, lock}
 	e.VNum += 1
 	return res
+}
+func (e *BarEnv) BarCount(start int64) float64 {
+	return float64(e.TimeStop-start) / float64(e.TFMSecs)
 }
 func (s *Series) Set(obj interface{}) *Series {
 	if !s.Cached() {
@@ -87,7 +90,10 @@ func (s *Series) Append(obj interface{}) *Series {
 	} else if val, ok := obj.(int); ok {
 		s.Data = append(s.Data, float64(val))
 	} else if arr, ok := obj.([]float64); ok {
-		for i, v := range arr {
+		if len(arr) > 0 {
+			s.Data = append(s.Data, arr[0])
+		}
+		for i, v := range arr[1:] {
 			if i >= len(s.Cols) {
 				col := s.To("_", i)
 				s.Cols = append(s.Cols, col)
@@ -98,7 +104,12 @@ func (s *Series) Append(obj interface{}) *Series {
 			}
 		}
 	} else if cols, ok := obj.([]*Series); ok {
-		s.Cols = cols
+		if len(cols) > 0 {
+			s.Data = append(s.Data, cols[0].Get(0))
+			if len(cols) > 1 {
+				s.Cols = cols[1:]
+			}
+		}
 	} else {
 		fmt.Printf("invalid val for Series.Append: %t", obj)
 		panic(ErrInvalidSeriesVal)
@@ -109,9 +120,6 @@ func (s *Series) Cached() bool {
 	return s.Time >= s.Env.TimeStop
 }
 func (s *Series) Get(i int) float64 {
-	if len(s.Cols) > 0 {
-		panic(fmt.Errorf("get val on combined Series"))
-	}
 	allLen := len(s.Data)
 	if i < 0 || i >= allLen {
 		return math.NaN()
@@ -141,7 +149,7 @@ func (s *Series) Min(obj interface{}) *Series
 func (s *Series) Max(obj interface{}) *Series
 func (s *Series) Abs() *Series
 func (s *Series) Len() int
-/*Cut the history length of the current sequence and keep the most recent keepNum data*/
+/*对当前序列截取历史长度，保留最近keepNum个数据*/
 func (s *Series) Cut(keepNum int)
 /*将当前序列向前移动num个位置*/
 func (s *Series) Back(num int) *Series
@@ -163,10 +171,9 @@ func (s *Series) To(k string, v int) *Series {
 }
 
 
-/* Cross 
-Calculate the distance of the most recent crossover. If both change, both must be sequences. Or one is a constant and the other is a sequence
-Return value: positive for crossing up, negative for crossing down, 0 for unknown or overlapped; abs(ret) - 1 for the distance between the crossing point and the current bar
-For example, Cross(rsi, 70) == 1 means to determine whether rsi crosses up 70, a value of -1 means crossing down 70, and a value of 5 means the most recent crossing is up, and the distance from the current bar is 4 candles */
+/* Cross 计算最近一次交叉的距离。如果两个都变化，则两个都必须是序列。或者一个是常数一个是序列
+返回值：正数上穿，负数下穿，0表示未知或重合；abs(ret) - 1表示交叉点与当前bar的距离
+比如Cross(rsi, 70) == 1表示判断rsi是否上穿70，值为-1表示下穿70，值为5表示最近一次是上穿，距离当前距离为4个蜡烛 */
 func Cross(se *Series, obj2 interface{}) int
 //AvgPrice typical price=(h+l+c)/3
 func AvgPrice(e *BarEnv) *Series
@@ -265,11 +272,11 @@ Internationally, init_type=0 is used, while MyTT and China mainly use init_type=
 国外主流使用init_type=0，MyTT和国内主要使用init_type=1
 fast: 12, slow: 26, smooth: 9
 return [macd, signal] */
-func MACD(obj *Series, fast int, slow int, smooth int) *Series {
+func MACD(obj *Series, fast int, slow int, smooth int) (*Series, *Series) {
 	return MACDBy(obj, fast, slow, smooth, 0)
 }
 // 其中initType是EMA的初始化类型
-func MACDBy(obj *Series, fast int, slow int, smooth int, initType int) *Series
+func MACDBy(obj *Series, fast int, slow int, smooth int, initType int) (*Series, *Series)
 func rsiBy(obj *Series, period int, subVal float64) *Series
 /* RSI Relative Strength Index 计算相对强度指数
 suggest period: 14 */
@@ -314,7 +321,7 @@ func LowestBar(obj *Series, period int) *Series
 /* KDJ alias: stoch indicator;
 period: 9, sm1: 3, sm2: 3
 return (K, D, RSV) */
-func KDJ(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int) *Series {
+func KDJ(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int) (*Series, *Series, *Series) {
 	return KDJBy(high, low, close, period, sm1, sm2, "rma")
 }
 var (
@@ -326,7 +333,7 @@ var (
 /* KDJBy alias: stoch indicator;
 period: 9, sm1: 3, sm2: 3
 return (K, D, RSV) */
-func KDJBy(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int, maBy string) *Series {
+func KDJBy(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int, maBy string) (*Series, *Series, *Series) {
 	byVal, _ := kdjTypes[maBy]
 	res := high.To("_kdj", period*100000+sm1*1000+sm2*10+byVal)
 	if res.Cached() {
@@ -370,21 +377,21 @@ AroonUp: (period - HighestBar(high, period+1)) / period * 100
 AroonDn: (period - LowestBar(low, period+1)) / period * 100
 Osc: AroonUp - AroonDn
 return [AroonUp, Osc, AroonDn] */
-func Aroon(high *Series, low *Series, period int) *Series
+func Aroon(high *Series, low *Series, period int) (*Series, *Series, *Series)
 /* 	StdDev Standard Deviation 标准差和均值
 suggest period: 20
 return [stddev，sumVal] */
-func StdDev(obj *Series, period int) *Series {
+func StdDev(obj *Series, period int) (*Series, *Series) {
 	return StdDevBy(obj, period, 0)
 }
 /* 	StdDevBy Standard Deviation
 suggest period: 20
 return [stddev，sumVal] */
-func StdDevBy(obj *Series, period int, ddof int) *Series
+func StdDevBy(obj *Series, period int, ddof int) (*Series, *Series)
 /* BBANDS Bollinger Bands 布林带指标
 period: 20, stdUp: 2, stdDn: 2
 return [upper, mid, lower] */
-func BBANDS(obj *Series, period int, stdUp, stdDn float64) *Series
+func BBANDS(obj *Series, period int, stdUp, stdDn float64) (*Series, *Series, *Series)
 /* 	TD Tom DeMark Sequence（狄马克序列）
 over bought: 9,13
 over sell: -9, -13
@@ -402,6 +409,16 @@ method=1 TradingView "ADX and DI for v4"
 suggest period: 14
 return [maDX, plusDI, minusDI] */
 func ADXBy(high *Series, low *Series, close *Series, period int, method int) *Series
+/* PluMinDI
+suggest period: 14
+return [plus di, minus di]
+*/
+func PluMinDI(high *Series, low *Series, close *Series, period int) (*Series, *Series)
+/* PluMinDM
+suggest period: 14
+return [Plus DM, Minus DM]
+*/
+func PluMinDM(high *Series, low *Series, close *Series, period int) (*Series, *Series)
 /* ROC rate of change
 suggest period: 9 */
 func ROC(obj *Series, period int) *Series {
@@ -414,7 +431,7 @@ func ROC(obj *Series, period int) *Series {
 	return res.Append((curVal - preVal) / preVal * 100)
 }
 // HeikinAshi 计算Heikin-Ashi
-func HeikinAshi(e *BarEnv) *Series
+func HeikinAshi(e *BarEnv) (*Series, *Series, *Series, *Series)
 type tnrState struct {
 	arr []float64
 	sumVal float64
@@ -451,7 +468,7 @@ suggest period: 14 */
 func WillR(e *BarEnv, period int) *Series
 /* StochRSI StochasticRSI
 rsiLen: 14, stochLen: 14, maK: 3, maD: 3 */
-func StochRSI(obj *Series, rsiLen int, stochLen int, maK int, maD int) *Series
+func StochRSI(obj *Series, rsiLen int, stochLen int, maK int, maD int) (*Series, *Series)
 /* MFI Money Flow Index
 https://corporatefinanceinstitute.com/resources/career-map/sell-side/capital-markets/money-flow-index/
 suggest period: 14 */
@@ -511,8 +528,16 @@ func ALMA(obj *Series, period int, sigma, distOff float64) *Series
 /* Stiffness Indicator
 maLen: 100, stiffLen: 60, stiffMa: 3 */
 func Stiffness(obj *Series, maLen, stiffLen, stiffMa int) *Series
+/* DV Developed by David Varadi of http://cssanalytics.wordpress.com/
+	period: 252   maLen: 2 */
+func DV(h, l, c *Series, period, maLen int) *Series
+/* UTBot UT Bot Alerts from TradingView */
+func UTBot(c, atr *Series, rate float64) *Series
+/* STC colored indicator
+period: 12  fast: 26  slow: 50  alpha: 0.5 */
+func STC(obj *Series, period, fast, slow int, alpha float64) *Series
 ```
-下面是banbot.core包的关键代码
+Below is the key code of the banbot.core package
 ```go
 type Param struct {
 	Name string
@@ -553,7 +578,7 @@ func PUniform(min, max float64) *Param {
 }
 ```
 
-下面是banbot.config包的关键代码
+Below is the key code of the banbot.config package
 ```go
 // The strategy to run, multiple strategies can be run at the same time 运行的策略，可以多个策略同时运行
 type RunPolicyConfig struct {
@@ -571,7 +596,7 @@ type RunPolicyConfig struct {
 	Score float64
 }
 ```
-下面是banbot.strat包的关键代码
+Below is the key code of the banbot.strat package
 // import "github.com/banbox/banbot/strat"
 ```go
 package strat
@@ -711,7 +736,7 @@ type ExitReq struct {
 	Force bool // Whether to force exit 是否强制退出
 }
 ```
-下面是一个示例策略，通过pol定义了3个可优化的超参数，使用了1h大周期的辅助数据做判断
+Here is an example strategy that defines three optimizable hyperparameters through pol, using auxiliary data from a 1-hour large cycle for judgment.
 ```go
 import (
 	"github.com/banbox/banbot/config"
@@ -778,63 +803,72 @@ func OnBar(s *strat.StratJob){
 	ma2 := ta.SMA(e.Close, 10)
 	cx := ta.Cross(ma1, ma2)
 	if cx == 1{
-		// ma1上穿ma2
+		// ma1 crosses above ma2
 	}else if cx == -1{
-		// ma1下穿ma2
+		// ma1 crosses below ma2
 	}else if cx < -1{
-		// ma1低于ma2
+		// ma1 is below ma2
 	}
 	hl2 := ta.HL2(e.High, e.Low)
 	vwma := ta.VWMA(hl2, e.Volume, 10)
-	macdCols := ta.MACD(e.Close, 12, 26, 9).Cols
-	macdX := ta.Cross(macdCols[0], macdCols[1])
+	macd, signal := ta.MACD(e.Close, 12, 26, 9)
+	macdX := ta.Cross(macd, signal)
 	if macdX == 1{
-		// macd金叉
+		// macd golden cross
 	}
-	kdjCols := ta.KDJ(e.Close, 9, 3, 3).Cols
-	kdjX := ta.Cross(kdjCols[0], kdjCols[1])
+	kdjK, kdjD, _ := ta.KDJ(e.Close, 9, 3, 3)
+	kdjX := ta.Cross(kdjK, kdjD)
 	if kdjX == 1{
-		// kdj金叉
+		// kdj golden cross
 	}
-	bbCols := ta.BBANDS(e.Close, 20, 2, 2).Cols
-	upX := ta.Cross(e.Close, bbCols[0])
+	bbUp, _, _ := ta.BBANDS(e.Close, 20, 2, 2)
+	upX := ta.Cross(e.Close, bbUp)
 	if upX == 1{
-		// close上穿布林带上轨
+		// close crosses above the upper Bollinger Band
 	}
-	adx := ta.ADX(e.Close, 30).Cols[0].Get(0)
+	adx := ta.ADX(e.Close, 30).Get(0)
 	if adx > 30{
-		// adx指标值高于30，处于趋势中
+		// adx value is above 30, indicating a trend
 	}
-	heiKa := ta.HeikinAshi(e).Cols
-	haOpen, haHigh, haLow, haClose := heiKa[0], heiKa[1], heiKa[2], heiKa[3]
-	// 当前标准差的值
-	sd := ta.StdDev(e.Close, 20).Cols[0].Get(0)
+	haOpen, haHigh, haLow, haClose := ta.HeikinAshi(e)
+	// current standard deviation value
+	dev, _ := ta.StdDev(e.Close, 20)
+	sd := dev.Get(0)
 }
 ```
 The above is part of the key code of the trading robot banbot and the indicator library banta. Your task is to help users build trading strategies based on banbot and banta. A strategy example has been attached above. Please build a trading strategy that complies with the banbot framework specifications based on user needs.
-Here are some rules you need to pay attention to when implementing strategies:
-* Most strategies actually only need WarmupNum and OnBar. Do not add additional functions and logic if it is not necessary
-* In OnBar, you can call OpenOrder and CloseOrders once or multiple times to enter and exit the market. If you need to limit the maximum number of orders for long or short positions, you can set TradeStrat's EachMaxLong and EachMaxShort. Set to 1 to open at most 1 order, and the default value of 0 is unlimited
-* Strategy initialization function func(pol *config.RunPolicyConfig) *strat.TradeStrat will return a strategy pointer, and banbot will use this strategy to create a strategy task *strat.StratJob for each product;
-* Some fixed information can generally be directly defined in the strategy initialization function (such as parameters parsed from pol), and then these fixed variables can be directly used in functions such as OnBar/OnInfoBar. For different variable information for each product, it should be recorded in *strat.StratJob.More.
-* If you need to automatically stop loss after the order is profitable and the maximum profit is retraced to a certain extent, you can set DrawDownExit to true, and then pass it to the GetDrawDownExitRate function: func(s *StratJob, od *orm.InOutOrder, maxChg float64) float64, return 0 to indicate no stop loss, return 0.5 to indicate a 50% stop loss from the maximum profit retracement. The macChg parameter is the maximum profit of the order, such as 0.1 means that the long order price increases by 10% or the short order price decreases by 10%
-* The trading cycle TimeFrame of the strategy is generally set in the external yaml, and does not need to be set in the code. If other time periods are required in addition to the time period currently used by the current strategy, the required product code, time period, and preheating quantity can be returned in OnPairInfos. _cur_ represents the current product. All other products and other time periods need to handle callbacks in OnInfoBar
-* If you need to synchronize strategy status in multiple functions, such as using information from other periods in OnInfoBar in OnBar, you generally need to use the More member of strat.StratJob, which is of interface{} type and supports arbitrary data; complex information synchronization can assign More to a structure pointer. When you need to read and write More, be sure to pass it into the OnStartUp function and initialize More in it. Note again that if there is only an OnBar function, do not use More;
-* Note that the hyperparameters parsed through RunPolicyConfig are fixed and read-only, and can be directly shared by all StratJobs of this strategy, so do not save the hyperparameters to the structure, let alone save them to StratJob.More. More should only record variables that are different for each product.
-* If you need to handle the exit logic for each order at each bar separately, you can pass in the OnCheckExit function and return a non-nil ExitReq to indicate the order is closed; if you need to synchronize information between OnCheckExit and OnBar, you can use StratJob.More
-* If you need to calculate the number of bars that an order has held, you can use holdNum := s.Env.BarCount(od.EnterAt)
-* Note that in most cases, you can directly implement a unified exit logic in OnBar without setting the exit logic for each order through OnCheckExit.
-* If you need to be notified when the order status changes, you can pass in the OnOrderChange function, where chgType indicates the order event type. For possible values, see the definition of OdChg* above.
-* The stop loss of the order can be passed in when calling OpenOrder. You can set StopLoss/TakeProfit to a certain stop loss and take profit price, but it is more recommended to use StopLossVal/TakeProfitVal, which indicates the price range of stop loss and take profit (note that it is not the multiple). It can automatically calculate the corresponding stop loss and take profit price according to whether Short is long/short and the current latest price. For example, {Short: true, StopLossVal:atr\*2} means opening a short order and using 2 times atr stop loss. Or {StopLossVal:price\*0.01} means using 1% of the price for stop loss.
-* The opening amount of a single order is configured in the external yaml, and generally does not need to be concerned in the strategy. If you need to use a non-default opening amount for an order, you can set the CostRate of EnterReq. The default is 1. Passing in 0.5 means using 50% of the usual amount to open an order.
-* For indicators like ta.BBANDS that return multiple columns [upper, mid, lower], you should use Cols to get each column by index, such as:
-bbCols := ta.BBANDS(e.Close, 20, 2, 2).Cols
-bbUpp, bbMid, bbLow := bbCols[0], bbCols[1], bbCols[2]
-* Do not call functions repeatedly, and keep the code concise, such as the following:
-mid, lower := ta.BBANDS(haClose, 40, 2, 2).Cols[1], ta.BBANDS(haClose, 40, 2, 2).Cols[2]
-should be replaced with:
-bbCols := ta.BBANDS(haClose, 40, 2, 2).Cols
-mid, lower := bbCols[1], bbCols[2]
-* Please do not add additional policy logic without authorization. All required parts should be implemented strictly according to the code or requirements entered by the user. Do not add additional policy logic that the user has not specified.
-* Please do not add empty functions. If the More structure is only assigned and not used, it should be deleted.
-If you are ready, please ask "Please tell me the policy inspiration you need to implement with banbot"
+
+---
+Here are some rules to keep in mind when implementing strategies:
+
+* Most strategies only require `WarmupNum` and `OnBar`. Avoid adding unnecessary functions and logic unless absolutely needed.
+* In `OnBar`, you can call `OpenOrder` and `CloseOrders` one or more times for entry and exit. If you need to limit the maximum number of long or short orders, set `EachMaxLong` and `EachMaxShort` in `TradeStrat`. Setting it to 1 means a maximum of 1 order, while the default value of 0 means no limit.
+* The strategy initialization function `func(pol *config.RunPolicyConfig) *strat.TradeStrat` returns a strategy pointer. Banbot will use this strategy to create a strategy task `*strat.StratJob` for each asset.
+* Some fixed information can usually be defined directly in the strategy initialization function (e.g., parameters parsed from `pol`). These fixed variables can then be used directly in functions like `OnBar` and `OnInfoBar`. For variables that differ across assets, they should be recorded in `*strat.StratJob.More`.
+* If you need to automatically stop loss after the order has profited and retraced by a certain percentage, set `DrawDownExit` to `true` and pass in the `GetDrawDownExitRate` function: `func(s *StratJob, od *orm.InOutOrder, maxChg float64) float64`. Returning 0 means no stop loss, while returning 0.5 means stopping loss after a 50% retracement from the maximum profit. The `maxChg` parameter represents the maximum profit of the order, e.g., 0.1 means a 10% increase in price for a long order or a 10% decrease in price for a short order.
+* The trading cycle `TimeFrame` for the strategy is usually set in the external YAML file, so there is no need to set it in the code. If, in addition to the current strategy's time frame, you need other time frames, you can return the required asset codes, time frames, and warmup numbers in `OnPairInfos`. `_cur_` represents the current asset. All other assets and time frames need to be handled in the `OnInfoBar` callback.
+* If you need to synchronize strategy states across multiple functions, such as using information from other time frames in `OnInfoBar` within `OnBar`, you can generally use the `More` member of `strat.StratJob`, which is of type `interface{}` and supports any data. For complex information synchronization, you can assign `More` to a struct pointer. When reading or writing `More`, be sure to pass it into the `OnStartUp` function and initialize `More` there. Again, note that if you only have the `OnBar` function, do not use `More`.
+* Note that the hyperparameters parsed via `RunPolicyConfig` are fixed, read-only, and can be directly shared by all `StratJob` instances of this strategy. Therefore, do not save hyperparameters to a struct, and especially not to `StratJob.More`. `More` should only record variables that differ across assets.
+* If you need to handle exit logic for each order on a per-bar basis, you can pass in the `OnCheckExit` function. Returning a non-nil `ExitReq` indicates closing the order. If you need to synchronize information between `OnCheckExit` and `OnBar`, you can use `StratJob.More`.
+* To calculate the number of bars an order has been held, use `holdNum := s.Env.BarCount(od.EnterAt)`.
+* Note that in most cases, you can implement unified exit logic directly in `OnBar` without needing to set exit logic for each order via `OnCheckExit`.
+* If you need to be notified when the order status changes, you can pass in the `OnOrderChange` function, where `chgType` represents the order event type. Possible values are defined above as `OdChg*`.
+* Stop loss for orders can be passed in when calling `OpenOrder`. You can set `StopLoss`/`TakeProfit` to specific stop loss/take profit prices, but it is more recommended to use `StopLossVal`/`TakeProfitVal`, which represent the price range for stop loss/take profit (note: not the ratio). It automatically calculates the corresponding stop loss/take profit prices based on whether `Short` is long/short and the latest price. For example, `{Short: true, StopLossVal: atr*2}` means opening a short order with a 2x ATR stop loss, or `{StopLossVal: price*0.01}` means using a 1% stop loss based on the price.
+* The order amount for individual trades is configured in the external YAML file, so the strategy generally does not need to care about it. If you need to use a non-default order amount for a specific order, set `CostRate` in `EnterReq`. The default is 1, and passing 0.5 means using 50% of the usual amount for the order.
+* For indicators like `ta.BBANDS` that return multiple columns `[upper, mid, lower]`, you should use multiple variables to receive each returned column, e.g.:
+  ```go
+  bbUpp, bbMid, bbLow := ta.BBANDS(e.Close, 20, 2, 2)
+  ```
+* Do not repeat function calls. Keep the code concise, e.g., the following:
+  ```go
+  _, mid, _ := ta.BBANDS(haClose, 40, 2, 2)
+  _, _, lower := ta.BBANDS(haClose, 40, 2, 2)
+  ```
+  should be replaced with:
+  ```go
+  _, mid, lower := ta.BBANDS(haClose, 40, 2, 2)
+  ```
+* Note: Do not add additional strategy logic without permission. Strictly implement all required parts according to the user's input or requirements. Do not add strategy logic that the user has not specified.
+* Note: Do not add empty functions. If the `More` struct is only assigned but not used, it should be deleted.
+
+If you are ready, please ask, "Please tell me your strategy inspiration for implementing with banbot."

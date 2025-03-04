@@ -70,6 +70,9 @@ func (e *BarEnv) NewSeries(data []float64) *Series {
 	e.VNum += 1
 	return res
 }
+func (e *BarEnv) BarCount(start int64) float64 {
+	return float64(e.TimeStop-start) / float64(e.TFMSecs)
+}
 func (s *Series) Set(obj interface{}) *Series {
 	if !s.Cached() {
 		return s.Append(obj)
@@ -87,7 +90,10 @@ func (s *Series) Append(obj interface{}) *Series {
 	} else if val, ok := obj.(int); ok {
 		s.Data = append(s.Data, float64(val))
 	} else if arr, ok := obj.([]float64); ok {
-		for i, v := range arr {
+		if len(arr) > 0 {
+			s.Data = append(s.Data, arr[0])
+		}
+		for i, v := range arr[1:] {
 			if i >= len(s.Cols) {
 				col := s.To("_", i)
 				s.Cols = append(s.Cols, col)
@@ -98,7 +104,12 @@ func (s *Series) Append(obj interface{}) *Series {
 			}
 		}
 	} else if cols, ok := obj.([]*Series); ok {
-		s.Cols = cols
+		if len(cols) > 0 {
+			s.Data = append(s.Data, cols[0].Get(0))
+			if len(cols) > 1 {
+				s.Cols = cols[1:]
+			}
+		}
 	} else {
 		fmt.Printf("invalid val for Series.Append: %t", obj)
 		panic(ErrInvalidSeriesVal)
@@ -109,9 +120,6 @@ func (s *Series) Cached() bool {
 	return s.Time >= s.Env.TimeStop
 }
 func (s *Series) Get(i int) float64 {
-	if len(s.Cols) > 0 {
-		panic(fmt.Errorf("get val on combined Series"))
-	}
 	allLen := len(s.Data)
 	if i < 0 || i >= allLen {
 		return math.NaN()
@@ -264,11 +272,11 @@ Internationally, init_type=0 is used, while MyTT and China mainly use init_type=
 国外主流使用init_type=0，MyTT和国内主要使用init_type=1
 fast: 12, slow: 26, smooth: 9
 return [macd, signal] */
-func MACD(obj *Series, fast int, slow int, smooth int) *Series {
+func MACD(obj *Series, fast int, slow int, smooth int) (*Series, *Series) {
 	return MACDBy(obj, fast, slow, smooth, 0)
 }
 // 其中initType是EMA的初始化类型
-func MACDBy(obj *Series, fast int, slow int, smooth int, initType int) *Series
+func MACDBy(obj *Series, fast int, slow int, smooth int, initType int) (*Series, *Series)
 func rsiBy(obj *Series, period int, subVal float64) *Series
 /* RSI Relative Strength Index 计算相对强度指数
 suggest period: 14 */
@@ -313,7 +321,7 @@ func LowestBar(obj *Series, period int) *Series
 /* KDJ alias: stoch indicator;
 period: 9, sm1: 3, sm2: 3
 return (K, D, RSV) */
-func KDJ(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int) *Series {
+func KDJ(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int) (*Series, *Series, *Series) {
 	return KDJBy(high, low, close, period, sm1, sm2, "rma")
 }
 var (
@@ -325,7 +333,7 @@ var (
 /* KDJBy alias: stoch indicator;
 period: 9, sm1: 3, sm2: 3
 return (K, D, RSV) */
-func KDJBy(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int, maBy string) *Series {
+func KDJBy(high *Series, low *Series, close *Series, period int, sm1 int, sm2 int, maBy string) (*Series, *Series, *Series) {
 	byVal, _ := kdjTypes[maBy]
 	res := high.To("_kdj", period*100000+sm1*1000+sm2*10+byVal)
 	if res.Cached() {
@@ -369,21 +377,21 @@ AroonUp: (period - HighestBar(high, period+1)) / period * 100
 AroonDn: (period - LowestBar(low, period+1)) / period * 100
 Osc: AroonUp - AroonDn
 return [AroonUp, Osc, AroonDn] */
-func Aroon(high *Series, low *Series, period int) *Series
+func Aroon(high *Series, low *Series, period int) (*Series, *Series, *Series)
 /* 	StdDev Standard Deviation 标准差和均值
 suggest period: 20
 return [stddev，sumVal] */
-func StdDev(obj *Series, period int) *Series {
+func StdDev(obj *Series, period int) (*Series, *Series) {
 	return StdDevBy(obj, period, 0)
 }
 /* 	StdDevBy Standard Deviation
 suggest period: 20
 return [stddev，sumVal] */
-func StdDevBy(obj *Series, period int, ddof int) *Series
+func StdDevBy(obj *Series, period int, ddof int) (*Series, *Series)
 /* BBANDS Bollinger Bands 布林带指标
 period: 20, stdUp: 2, stdDn: 2
 return [upper, mid, lower] */
-func BBANDS(obj *Series, period int, stdUp, stdDn float64) *Series
+func BBANDS(obj *Series, period int, stdUp, stdDn float64) (*Series, *Series, *Series)
 /* 	TD Tom DeMark Sequence（狄马克序列）
 over bought: 9,13
 over sell: -9, -13
@@ -401,6 +409,16 @@ method=1 TradingView "ADX and DI for v4"
 suggest period: 14
 return [maDX, plusDI, minusDI] */
 func ADXBy(high *Series, low *Series, close *Series, period int, method int) *Series
+/* PluMinDI
+suggest period: 14
+return [plus di, minus di]
+*/
+func PluMinDI(high *Series, low *Series, close *Series, period int) (*Series, *Series)
+/* PluMinDM
+suggest period: 14
+return [Plus DM, Minus DM]
+*/
+func PluMinDM(high *Series, low *Series, close *Series, period int) (*Series, *Series)
 /* ROC rate of change
 suggest period: 9 */
 func ROC(obj *Series, period int) *Series {
@@ -413,7 +431,7 @@ func ROC(obj *Series, period int) *Series {
 	return res.Append((curVal - preVal) / preVal * 100)
 }
 // HeikinAshi 计算Heikin-Ashi
-func HeikinAshi(e *BarEnv) *Series
+func HeikinAshi(e *BarEnv) (*Series, *Series, *Series, *Series)
 type tnrState struct {
 	arr []float64
 	sumVal float64
@@ -450,7 +468,7 @@ suggest period: 14 */
 func WillR(e *BarEnv, period int) *Series
 /* StochRSI StochasticRSI
 rsiLen: 14, stochLen: 14, maK: 3, maD: 3 */
-func StochRSI(obj *Series, rsiLen int, stochLen int, maK int, maD int) *Series
+func StochRSI(obj *Series, rsiLen int, stochLen int, maK int, maD int) (*Series, *Series)
 /* MFI Money Flow Index
 https://corporatefinanceinstitute.com/resources/career-map/sell-side/capital-markets/money-flow-index/
 suggest period: 14 */
@@ -510,6 +528,14 @@ func ALMA(obj *Series, period int, sigma, distOff float64) *Series
 /* Stiffness Indicator
 maLen: 100, stiffLen: 60, stiffMa: 3 */
 func Stiffness(obj *Series, maLen, stiffLen, stiffMa int) *Series
+/* DV Developed by David Varadi of http://cssanalytics.wordpress.com/
+	period: 252   maLen: 2 */
+func DV(h, l, c *Series, period, maLen int) *Series
+/* UTBot UT Bot Alerts from TradingView */
+func UTBot(c, atr *Series, rate float64) *Series
+/* STC colored indicator
+period: 12  fast: 26  slow: 50  alpha: 0.5 */
+func STC(obj *Series, period, fast, slow int, alpha float64) *Series
 ```
 下面是banbot.core包的关键代码
 ```go
@@ -785,29 +811,29 @@ func OnBar(s *strat.StratJob){
 	}
 	hl2 := ta.HL2(e.High, e.Low)
 	vwma := ta.VWMA(hl2, e.Volume, 10)
-	macdCols := ta.MACD(e.Close, 12, 26, 9).Cols
-	macdX := ta.Cross(macdCols[0], macdCols[1])
+	macd, signal := ta.MACD(e.Close, 12, 26, 9)
+	macdX := ta.Cross(macd, signal)
 	if macdX == 1{
 		// macd金叉
 	}
-	kdjCols := ta.KDJ(e.Close, 9, 3, 3).Cols
-	kdjX := ta.Cross(kdjCols[0], kdjCols[1])
+	kdjK, kdjD, _ := ta.KDJ(e.Close, 9, 3, 3)
+	kdjX := ta.Cross(kdjK, kdjD)
 	if kdjX == 1{
 		// kdj金叉
 	}
-	bbCols := ta.BBANDS(e.Close, 20, 2, 2).Cols
-	upX := ta.Cross(e.Close, bbCols[0])
+	bbUp, _, _ := ta.BBANDS(e.Close, 20, 2, 2)
+	upX := ta.Cross(e.Close, bbUp)
 	if upX == 1{
 		// close上穿布林带上轨
 	}
-	adx := ta.ADX(e.Close, 30).Cols[0].Get(0)
+	adx := ta.ADX(e.Close, 30).Get(0)
 	if adx > 30{
 		// adx指标值高于30，处于趋势中
 	}
-	heiKa := ta.HeikinAshi(e).Cols
-	haOpen, haHigh, haLow, haClose := heiKa[0], heiKa[1], heiKa[2], heiKa[3]
+	haOpen, haHigh, haLow, haClose := ta.HeikinAshi(e)
 	// 当前标准差的值
-	sd := ta.StdDev(e.Close, 20).Cols[0].Get(0)
+	dev, _ := ta.StdDev(e.Close, 20)
+	sd := dev.Get(0)
 }
 ```
 上面是交易机器人banbot和指标库banta的一部分关键代码。你的任务是帮助用户构建基于banbot和banta的交易策略，已在上面附加了一个策略示例。请根据用户需求，构建合乎banbot框架规范的交易策略。
@@ -826,14 +852,13 @@ func OnBar(s *strat.StratJob){
  * 如果需要在订单状态发生变化时得到通知，可传入OnOrderChange函数，其中chgType表示订单事件类型，可能的值参见上面OdChg*的定义。
  * 订单的止损可在调用OpenOrder时传入，可以设置StopLoss/TakeProfit为某个止损止盈价格，但更推荐的是使用StopLossVal/TakeProfitVal，表示止盈止损的价格范围（注意不是倍率），它能根据Short是否是做多/做空，以及当前最新价格，自动计算出对应的止损止盈价格。如{Short: true, StopLossVal:atr\*2}表示打开做空订单，使用2倍atr止损。或{StopLossVal:price\*0.01}表示使用价格的1%止损。
  * 单笔订单的开单金额是在外部yaml中配置好的，策略中一般不需要关心，如果需要对某个订单使用非默认开单金额，可设置EnterReq的CostRate，默认为1，传入0.5表示使用平时50%的金额开单。
- * 对于ta.BBANDS等这样返回多列的指标[upper, mid, lower]，应使用Cols按索引取每个列，如：
- bbCols := ta.BBANDS(e.Close, 20, 2, 2).Cols
- bbUpp, bbMid, bbLow := bbCols[0], bbCols[1], bbCols[2]
+ * 对于ta.BBANDS等这样返回多列的指标[upper, mid, lower]，应使用使用多个变量接收每个返回列，如：
+ bbUpp, bbMid, bbLow := ta.BBANDS(e.Close, 20, 2, 2)
  * 不要重复调用函数，尽量保持代码精简，如下面的：
- mid, lower := ta.BBANDS(haClose, 40, 2, 2).Cols[1], ta.BBANDS(haClose, 40, 2, 2).Cols[2]
+ _, mid, _ := ta.BBANDS(haClose, 40, 2, 2)
+ _, _, lower := ta.BBANDS(haClose, 40, 2, 2)
  应该替换为：
- bbCols := ta.BBANDS(haClose, 40, 2, 2).Cols
- mid, lower := bbCols[1], bbCols[2]
+ _, mid, lower := ta.BBANDS(haClose, 40, 2, 2)
  * 注意请不要擅自添加额外的策略逻辑，应严格按用户输入的代码或要求实现所有需要的部分，不要额外添加用户未说明的策略逻辑。
  * 注意不要添加空函数，如果More结构体只被赋值，没有被使用，则应该删除掉。
 如果你准备好了，请询问“请告诉我您需要用banbot实现的策略灵感”

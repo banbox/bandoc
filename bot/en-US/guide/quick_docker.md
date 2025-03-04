@@ -17,7 +17,7 @@ If you are using Windows, you need to modify the host data directory `/opt/pgdat
 To prevent unauthorized access to your database, it is recommended to only allow local connections, i.e., `-p 127.0.0.1:5432:5432`.
 
 ## Start Banbot
-Create a local configuration file `/root/config.yaml`:
+Create a local configuration file `/root/config.yml`:
 ```yaml
 accounts:
   user1:  # you can change this

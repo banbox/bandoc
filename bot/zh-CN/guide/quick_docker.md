@@ -17,7 +17,7 @@ docker run -d --name timescaledb -p 127.0.0.1:5432:5432 \
 为避免您的数据库被未授权访问，建议您仅允许本地连接，即`-p 127.0.0.1:5432:5432`。
 
 ## 启动Banbot
-创建一个本地配置文件 `/root/config.yaml`:
+创建一个本地配置文件 `/root/config.yml`:
 ```yaml
 accounts:
   user1:  # 账户名，可修改
