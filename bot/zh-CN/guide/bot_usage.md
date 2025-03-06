@@ -190,6 +190,10 @@ Usage of backtest:
         dir path for strategies
   -timerange string
         Specify what timerange of data to use
+  -timestart string
+        set start time, allow multiple formats
+  -timeend string
+        set end time, timestart is required
 ```
 
 ## K线相关工具

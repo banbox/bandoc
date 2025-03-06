@@ -44,7 +44,8 @@ docker run -d --name banbot -p 8000:8000 -v /root:/root\
 ## 执行回测
 您可以在回测管理页面，开始新的回测任务，回测任务的所有配置都是通过yaml配置进行的，您至少需要指定以下配置：
 ```yml
-timerange: "20240101-20250101"
+time_start: "20240701"
+time_end: "20250701"
 pairs: ['ETH/USDT']  # 您可指定多个品种回测，如果忽略此项，则通过pairlists动态计算品种列表
 run_policy:
   - name: ma:demo

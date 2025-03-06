@@ -51,7 +51,8 @@ Example:
 stake_amount: 100
 wallet_amounts:
   USDT: 1000
-timerange: "20230701-20250101"
+time_start: "20240701"
+time_end: "20250701"
 pairs: ['ETH/USDT']
 run_policy:
   - name: ma:demo

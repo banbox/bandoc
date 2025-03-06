@@ -44,7 +44,8 @@ You can directly click to expand and view the strategy source code (such as `ma/
 ## Running Backtests
 You can start new backtest tasks on the backtest management page. All configurations for backtest tasks are done through yaml configuration. You need to specify at least the following configuration:
 ```yml
-timerange: "20240101-20250101"
+time_start: "20240701"
+time_end: "20250701"
 pairs: ['ETH/USDT']  # You can specify multiple pairs. If omitted, the pair list will be calculated dynamically through pairlists
 run_policy:
   - name: ma:demo
