@@ -9,9 +9,15 @@ Possible values for `GOOS`: linux, darwin, windows, ...
 Possible values for `GOARCH`: amd64, arm64, ...
 
 ::: code-group
-```shell [Linux/MacOS]
+```shell [Linux]
 export GOARCH="amd64"
 export GOOS="linux"
+go build -o bot
+```
+
+```shell [MacOS]
+export GOARCH="amd64"
+export GOOS="darwin"
 go build -o bot
 ```
 
@@ -43,7 +49,7 @@ go build -o bot
 ## 2. Preparing the Database
 Install and start TimeScaledb. It is recommended to use Docker for a quick setup. Refer to the [documentation](https://docs.timescale.com/self-hosted/latest/install/).
 
-Save your database connection string: `postgresql://postgres:123@[host.docker.internal]:5432/ban` (You may need to modify the password or database name, etc.)
+Save your database connection string: `postgresql://postgres:123@[timescaledb]:5432/ban` (You may need to modify the password or database name, etc.)
 
 ::: tip Note
 You do not need to create the database or related table structures. banbot will automatically initialize the database and related table structures upon startup.

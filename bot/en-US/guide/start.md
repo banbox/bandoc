@@ -62,6 +62,11 @@ The strategy project is the go project where you maintain all your strategy code
 
 You can download the [GitHub repository](https://github.com/banbox/bandoc/) of this document, then open it with Cursor, and @codebase in the chat to ask any questions you have; Cursor will combine all the content of the document to provide you with a more understandable explanation.
 
+**Is it stable? Can it be used for real trading in a production environment?**
+
+We have been using BanBot for live trading since December 1, 2024, up until now. During this period, we have resolved some bugs. The commonly used live trading features have all passed testing, but there may still be areas that have not been covered. 
+If you want to test the strategy with a small amount of capital, you can consider starting to use BanBot immediately. However, if you have a large amount of capital, we recommend that you first run a trial with a small amount of capital for a few months to observe its performance.
+
 ## Community Support
 For any questions not covered in the documentation, or if you need more information about the robot, or just want to communicate with each other, 
 please join our [Discord server](https://discord.com/invite/XXjA8ctqga)

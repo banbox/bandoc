@@ -6,7 +6,8 @@ For a better strategy development experience, it is recommended to install the g
 
 ## Start TimeScaledb
 ```bash
-docker run -d --name timescaledb -p 127.0.0.1:5432:5432 \
+docker network create mynet
+docker run -d --name timescaledb --network mynet -p 127.0.0.1:5432:5432 \
   -v /opt/pgdata:/var/lib/postgresql/data \
   -e POSTGRES_PASSWORD=123 timescale/timescaledb:latest-pg17
 ```
@@ -25,14 +26,11 @@ accounts:
       prod:
         api_key: your_api_key_here
         api_secret: your_secret_here
-#database:
-#  url: postgresql://postgres:123@[host.docker.internal]:5432/ban
+database:
+  url: postgresql://postgres:123@[timescaledb]:5432/ban
 ```
-> banbot uses `postgresql://postgres:123@[host.docker.internal]:5432/ban` as the default database connection string in docker. You can modify it by setting `database.url`.
-
 ```bash
-docker run -d --name banbot -p 8000:8000 -v /root:/root\
-  --add-host=host.docker.internal:host-gateway banbot/banbot:latest -config /root/config.yml
+docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml
 ``` 
 Now you can access `http://127.0.0.1:8000` in your browser to experience banbot's UI interface!
 

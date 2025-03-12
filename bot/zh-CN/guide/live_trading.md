@@ -9,9 +9,15 @@ banbot支持您无需修改策略直接进行实时模拟交易或实盘交易�
 `GOARCH`的可选值：amd64, arm64, ...
 
 ::: code-group
-```shell [Linux/MacOS]
+```shell [Linux]
 export GOARCH="amd64"
 export GOOS="linux"
+go build -o bot
+```
+
+```shell [MacOS]
+export GOARCH="amd64"
+export GOOS="darwin"
 go build -o bot
 ```
 
@@ -43,7 +49,7 @@ go build -o bot
 ## 2. 准备数据库
 安装并启动TimeScaledb，建议使用docker快速启动，[文档](https://docs.timescale.com/self-hosted/latest/install/)
 
-保存您的数据库连接字符串：`postgresql://postgres:123@[host.docker.internal]:5432/ban`（您可能需要修改其中的密码或数据库名称等）
+保存您的数据库连接字符串：`postgresql://postgres:123@[timescaledb]:5432/ban`（您可能需要修改其中的密码或数据库名称等）
 
 ::: tip 提示
 您无需创建数据库和相关表结构，banbot启动时会自动初始化数据库和相关表结构
