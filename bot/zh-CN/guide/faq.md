@@ -1,5 +1,16 @@
+**为什么不提供预编译的安装包？**
+
+量化策略大多需要自行编写代码，banbot为了在兼顾开发效率的同时尽可能提升性能，选择golang作为系统和策略的统一语言，这也对用户提供了最大自由度。  
+golang的哲学是将一切（banbot和您的策略代码）编译为单个可执行文件，您可以非常方便地将其分发给任何人并直接运行。  
+所以您只需[拉取示例策略项目](./init_project.md)，使用内置策略或实现您自己的策略，编译后即可体验回测、实盘交易等所有功能。
+
 ## 支持的市场
 banbot支持币安的现货、U本位合约、币本位合约。欢迎您提交pull request支持更多交易所和市场。
+
+**稳定吗？可用于生产环境真实交易吗？**
+
+我们从24年12月1日起使用banbot进行实盘交易一直到现在，期间解决了一些bug，目前常用的实盘特性都测试通过，但也可能还有未覆盖到的地方；
+您如果小资金测试策略可以考虑立即开始使用banbot，如果您资金量较大，建议您先小资金试运行几个月看看。
 
 ## 可以开空头仓位吗？
 banbot支持开空头仓位，只需要在`OpenOrders(&strat.EnterReq{Tag: "short", Short: true})`中设置`Short`为true即可。
@@ -14,6 +25,11 @@ banbot支持仓位或订单的部分退出。只需要`CloseOrders(&strat.ExitRe
 ## 修改配置后需要重新启动机器人吗？
 目前您修改配置后，需要重新启动机器人才能生效。不过机器人重新启动后，会自动检测相关仓位和订单，不会丢失。
 
+## 实盘和回测的订单不匹配？
+* 排查实盘日志是否有错误
+* 检查回测和实盘订单时间的时区是否一致
+* 检查配置是否一致：市场、杠杆、策略和时间周期、开单金额等
+
 ## 启动时错误：read tcp 127.0.0.1:xxx->host:5432: wsarecv: An existing connection was forcibly closed by the remote host.
 请确认已正确安装TimeScaledb插件（在`psql`中执行`\dx`能看到TimeScaledb插件）。
 
@@ -23,7 +39,5 @@ banbot支持仓位或订单的部分退出。只需要`CloseOrders(&strat.ExitRe
 ## ormo或ormu报错：constraint failed: NOT NULL constraint failed，对应字段是float64
 如果golang某个字段类型float64，而值是nan或inf，写入sqlite时会处理为null，而此列not null时，就会出现上面错误。解决：写入前utils.NanInfTo(v, 0)替换为0
 
-## 实盘和回测的订单不匹配？
-* 排查实盘日志是否有错误
-* 检查回测和实盘订单时间的时区是否一致
-* 检查配置是否一致：市场、杠杆、策略和时间周期、开单金额等
+## Get "https://xxx": unexpected EOF
+这是无法从go仓库下载的错误，可能有两个原因：`GOPROXY`指向的go仓库不可用，或者VPN代理节点不可用，尝试切换即可。
