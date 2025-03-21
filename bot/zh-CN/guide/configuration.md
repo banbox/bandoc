@@ -44,6 +44,7 @@ max_simul_open: 0 # 在一个bar上最大同时打开订单数量
 bt_net_cost: 15 # 回测时下单延迟，可用于模拟滑点，单位：秒，默认15
 relay_sim_unfinish: false  # 交易新品种时(回测/实盘)，是否从开始时间未平仓订单接力开始交易
 order_bar_max: 500  # 查找开始时间未平仓订单向前模拟最大bar数量
+ntp_lang_code: none  # ntp真实时间同步，默认none不启用，支持的代码：zh-CN, zh-HK, zh-TW, ja-JP, ko-KR, zh-SG, global(表示全球ntp服务器：google、apple、facebook...)
 wallet_amounts:  # 钱包余额，用于回测
   USDT: 10000
 stake_currency: [USDT, TUSD]  # 限定只交易定价币为这些的交易对

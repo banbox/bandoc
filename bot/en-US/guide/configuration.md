@@ -46,6 +46,7 @@ max_simul_open: 0 # Maximum number of simultaneously open orders on one candlest
 bt_net_cost: 15  # Order delay in backtest, can be used to simulate slippage, in seconds, default is 15
 relay_sim_unfinish: false  # When trading a new symbol (backtesting/live trading), whether to trading from the open order relay at the beginning time
 order_bar_max: 500  # Find the maximum number of bars for forward simulation from the open orders at the start time.
+ntp_lang_code: none  # NTP (Network Time Protocol) real-time synchronization. The default is `none`(disabled). Supported codes: zh-CN, zh-HK, zh-TW, ja-JP, ko-KR, zh-SG, and global (indicating global NTP servers such as Google, Apple, Facebook, etc.).
 wallet_amounts:  # Wallet balance, used for backtesting
   USDT: 10000
 stake_currency: [USDT, TUSD]  # Limit trading pairs to those priced in these currencies
