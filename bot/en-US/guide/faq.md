@@ -1,5 +1,4 @@
-**Why are precompiled installation packages not provided?**
-
+## Why not provided precompiled installation packages?
 Most quantitative strategies require writing code independently. To balance development efficiency and maximize performance, banbot chooses golang as the unified language for both the system and strategies, which also provides users with the greatest freedom.  
 The philosophy of golang is to compile everything (banbot and your strategy code) into a single executable file, which you can easily distribute to anyone and run directly.  
 So you only need to [pull the example strategy project](./init_project.md), use the built-in strategies or implement your own, and after compilation, you can experience all functions such as backtesting and live trading.

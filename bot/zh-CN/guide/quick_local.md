@@ -65,6 +65,10 @@ accounts:
         api_secret: vvv
 database:
   url: postgresql://postgres:123@[127.0.0.1]:5432/ban
+# 中国大陆不能直接访问币安api，请设置vpn代理，或设置HTTP_PROXY/HTTPS_PROXY，以及系统代理配置
+exchange:
+  binance:
+    proxy: http://127.0.0.1:10808  # 设置为no，禁用系统代理
 ```
 
 ## Step 5. 启动WebUI

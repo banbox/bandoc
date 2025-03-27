@@ -26,7 +26,12 @@ accounts:
         api_secret: your_secret_here
 database:
   url: postgresql://postgres:123@[timescaledb]:5432/ban
+# 中国大陆不能直接访问币安api，请务必设置vpn代理为您本地代理地址
+exchange:
+  binance:
+    proxy: http://[你的主机本地IP]:[代理端口]
 ```
+执行`ipconfig`或`ifconfig`查看你的本地ip，替换上面`[你的主机本地IP]`，并设置`[代理端口]`为本地vpn代理的端口，然后执行下面命令启动banbot：
 ```bash
 docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml
 ```
