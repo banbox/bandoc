@@ -3,10 +3,19 @@ Most quantitative strategies require writing code independently. To balance deve
 The philosophy of golang is to compile everything (banbot and your strategy code) into a single executable file, which you can easily distribute to anyone and run directly.  
 So you only need to [pull the example strategy project](./init_project.md), use the built-in strategies or implement your own, and after compilation, you can experience all functions such as backtesting and live trading.
 
+## What types of quantitative strategies are supported, and which types are not supported?
+**Supported Strategies**: Time-series strategies of 1-minute and above (multi-asset and multi-timeframe supported).
+
+**Limited Support**: Multi-factor cross-sectional strategies, AI-driven strategies.
+
+**Not Currently Supported**: High-frequency trading, arbitrage trading (including triangular arbitrage, cross-exchange arbitrage, and term arbitrage, etc.), pair trading, statistical arbitrage.
+
 ## Supported markets
 Banbot supports Binance's spot, U-margined contracts, and coin-margined contracts. You are welcome to submit pull requests to support more exchanges and markets.
 
-**Is it stable? Can it be used for real trading in a production environment?**
+Not currently supported: Stocks, futures, foreign exchange, bonds, decentralized cryptocurrency exchanges, etc.
+
+## Is it stable? Can it be used for real trading in a production environment?
 
 We have been using BanBot for live trading since December 1, 2024, up until now. During this period, we have resolved some bugs. The commonly used live trading features have all passed testing, but there may still be areas that have not been covered.
 If you want to test the strategy with a small amount of capital, you can consider starting to use BanBot immediately. However, if you have a large amount of capital, we recommend that you first run a trial with a small amount of capital for a few months to observe its performance.

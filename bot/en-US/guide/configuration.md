@@ -37,6 +37,7 @@ margin_add_rate: 0.66  # For futures contracts, add margin when the loss reaches
 stake_amount: 15  # Default amount per order, lower priority than stake_pct
 stake_pct: 50  # Percentage of account to use for each order, based on the nominal value
 max_stake_amt: 5000  # Max order amount of 5k, valid only if stake_pct is specified
+draw_balance_over: 0  # When the balance exceeds this value, the excess amount will be automatically withdrawn and will not be used for subsequent transactions. It is only used for backtesting.
 charge_on_bomb: false # Automatically recharge to continue backtesting when backtesting liquidation occurs
 take_over_strat: ma:demo # The strategy for taking over user orders during real trading, empty by default
 open_vol_rate: 1  # Maximum allowed open order quantity / average candle volume ratio when not specifying order quantity, default is 1

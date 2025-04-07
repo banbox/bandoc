@@ -7,9 +7,38 @@
 ## 环境变量
 为方便后续使用，您需要设置环境变量`BanDataDir`和`BanStratDir`。
 
-`BanDataDir`是banbot运行过程中回测结果、前端UI资源文件保存的目录。
+`BanDataDir`建议设置为一个空目录。是banbot运行过程中回测结果、前端UI资源文件保存的目录。不建议设置为策略项目的子目录。
 
 `BanStratDir`即您的交易策略项目(banstrats)的路径，每次回测时，banbot会自动保存您此次回测对应的策略代码版本，方便您及时恢复到之前的某个版本。
+
+比如设置环境变量如下：
+
+::: code-group
+```shell [MacOS]
+nano ~/.zshrc
+# 如果您使用的Catalina以前的版本，请使用nano ~/.bash_profile
+# 在文件末尾追加：
+export BanDataDir=/Users/YourName/bandata
+export BanStratDir=/Users/YourName/banstrats
+# 然后Ctrl+O保存，Ctrl+X退出
+# 执行下面命令使修改生效
+source ~/.zshrc
+```
+```shell [Linux]
+nano ~/.bashrc
+# 在文件末尾追加：
+export BanDataDir=/home/YourName/bandata
+export BanStratDir=/home/YourName/banstrats
+# 然后Ctrl+O保存，Ctrl+X退出
+# 执行下面命令使修改生效
+source ~/.bashrc
+```
+```text [Windows]
+BanDataDir=E:\quant\bandata
+BanStratDir=E:\quant\banstrats
+```
+:::
+注意一般修改后需要打开新的终端窗口才会生效。
 
 ## 从示例项目开始(推荐)
 示例项目实现了网格策略、经典均线策略等，您可基于此快速实现您的自定义策略。

@@ -35,6 +35,7 @@ margin_add_rate: 0.66  # 交易合约时，如出现亏损，亏损达到初始�
 stake_amount: 15  # 单笔订单默认本金，优先级低于stake_pct
 stake_pct: 50 # 单笔开单金额百分比，名义价值
 max_stake_amt: 5000 # 单笔上限5k，仅stake_pct有值时有效
+draw_balance_over: 0  # 余额超过此值时，超出部分自动提现，不用于后续交易，仅用于回测
 charge_on_bomb: false # 回测爆仓时自动充值继续回测
 take_over_strat: ma:demo # 实盘时接管用户开单的策略，默认为空
 open_vol_rate: 1 # 未指定数量开单时，最大允许开单数量/平均蜡烛成交量的比值，默认1

@@ -7,9 +7,40 @@ When you execute `go build` under your strategy project, your strategy will be c
 ## Environment variables
 For the convenience of subsequent use, you need to set the environment variables `BanDataDir` and `BanStratDir`.
 
-`BanDataDir` is the directory where the backtest results and front-end UI resource files are saved during the operation of banbot.
+`BanDataDir` expect to be an empty directory. It is the directory where backtest results and frontend UI resource files are saved during the operation of banbot. It is not recommended to set it as a subdirectory of the strategy project.
 
 `BanStratDir` is the path of your trading strategy project(banstrats). Each time you backtest, banbot will automatically save the strategy code version corresponding to your backtest, so that you can restore to a previous version in time.
+
+For example, set the environment variables as follows:
+::: code-group
+
+```shell [MacOS]
+nano ~/.zshrc
+# If you are using a version earlier than Catalina, please use nano ~/.bash_profile
+# Append the following lines to the end of the file:
+export BanDataDir=/Users/YourName/bandata
+export BanStratDir=/Users/YourName/banstrats
+# Then save with Ctrl+O and exit with Ctrl+X
+# Execute the following command to apply the changes
+source ~/.zshrc
+```
+
+```shell [Linux]
+nano ~/.bashrc
+# Append the following lines to the end of the file:
+export BanDataDir=/home/YourName/bandata
+export BanStratDir=/home/YourName/banstrats
+# Then save with Ctrl+O and exit with Ctrl+X
+# Execute the following command to apply the changes
+source ~/.bashrc
+```
+
+```text [Windows]
+BanDataDir=E:\quant\bandata
+BanStratDir=E:\quant\banstrats
+```
+:::
+Note that generally, you need to open a new terminal window for the changes to take effect.
 
 ## Start from the sample project (Recommended)
 The sample project implements the grid strategy, classic moving average strategy, etc. You can quickly implement your custom strategy based on this.
