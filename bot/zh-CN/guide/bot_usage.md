@@ -242,6 +242,15 @@ banbot tick:
         to_kline:       build kline from ticks
 ```
 
+## 实盘交易工具
+**bot live down_order**  
+`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC/USDT,ETH/USDT`
+下载指定账户的订单到`@exgOrders/`目录下，保存的文件格式为`[exchange]_[market]_[account]_[apiKeyPrefix].gob`，如`binance_linear_user1_C1uMI.gob`。可用于`bot tool cmp_orders`对比回测订单。
+
+**bot live close_order**  
+`-account user1 -pair BTC/USDT,ETH/USDT -strat ma:demo1,ma:demo2 -exg true`  
+对指定用户的符合订单进行平仓。
+
 ## 其他工具
 **bot tool collect_opt**  
 收集超参数调优结果，并按顺序显示到控制台。
@@ -254,6 +263,9 @@ banbot tick:
 
 **bot tool cmp_orders**  
 将从币安导出的订单与本地回测订单记录进行对比，检查回测和实盘是否一致。
+
+**bot tool list_strats**  
+输出已注册的策略列表。
 
 **bot tool data_server**  
 启动一个grpc服务器，供其他语言端访问数据和指标结果等。可用于AI机器学习等。

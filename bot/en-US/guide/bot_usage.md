@@ -242,6 +242,16 @@ banbot tick:
         convert:        convert tick data format
         to_kline:       build kline from ticks
 ```
+
+## Live Trading Tools
+**bot live down_order**  
+`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC/USDT,ETH/USDT`  
+Download orders for the specified account to the `@exgOrders/` directory. The saved file format is `[exchange]_[market]_[account]_[apiKeyPrefix].gob`, such as `binance_linear_user1_C1uMI.gob`. This can be used with `bot tool cmp_orders` to compare backtest orders.
+
+**bot live close_order**  
+`-account user1 -pair BTC/USDT,ETH/USDT -strat ma:demo1,ma:demo2 -exg true`  
+Close positions for the specified user's eligible orders.
+
 ## Other tools
 **bot tool collect_opt**  
 Collect hyperparameter tuning results and display them to the console in order.
@@ -254,6 +264,12 @@ Load trading calendar (for Chinese futures market)
 
 **bot tool cmp_orders**  
 Compare the orders exported from Binance with the local backtest order records to check whether the backtest and the real market are consistent.
+
+**bot tool list_strats**  
+print registered strategies.
+
+**bot tool data_server**  
+Start a gRPC server to provide access to data and metric results for clients written in other languages. It can be used for AI machine learning and other purposes.
 
 **bot tool calc_perfs**  
 Input in a CSV/XLSX file, where each row represents one day and each column represents the cumulative income of a variety. Calculate Shape/Sortino for each column
