@@ -37,7 +37,7 @@ If you have to set `proxy`, Run `ipconfig` or `ifconfig` to check your local IP.
 
 Then execute the following command to start BanBot:
 ```bash
-docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml
+docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml -host 0.0.0.0
 ``` 
 Now you can access `http://127.0.0.1:8000` in your browser to experience banbot's UI interface!
 
