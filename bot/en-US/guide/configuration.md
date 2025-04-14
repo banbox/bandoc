@@ -40,6 +40,7 @@ max_stake_amt: 5000  # Max order amount of 5k, valid only if stake_pct is specif
 draw_balance_over: 0  # When the balance exceeds this value, the excess amount will be automatically withdrawn and will not be used for subsequent transactions. It is only used for backtesting.
 charge_on_bomb: false # Automatically recharge to continue backtesting when backtesting liquidation occurs
 take_over_strat: ma:demo # The strategy for taking over user orders during real trading, empty by default
+close_on_stuck: 20 # If no K-line is received within 20 minutes, all positions will be closed. The default value is 20. (Only valid for live trading)
 open_vol_rate: 1  # Maximum allowed open order quantity / average candle volume ratio when not specifying order quantity, default is 1
 min_open_rate: 0.5  # Minimum open order ratio, allows order if balance / per order amount exceeds this ratio when balance is insufficient, default is 0.5 (50%)
 low_cost_action: ignore # Action when stake amount < the minimum amount: ignore/keepBig/keepAll
@@ -71,6 +72,7 @@ run_policy:  # The strategy to run, multiple strategies can run simultaneously o
     max_simul_open: 0  # Maximum number of orders opened simultaneously on a candlestick
     order_bar_max: 0  # Overrides the global default order_bar_max when non-zero
     stake_rate: 1 # The stake amount rate for this strategy
+    stop_loss: 0 # Stop loss rate for this strategy, e.g., 5% or 0.05
     dirt: any  # any/long/short
     pairs: [BTC/USDT:USDT]
     params: {atr: 15}

@@ -38,6 +38,7 @@ max_stake_amt: 5000 # 单笔上限5k，仅stake_pct有值时有效
 draw_balance_over: 0  # 余额超过此值时，超出部分自动提现，不用于后续交易，仅用于回测
 charge_on_bomb: false # 回测爆仓时自动充值继续回测
 take_over_strat: ma:demo # 实盘时接管用户开单的策略，默认为空
+close_on_stuck: 20  # 超时20分钟未收到K线时自动全部平仓，默认20。（仅实盘生效）
 open_vol_rate: 1 # 未指定数量开单时，最大允许开单数量/平均蜡烛成交量的比值，默认1
 min_open_rate: 0.5 # 最小开单比率，余额不足单笔金额时，余额/单笔金额高于此比率允许开单，默认0.5即50%
 low_cost_action: ignore # 开单金额不足最小金额时的动作：ignore/keepBig/keepAll
@@ -69,6 +70,7 @@ run_policy:  # 运行的策略，可以多个策略同时运行；也可以一�
     max_simul_open: 0  # 在一个bar上，最大同时打开订单数量
     order_bar_max: 0  # 非0时覆盖全局默认order_bar_max
     stake_rate: 1 # 此策略的开单倍率
+    stop_loss: 0  # 此策略的止损比率，如 5% 或 0.05
     dirt: any # any/long/short
     pairs: [BTC/USDT:USDT]
     params: {atr: 15}

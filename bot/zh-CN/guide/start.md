@@ -19,7 +19,14 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 * 指标库：内置[banta](https://github.com/banbox/banta)高性能指标库，您可基于其快速开发自定义指标
 
 ## WebUI
-![image](https://www.banbot.site/uidev.gif)
+用于策略研究回测，仅推荐在本地启动，无密码
+
+![image](https://docs.banbot.site/uidev.gif)
+
+## Dashboard UI
+用于管理实盘机器人，推荐部署在离交易所更近的服务器，需密码访问
+
+![image](https://docs.banbot.site/dashboard.gif)
 
 ## 支持的交易所
 基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前仅支持币安交易所，但也能比较容易对接其他交易所。
@@ -32,16 +39,21 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 * Linux/Windows基本操作（环境变量、命令行、编辑配置文件）
 * golang语言基础（[快速入门](https://go.dev/tour/welcome/2)）
 * 量化交易基础知识
+
 ::: tip tip
 建议您通过DeepSeek快速学习相关基础知识
 :::
 
 ## 安装要求
 ### 硬件要求
-推荐您使用不低于此配置的linux云服务器：
+* CPU：2核
 * 内存：2GB
 * 磁盘：10GB
-* CPU：2核
+
+**本地策略研究**推荐不低于上面配置。
+
+**实盘部署**推荐直接使用上面配置的linux云服务器。
+
 ::: tip tip
 此配置可同时部署数据库和机器人，每个机器人单个账户占用资源极小，您可在单个机器人进程中配置数百个账户。
 :::

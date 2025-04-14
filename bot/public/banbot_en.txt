@@ -826,7 +826,7 @@ func OnBar(s *strat.StratJob){
 	if upX == 1{
 		// close crosses above the upper Bollinger Band
 	}
-	adx := ta.ADX(e.Close, 30).Get(0)
+	adx := ta.ADX(e.High, e.Low, e.Close, 30).Get(0)
 	if adx > 30{
 		// adx value is above 30, indicating a trend
 	}

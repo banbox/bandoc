@@ -17,6 +17,7 @@ Public fields:
 - `BatchInOut bool` - Whether to batch execute entry/exit
 - `BatchInfo bool` - Whether to perform batch processing after OnInfoBar
 - `StakeRate float64` - Relative basic amount billing rate
+- `StopLoss float64` - Stop loss rate for all orders opened by this strategy (without leverage)
 - `StopEnterBars int` - Timeout candlestick number for limit entry orders
 - `EachMaxLong int` - Maximum number of long orders per trading pair, -1 to disable
 - `EachMaxShort int` - Maximum number of short orders per trading pair, -1 to disable

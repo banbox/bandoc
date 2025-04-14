@@ -826,7 +826,7 @@ func OnBar(s *strat.StratJob){
 	if upX == 1{
 		// close上穿布林带上轨
 	}
-	adx := ta.ADX(e.Close, 30).Get(0)
+	adx := ta.ADX(e.High, e.Low, e.Close, 30).Get(0)
 	if adx > 30{
 		// adx指标值高于30，处于趋势中
 	}

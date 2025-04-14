@@ -17,8 +17,9 @@ Not currently supported: Stocks, futures, foreign exchange, bonds, decentralized
 
 ## Is it stable? Can it be used for real trading in a production environment?
 
-We have been using BanBot for live trading since December 1, 2024, up until now. During this period, we have resolved some bugs. The commonly used live trading features have all passed testing, but there may still be areas that have not been covered.
-If you want to test the strategy with a small amount of capital, you can consider starting to use BanBot immediately. However, if you have a large amount of capital, we recommend that you first run a trial with a small amount of capital for a few months to observe its performance.
+We have been using Banbot in live trading since December 1, 2024. During this period, we have resolved many bugs, and the commonly used live trading features have all passed testing. However, the number of live trading users is still not sufficient at present, and there is a possibility that there are areas not yet covered that could lead to capital losses.
+
+If you want to test the strategy with a small amount of capital, you can consider starting to use Banbot immediately. If you have a large amount of capital, we suggest that you first run a trial with a small amount of capital for a few months to observe the results.
 
 ## Can I open a short position?
 Banbot supports opening a short position. Just set `Short` to true in `OpenOrders(&strat.EnterReq{Tag: "short", Short: true})`.

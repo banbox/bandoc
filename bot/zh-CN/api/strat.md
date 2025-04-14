@@ -17,6 +17,7 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `BatchInOut bool` - 是否批量执行入场/出场
 - `BatchInfo bool` - 是否对OnInfoBar后执行批量处理
 - `StakeRate float64` - 相对基础金额开单倍率
+- `StopLoss float64` - 此策略打开所有订单的默认止损比率（不带杠杆）
 - `StopEnterBars int` - 限价入场单超时K线数
 - `EachMaxLong int` - 每个交易对最大做多订单数，-1表示禁用
 - `EachMaxShort int` - 每个交易对最大做空订单数，-1表示禁用

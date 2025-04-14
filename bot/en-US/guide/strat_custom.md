@@ -10,7 +10,8 @@ Second, you only need to register this strategy in the current go package's `ini
 Let's see how to implement our custom logic in the strategy function.
 
 ::: tip
-It is strongly recommended that you use AI tools such as Cursor or Claude to convert trading strategies in other languages ​​into banbot strategies. Just attach the [knowledge base](/banbot_en.txt){target="_self"}
+We strongly recommend that you use our online AI assistant to aid in development: [Link](https://www.banbot.site/en-US/backtest/new){target="_self"}.  
+While the AI assistant is very convenient, it can still make mistakes. You must check and understand the strategy code output by the AI to ensure it aligns with your logic; otherwise, the subsequent backtesting and live trading will be meaningless.
 :::
 
 ## Strategy Naming
@@ -81,6 +82,7 @@ type TradeStrat struct {
 	BatchInOut    bool    // Whether to batch execute entry/exit 是否批量执行入场/出场
 	BatchInfo     bool    // whether to perform batch processing after OninfoBar 是否对OnInfoBar后执行批量处理
 	StakeRate     float64 // Relative basic amount billing rate 相对基础金额开单倍率
+    StopLoss      float64 // Default stop loss rate for all orders opened by this strategy (without leverage). 此策略打开所有订单的默认止损比率，不带杠杆
 	StopEnterBars int     // If the limit order exceeds the given K line and still does not enter the market, it will be cancelled
 	EachMaxLong   int      // max number of long open orders for one pair
 	EachMaxShort  int      // max number of short open orders for one pair
@@ -525,3 +527,29 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 		},
 	}
 }
+```
+
+## All Member Functions of StratJob
+**CanOpen(short bool) bool**  
+Determine whether it is currently allowed to open an order (pass `true` to check if short selling is allowed, `false` to check if long buying is allowed).
+
+**OpenOrder(req \*EnterReq) \*errs.Error**  
+Send a request to open an order. If it fails, return an error message.
+
+**CloseOrders(req \*ExitReq) \*errs.Error**  
+Send a request to close an order, which can close one or multiple orders. If it fails, return an error message.
+
+**GetOrderNum(dirt float64) int**  
+Return the number of orders for the current strategy task. The parameter `dirt` can be `core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`.
+
+**GetOrders(dirt float64) []\*ormo.InOutOrder**  
+Return all orders for the current strategy task in the specified direction. The parameter `dirt` can be `core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`.
+
+**Position(dirt float64, enterTag string) float64**  
+Get the position size of the current strategy task, returning a multiple of the base amount. For example, if the default order amount is 30U, a return value of 2 indicates that 60U has been spent on orders.
+
+**SetAllStopLoss(dirt float64, args \*ormo.ExitTrigger)**  
+Set stop-loss for all orders in the specified direction for the current strategy task. The parameter `dirt` can be `core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`.
+
+**SetAllTakeProfit(dirt float64, args \*ormo.ExitTrigger)**  
+Set take-profit for all orders in the specified direction for the current strategy task. The parameter `dirt` can be `core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`.

@@ -28,7 +28,7 @@ accounts:
         api_secret: your_secret_here
 database:
   url: postgresql://postgres:123@[timescaledb]:5432/ban
-# If the Binance API cannot be accessed in your region, please be sure to set the VPN proxy to your local proxy address
+# If the Binance API cannot be accessed in your region, please be sure to set the VPN proxy to your local proxy address, and you need to allow connections from the local area network in the proxy software.
 #exchange:
 #  binance:
 #    proxy: http://[YOUR_IP]:[VPN_PORT]

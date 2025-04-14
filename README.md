@@ -4,7 +4,7 @@ You can download this repository and open it with cursor, then use @codebase in 
 You can also use this repository as a knowledge base and interact with it through AI tools like [cherry studio](https://github.com/CherryHQ/cherry-studio).
 
 It is divided into three sub-documentation sites:
-* bot: The bot documentation site https://www.banbot.site
+* bot: The bot documentation site https://docs.banbot.site
 * exg: The exchange documentation site
 * ta: The technical indicator library documentation site
 
@@ -21,7 +21,7 @@ Then package the output directory `bot\.vitepress\dist` and upload it to the ser
 您也可将此仓库作为知识库，通过[cherry studio](https://github.com/CherryHQ/cherry-studio)等AI工具问答。
 
 分为三个子文档站点：
-* bot: 机器人文档站点 https://www.banbot.site
+* bot: 机器人文档站点 https://docs.banbot.site
 * exg: 交易所文档站点
 * ta: 技术指标库文档站点
 

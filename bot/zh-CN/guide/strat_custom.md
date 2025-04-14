@@ -10,7 +10,8 @@
 下面我们看看在策略函数中应该如何实现我们的自定义逻辑。
 
 ::: tip
-强烈推荐您使用Cursor或Claude等AI工具将其他语言的交易策略转为banbot策略，只需附加[知识库](/banbot_cn.txt){target="_self"}
+强烈推荐您使用我们的在线AI助手辅助开发：[链接](https://www.banbot.site/zh-CN/backtest/new){target="_self"}。  
+AI助手虽然很方便，但依然会犯错，您必须检查并理解AI输出的策略代码，确保符合您的逻辑，否则后续回测和实盘没有意义。
 :::
 
 ## 策略命名
@@ -80,6 +81,7 @@ type TradeStrat struct {
 	BatchInOut    bool    // 是否批量执行入场/出场
 	BatchInfo     bool    // 是否对OnInfoBar后执行批量处理
 	StakeRate     float64 // 相对基础金额开单倍率
+    StopLoss      float64 // 此策略打开所有订单的默认止损比率（不带杠杆）
 	StopEnterBars int // 限价单如果超过给定K线仍未入场则取消
 	EachMaxLong   int      // 单个品种最大同时开多数量，默认0不限制
 	EachMaxShort  int      // 单个品种最大同时开空数量，默认0不限制
@@ -526,3 +528,29 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
+
+## StratJob的所有成员函数
+**CanOpen(short bool) bool**  
+判断当前是否允许打开订单（传true判断是否允许开空，false判断是否允许开多）
+
+**OpenOrder(req \*EnterReq) \*errs.Error**  
+发出一个打开订单请求，如果失败，返回错误信息。
+
+**CloseOrders(req \*ExitReq) \*errs.Error**  
+发出一个关闭订单请求，可关闭一个或多个订单。如果失败，返回错误信息。
+
+**GetOrderNum(dirt float64) int**  
+返回当前策略任务的订单数量，参数dirt值可为`core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`。
+
+**GetOrders(dirt float64) []\*ormo.InOutOrder**  
+返回当前策略任务指定方向的所有订单，参数dirt的值可为`core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`。
+
+**Position(dirt float64, enterTag string) float64**  
+获取当前策略任务的仓位大小，返回基于基准金额的倍数。比如默认开单金额30U，返回2表示已花费60U开单。
+
+**SetAllStopLoss(dirt float64, args \*ormo.ExitTrigger)**  
+对当前策略任务的所有指定方向订单设置止损，参数dirt的值可为`core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`。
+
+**SetAllTakeProfit(dirt float64, args \*ormo.ExitTrigger)**  
+对当前策略任务的所有指定方向订单设置止盈，参数dirt的值可为`core.OdDirtLong/core.OdDirtShort/core.OdDirtBoth`。
+

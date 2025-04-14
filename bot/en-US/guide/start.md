@@ -19,7 +19,14 @@ We strongly recommend that you have basic golang programming knowledge and under
 * Indicator library: Built-in [banta](https://github.com/banbox/banta) high-performance indicator library, you can quickly develop custom indicators based on it
 
 ## WebUI
-![image](https://www.banbot.site/uidev.gif)
+For strategy research backtesting, it is recommended to start locally only, without a password.
+
+![image](https://docs.banbot.site/uidev.gif)
+
+## Dashboard UI
+For managing live trading robots, it is recommended to deploy on servers closer to the exchange, with password access required.
+
+![image](https://docs.banbot.site/dashboard.gif)
 
 ## Supported exchanges
 Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently only supports Binance Exchange, but it can also be easily connected to other exchanges.
@@ -32,16 +39,21 @@ Based on the unified interface provided by [banexg](https://github.com/banbox/ba
 * Basic Linux/Windows operations (environment variables, command line, editing configuration files)
 * Fundamentals of the Go language ([Quick Start](https://go.dev/tour/welcome/2))
 * Basic knowledge of quantitative trading
+
 ::: tip tip
 It is recommended that you quickly learn the relevant basics through DeepSeek
 :::
 
 ## Installation Requirements
 ### Hardware Requirements
-It is recommended that you use a Linux cloud server with a configuration no less than this:
+* CPU: 2 cores
 * Memory: 2GB
 * Disk: 10GB
-* CPU: 2 cores
+
+**Local Strategy Research** is recommended to have a configuration no lower than the one mentioned above.
+
+**Live Deployment** is recommended to directly use the Linux cloud server with the configuration mentioned above.
+
 ::: tip tip
 This configuration allows for the simultaneous deployment of both the database and the bot. Each bot account occupies minimal resources, enabling you to configure hundreds of accounts within a single bot process.
 :::
