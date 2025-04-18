@@ -1,5 +1,15 @@
 banbot allows you to perform real-time simulated trading or live trading without modifying your strategies. This document helps you deploy a trading bot to a production environment.
 
+::: warning Risk Warning
+Banbot currently does not have a large number of live trading users. Although common live trading use cases have passed testing, there is still a possibility that undiscovered bugs may cause financial losses. Use of this software is at your own risk. The author and all related parties assume no responsibility for your trading results.
+
+If you are planning to start live trading, please ensure that your strategy or yml configuration includes appropriate stop-loss settings to avoid significant losses, and test with a small amount of capital for a period of time first.
+:::
+
+::: tip Technical Support
+We offer preferential live trading servers to help you set up a live trading environment, and provide live trading technical support and account management services. [Go to Purchase](https://banbot.site/zh-CN/services)
+:::
+
 ## 1. Compilation
 **Compiling from WebUI**  
 You can execute `bot` to start the WebUI directly, then navigate to [/en-US/setting/](http://127.0.0.1:8000/en-US/setting/). On the left side, select 【Compile Code】, and on the right side, choose the target system and architecture. Proceed with the compilation and download.
@@ -98,16 +108,15 @@ You can configure `rpc_channels` in the YML file for notifications. Messages wil
 
 You can follow the WeCom plugin in WeChat (scan the QR code from the WeCom PC management console) to receive these messages in WeChat.
 
-**DashBoard**
+**DashBoard UI**  
+You can configure `api_server` in the yml file. This will start a web service simultaneously when the bot is launched. After the bot is started, you can access the bot's DashBoard using the configured username and password to view the trading overview and manage the bot.
 
-You can configure `api_server` in the yml file, which will start a web service simultaneously when the robot is started. Then you can access the robot's DashBoard through the configured account and password after the robot is started, to view the trading overview and manage the robot.
+The web service mentioned above is started with HTTP. It is recommended that you set the `bind_ip` to the local or intranet IP of the server to prevent unauthorized access.
 
-The web service above is started with http, it is recommended that you set `bind_ip` to local or LAN ip to avoid unauthorized access.
-
-If you need to access the Dashboard from other hosts, you can connect to the server running the robot via ssh, and then map the web service port to other hosts through port forwarding:
+If you need to access the server's Dashboard from your local machine, you can connect to the server running the bot via SSH and then use port forwarding to forward requests from a local port to the server port:
 ```shell
-ssh -L [local port]:[remote host]:[remote port] [username]@[remote server address]
-# e.g.
+ssh -L [local_port]:[server_bind_ip]:[server_port] [username]@[server_public_address]
+# e.g. 
 ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 ```
 
