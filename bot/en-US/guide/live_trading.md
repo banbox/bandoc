@@ -7,7 +7,7 @@ If you are planning to start live trading, please ensure that your strategy or y
 :::
 
 ::: tip Technical Support
-We offer preferential live trading servers to help you set up a live trading environment, and provide live trading technical support and account management services. [Go to Purchase](https://banbot.site/zh-CN/services)
+We offer preferential live trading servers to help you set up a live trading environment, and provide live trading technical support and account management services. [Go to Purchase](https://banbot.site/en-US/services)
 :::
 
 ## 1. Compilation

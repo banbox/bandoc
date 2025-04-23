@@ -105,7 +105,7 @@ type TradeStrat struct {
 }
 ```
 
-## Simple policy example
+## Simple strategy example
 ```go
 package ma
 
@@ -117,7 +117,7 @@ import (
 )
 
 func init() {
-	// Register the policy in Banbot, and use ma: demo in the configuration file to reference this policy later
+	// Register the strategy in Banbot, and use ma: demo in the configuration file to reference this strategy later
 	// `init`The function is a special function in Go that will be executed immediately when the current package is imported
 	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
 		"demo": Demo,
