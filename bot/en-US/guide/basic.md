@@ -128,7 +128,7 @@ The second group provides two timeframes, `[5m 15m]`, and will calculate the can
 
 The `BTC/USDT` in the third group overlaps with the first group, so it will be ignored.
 
-Note: When the dirt parameter is omitted, the default is `both`.
+Note: When the dirt parameter is omitted, it means both long/short orders are allowed.
 
 ## Backtesting Execution Logic
 * Load the configuration and initialize: database session, exchange, data provider, order manager, wallets, pair manager, etc.

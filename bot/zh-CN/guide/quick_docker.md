@@ -33,7 +33,7 @@ exchange:
 ```
 执行`ipconfig`或`ifconfig`查看你的本地ip，替换上面`[你的主机本地IP]`，并设置`[代理端口]`为本地vpn代理的端口，然后执行下面命令启动banbot：
 ```bash
-docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml -host 0.0.0.0
+docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/banbot:latest -config /root/config.yml
 ```
 现在，您可以在浏览器访问`http://127.0.0.1:8000`，体验banbot的UI界面了！
 
