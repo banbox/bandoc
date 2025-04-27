@@ -7,7 +7,9 @@ bot optimize -out PATH [-opt-rounds 30] [-sampler bayes]
 启动时您需要指定一个输出文件，超参数搜索结果将写入到此文件中，一般形如`opt1.log`。
 您可通过`-opt-rounds`指定调优的执行次数，以及`-sampler`指定采样优化器。调优时将固定使用`-nodb`参数。
 
-如果您有多组策略需要优化，默认情况下banbot将逐个搜索每个策略；如果您希望提高并发，可编译为可执行文件后，传入`-concur`参数控制并发数量。
+如果您有多组策略需要优化（即run_policy配置了多个策略），默认情况下banbot将逐个搜索每个策略；如果您希望提高并发，可编译为可执行文件后，传入`-concur`参数控制并发数量（仅对多个策略时启用并发）。
+
+`run_policy`下的`dirt`可选值为空、any、long、short；默认为空表示多空双开，为long/short时分别表示只开多/空，为any时，banbot会将此任务拆分为long/short/空三种情况分别调优。
 
 您可使用`-picker`指定一个挑选器名称，用于从搜索结果中选择一组参数。未指定时，默认使用`good3`
 

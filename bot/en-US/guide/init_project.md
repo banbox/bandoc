@@ -1,3 +1,5 @@
+If you have already configured and launched BanBot through **Quick Experience/Quick Start**, there is no need to refer to this page for project initialization.
+
 You can quickly start from the sample strategy project or create a new project directly.
 
 You don't need to download the source code of banbot, but just create a project for managing trading strategies. By adding the banbot dependency with `go get`, you can enjoy all the conveniences brought by banbot.

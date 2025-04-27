@@ -106,7 +106,7 @@ bot trade [-spider] [-pairs PAIRS] ...
 
 ```yaml
 api_server:
-  enabled: true  # enable here
+  enable: true  # enable here
   bind_ip: 0.0.0.0
   port: 8001
   jwt_secret_key: '123456789'  # This should be complicated enough

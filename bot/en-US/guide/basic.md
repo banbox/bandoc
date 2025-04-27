@@ -10,6 +10,76 @@ This page introduces some basic principles and concepts of banbot.
 * TakeProfit: Submitting a limit exit order to the exchange for the current order (e.g., entering a long position at $10, when the price reaches $11, a limit take profit can be set above $11 and wait for execution).
 * StopLoss: Setting a stop loss for the current order at the exchange. There are market stop losses and limit stop losses (e.g., entering a long position at $10, when the price reaches $11, a stop loss can be set below $11 as the trigger price).
 
+## Fees
+All profit calculations of banbot include fees. For backtesting, hyperparameter optimization, and real-time simulation modes, the default exchange fees will be used. For live trading, the actual fees charged by the exchange (after deducting rebates, etc.) will be applied.
+
+## Symbol Naming
+In cryptocurrency trading, two concepts are frequently involved: **base currency** and **quote currency**. The former is the object of the current trade, while the latter is the currency used for pricing and exchange. There may be differences in the naming of trading pairs across different exchanges. We maintain a unified naming standard and automatically handle differences between exchanges.
+
+#### Spot Trading Pair Naming
+```text
+Base currency ↓
+       BTC/USDT
+       ETH/BTC
+      DASH/ETH
+            ↑ Quote currency
+```
+In spot trading, trading pairs are divided into two parts separated by "/", with the base currency in front and the quote currency behind.
+
+#### Contract Trading Pair Naming
+```text
+// Base currency
+// ↓
+// ↓  Quote currency
+// ↓  ↓
+// ↓  ↓    Settlement currency
+// ↓  ↓    ↓
+// ↓  ↓    ↓
+'BTC/USDT:BTC'  // BTC/USDT perpetual contract settled in BTC
+'BTC/USDT:USDT' // BTC/USDT perpetual contract settled in USDT
+'ETH/USDT:ETH'  // ETH/USDT perpetual contract settled in ETH
+'ETH/USDT:USDT' // ETH/USDT perpetual contract settled in USDT
+```
+In contract trading, trading pairs are divided into three parts separated by ":", representing base currency/quote currency:settlement currency. The settlement currency is the currency used for margin and profit/loss calculation.
+
+Contracts are divided into two types based on the settlement currency: linear contracts (U-based contracts) and inverse contracts (coin-based contracts). The former uses stablecoins such as USDT/USDC as the settlement currency, while the latter uses digital currencies such as BTC/ETH as the settlement currency. In the yml file, `market_type` is configured as `linear` and `inverse` to enable linear or inverse contracts.
+
+Contracts are also divided into perpetual contracts and delivery contracts based on whether there is a delivery date:
+```text
+// Base currency
+// ↓
+// ↓  Quote currency
+// ↓  ↓
+// ↓  ↓    Settlement currency
+// ↓  ↓    ↓
+// ↓  ↓    ↓     Identifier (delivery date)
+// ↓  ↓    ↓     ↓
+// ↓  ↓    ↓     ↓
+'BTC/USDT:BTC-211225'  // BTC/USDT inverse contract settled in BTC with delivery date 2021-12-25
+'BTC/USDT:USDT-210625' // BTC/USDT linear contract settled in USDT with delivery date 2021-06-25
+```
+In the yml file, `contract_type` is configured as `swap` and `future` to enable perpetual contracts or delivery contracts respectively.
+
+Options:
+```text
+// Base currency
+// ↓
+// ↓  Quote currency
+// ↓  ↓
+// ↓  ↓    Settlement currency
+// ↓  ↓    ↓
+// ↓  ↓    ↓       Identifier (delivery date)
+// ↓  ↓    ↓       ↓
+// ↓  ↓    ↓       ↓   Strike price
+// ↓  ↓    ↓       ↓   ↓
+// ↓  ↓    ↓       ↓   ↓   Type, put (P) or call (C)
+// ↓  ↓    ↓       ↓   ↓   ↓
+'BTC/USDT:BTC-211225-60000-P'  // BTC/USDT inverse contract settled in BTC, with the right to sell at 60000 on 2021-12-25
+'ETH/USDT:USDT-211225-40000-C' // BTC/USDT linear contract settled in USDT, with the right to buy at 40000 on 2021-12-25
+'ETH/USDT:ETH-210625-5000-P'   // ETH/USDT inverse contract settled in ETH, with the right to sell at 5000 on 2021-06-25
+'ETH/USDT:USDT-210625-5000-C'  // ETH/USDT linear contract settled in USDT, with the right to buy at 5000 on 2021-06-25
+```
+
 ## Main Components
 The execution of backtesting and live trading involves various aspects. To ensure the project's structure remains flexible and clear, the main components involved in banbot include:
 

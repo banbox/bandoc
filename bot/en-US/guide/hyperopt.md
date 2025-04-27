@@ -5,7 +5,9 @@ After defining hyperparameters and their ranges using `pol.Def` in your strategy
 
 At startup, you need to specify an output file where the results of the hyperparameter search will be written, usually in the format of `opt1.log`. You can specify the number of tuning executions with `-opt-rounds` and the sampling optimizer with `-sampler`. During tuning, the `-nodb` parameter will be fixed.
 
-If you have multiple strategies that need optimization, by default, banbot will search each strategy one by one; if you want to improve concurrency, you can compile it into an executable file and pass the `-concur` parameter to control the number of concurrent processes.
+If you have multiple strategies that need optimization (i.e., `run_policy` is configured with multiple strategies), by default, banbot will search each strategy one by one. If you wish to increase concurrency, you can compile it into an executable file and pass the `-concur` parameter to control the number of concurrent tasks (concurrency is only enabled when there are multiple strategies).
+
+Under `run_policy`, the optional values for `dirt` are empty, any, long, and short. The default value is empty, which means both long and short positions are opened. When set to long or short, it indicates opening only long or short positions, respectively. When set to any, banbot will split this task into three scenarios—long, short, and empty—and optimize each separately.
 
 You can use `-picker` to specify a picker name for selecting a set of parameters from the search results. If not specified, the default will use `good3`.
 

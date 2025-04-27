@@ -194,7 +194,7 @@ webhook:  # Message types that can be sent via RPC
   exception:
     content: '{name}: {status}'
 api_server:  # For external control of the bot or access to dashboard via API
-  enabled: true
+  enable: true
   bind_ip: 0.0.0.0
   port: 8001
   jwt_secret_key: fn234njkcu89234nbf
@@ -218,3 +218,55 @@ Similarly, you can also set different order amount multipliers for different str
 
 #### Global stop loss
 You can use `fatal_stop` to set the robot to stop trading for `fatal_stop_hours` hours when the robot's combined loss of all strategy tasks reaches a certain percentage within x minutes.
+
+#### Environment
+The optional values for `env` are:
+- `prod`: Production network
+- `test`: Test network
+- `dry_run`: Simulated live trading, with local matching and no submission to the exchange. This is only effective when running `trade` for real-time trading.
+
+**Note**: Currently, the product IDs are not distinguished between `prod` and `test`. If you have already downloaded the K-line data, you need to delete the existing K-line data before switching environments, otherwise, there will be confusion.
+
+#### Product Filtering and Periodic Refresh
+In addition to configuring fixed products through `pairs`, you can also use `pairlists` to dynamically filter and determine trading products. If you want to enable this, make sure `pairs` is empty.
+
+`pairlists` provides several filters that can be used to filter products based on dimensions such as trading volume, price, volatility, liquidity, and correlation.
+
+If you need to periodically recalculate the product list, you can configure `pairmgr.cron`. When `force_filters` is set to `true`, the `pairlists` filters will be forcibly applied to `pairs`.
+
+Both `pairmgr` and `pairlists` support live trading and backtesting. If you enable them during backtesting, historical data will be used for filtering. This ensures that the dynamically calculated product list will be exactly the same when you start backtesting/live trading at different times with the same configuration.
+
+#### Real-Time Synchronization Settings
+When requesting authenticated exchange interfaces, a timestamp is generally required. If the local computer's time has a large deviation from the network time, it may cause the request to fail.
+
+Banbot provides the `ntp_lang_code` configuration item, which can be used to automatically detect the local time deviation (by requesting a specified NTP server to calculate the time deviation), and then use the real network time to initiate exchange requests.
+
+The optional values for `ntp_lang_code` are:
+- `none`: Not enabled
+- `zh-CN`: China
+- `zh-HK`: Hong Kong
+- `zh-TW`: Taiwan
+- `ja-JP`: Japan
+- `ko-KR`: South Korea
+- `zh-SG`: Singapore
+- `global`: Global NTP servers: google, apple, facebook, etc.
+
+#### Multi-Account Configuration
+You can configure multiple accounts in `accounts`, and each account can have different parameters.
+
+The parameters that can be configured for each account are:
+- `no_trade`: Whether to prohibit trading for this account
+- `stake_rate`: Order amount multiplier, the actual order amount multiplier is the global `stake_rate` multiplied by the account's `stake_rate`
+- `leverage`: Contract leverage
+- `max_stake_amt`: Maximum allowed single order amount
+- `max_pair`: Maximum number of products allowed for this account
+- `max_open_orders`: Maximum number of open orders allowed for this account
+
+During backtesting or simulated trading, only the configuration of the first account will be used for trading.
+
+#### Relay Unfinished Order
+For strategies with long holding periods in large cycles, where an order may hold for one or two months, you may already have some positions according to the trading signals when you start the robot. To fully follow the signals, you should enter the positions immediately and hold the corresponding positions instead of waiting for the next signal to be issued.
+
+When `relay_sim_unfinish` is set to `true`, it will automatically backtest the previous 500 K-lines when starting to trade a product, obtain the unliquidated orders, and then enter the positions immediately according to these orders.
+
+This configuration item is effective in both backtesting and live trading.

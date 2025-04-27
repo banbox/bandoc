@@ -95,7 +95,7 @@ type TradeStrat struct {
 	OnInfoBar           func(s *StratJob, e *ta.BarEnv, pair, tf string)   // 其他依赖的bar数据
 	OnTrades            func(s *StratJob, trades []*banexg.Trade)          // 逐笔交易数据
 	OnBatchJobs         func(jobs []*StratJob)                             // 当前时间所有标的job，用于批量开单/平仓
-	OnBatchInfos        func(jobs map[string]*StratJob)                    // 当前时间所有info标的job，用于批量处理
+	OnBatchInfos        func(tf string, jobs map[string]*JobEnv)            // 当前时间所有info标的job，用于批量处理
 	OnCheckExit         func(s *StratJob, od *ormo.InOutOrder) *ExitReq     // 自定义订单退出逻辑
 	OnOrderChange       func(s *StratJob, od *ormo.InOutOrder, chgType int) // 订单更新回调
 	GetDrawDownExitRate CalcDDExitRate                                     // 计算跟踪止盈回撤退出的比率
@@ -473,7 +473,7 @@ func BatchDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 			}
 			calcCorrs(jobs, false)
 		},
-		OnBatchInfos: func(jobs map[string]*strat.StratJob) {
+		OnBatchInfos: func(tf string, jobs map[string]*JobEnv) {
 			jobList := utils.ValsOfMap(jobs)
 			if jobList[0].IsWarmUp {
 				return

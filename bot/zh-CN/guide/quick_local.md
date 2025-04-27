@@ -1,5 +1,7 @@
 您可按照下面步骤快速在本地配置并运行banbot而无需docker：
 
+您也可以查看B站的[安装教程视频](https://www.bilibili.com/video/BV1QuLozqEzg/)
+
 ## Step 1. 安装
 您需要安装TimeScaledb和Golang开发环境，请参考[指引](./install.md)
 
