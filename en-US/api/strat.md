@@ -55,18 +55,19 @@ Public fields:
 - `IsWarmUp bool` - Whether currently in warmup state
 - `More interface{}` - Additional information for strategy customization
 
-### BatchTask
-Structure for batch execution tasks.
+### JobEnv
+Represents a job for additional product data in OnBatchInfos.
 
 Public fields:
-- `Job *StratJob` - Strategy task instance
-- `Type int` - Task type
+- `Job *StratJob` - Strategy job instance
+- `Env *ta.BarEnv` - Indicator runtime environment
+- `Symbol string` - Trading pair name
 
 ### BatchMap
 Batch execution task pool for all targets in the current exchange market time cycle.
 
 Public fields:
-- `Map map[string]*BatchTask` - Task mapping
+- `Map map[string]*JobEnv` - Task mapping
 - `TFMSecs int64` - Time frame milliseconds
 - `ExecMS int64` - Timestamp for executing batch tasks, delayed by a few seconds upon receiving a new target; execution starts when delay exceeds DelayBatchMS without receiving new targets
 

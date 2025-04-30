@@ -38,6 +38,13 @@ export default defineConfig({
                         { text: 'Rolling optimization backtesting', link: '/en-US/guide/roll_btopt' },
                         {text: 'AI', link: '/en-US/advanced/ai'}
                     ]
+                },{
+                    text: 'DeepWiki',
+                    items: [
+                        {text: 'banbot', link: 'https://deepwiki.com/banbox/banbot'},
+                        {text: 'banexg', link: 'https://deepwiki.com/banbox/banexg'},
+                        {text: 'banta', link: 'https://deepwiki.com/banbox/banta'},
+                    ]
                 }
             ],
             '/en-US/api/': getApiMenus('/en-US')

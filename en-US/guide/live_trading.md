@@ -99,7 +99,7 @@ nohup /ban/bot trade -config @demo.yml > /tmp/trade.log 2>&1 &
 ::: tip Tip
 The logs for the spider process will be automatically saved to `@logs/spider.log`; the logs for the bot process will be automatically saved to `@logs/[bot_name].log`. Log files will be rotated automatically when they exceed 300MB in size.
 
-Therefore, you can directly redirect the stdout and stderr of both the spider and the bot to `/dev/null`.
+However, these files can only record the log output during normal operation. If the robot terminates unexpectedly, the panic error log at the time of exit cannot be recorded. Therefore, it is recommended that when you start the spider and the robot, you redirect the stdout and stderr outputs to a certain file.  
 :::
 
 ## 5. Notifications, DashBoard, and Monitoring

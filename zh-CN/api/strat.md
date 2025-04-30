@@ -55,18 +55,19 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `IsWarmUp bool` - 当前是否处于预热状态
 - `More interface{}` - 策略自定义的额外信息
 
-### BatchTask
-批量执行任务的结构体。
+### JobEnv
+在OnBatchInfos中表示某个额外品种数据的job
 
 公开字段：
 - `Job *StratJob` - 策略任务实例
-- `Type int` - 任务类型
+- `Env *ta.BarEnv` - 指标运行环境
+- `Symbol string` - 交易对名称
 
 ### BatchMap
 当前交易所-市场-时间周期下，所有标的的批量执行任务池。
 
 公开字段：
-- `Map map[string]*BatchTask` - 任务映射
+- `Map map[string]*JobEnv` - 任务映射
 - `TFMSecs int64` - 时间周期毫秒数
 - `ExecMS int64` - 执行批量任务的时间戳，每收到新的标的，推迟几秒；超过DelayBatchMS未收到，开始执行
 

@@ -40,6 +40,13 @@ export default defineConfig({
                         { text: '滚动优化回测', link: '/zh-CN/guide/roll_btopt' },
                         {text: 'AI', link: '/zh-CN/advanced/ai'}
                     ]
+                },{
+                    text: 'DeepWiki',
+                    items: [
+                        {text: 'banbot', link: 'https://deepwiki.com/banbox/banbot'},
+                        {text: 'banexg', link: 'https://deepwiki.com/banbox/banexg'},
+                        {text: 'banta', link: 'https://deepwiki.com/banbox/banta'},
+                    ]
                 }
             ],
             '/zh-CN/api/': getApiMenus('/zh-CN')

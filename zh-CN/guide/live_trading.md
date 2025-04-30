@@ -98,7 +98,7 @@ nohup /ban/bot trade -config @demo.yml > /tmp/trade.log 2>&1 &
 ::: tip Tip
 spider进程日志会自动保存到`@logs/spider.log`；机器人进程日志会自动保存到`@logs/[bot_name].log`；日志文件大小超过300M会自动轮换。
 
-故您可以直接将spider和机器人的stdout,stderr输出重定向到`/dev/null`
+但这些文件只能记录正常运行的日志输出，如果机器人意外终止，退出时的panic错误日志无法记录，故推荐您启动spider和机器人时将stdout和stderr输出重定向到某个文件。
 :::
 
 ## 5. 消息通知、DashBoard和监控

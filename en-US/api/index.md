@@ -4,6 +4,10 @@
 * The `import` statement for packages must be placed at the top of the file; it cannot be imported within functions, nor can it be dynamically imported;
 * The dependency relationships of all packages within the entire Go project should form a directed acyclic tree.
 
+::: tip DeepWiki
+It is highly recommended that you quickly get familiar with banbot through [deepwiki](https://deepwiki.com/banbox/banbot); It provides complete flowcharts, design concepts, architecture, conversational research, and so on.
+:::
+
 ## Go Package Introduction & Dependencies
 Banbot is divided into several different packages based on functional characteristics and dependencies. Common global variables are mostly scattered across multiple packages. Below are the dependencies of all packages:
 
