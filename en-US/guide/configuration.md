@@ -201,6 +201,7 @@ api_server:  # For external control of the bot or access to dashboard via API
   users:
     - user: ban
       pwd: 123
+      allow_ips: []
       acc_roles: {user1: admin}
 ```
 

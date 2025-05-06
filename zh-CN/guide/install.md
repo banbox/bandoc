@@ -5,11 +5,8 @@
 banbot开箱即用地支持[banta](https://github.com/banbox/banta)高性能指标库，您可基于其快速开发自定义指标。
 
 ## 安装TimeScaleDB数据库
-建议按照官方文档安装最新稳定版本：
-* [在linux中安装](https://docs.timescale.com/self-hosted/latest/install/installation-linux/)
-* [在MacOS中安装](https://docs.timescale.com/self-hosted/latest/install/installation-macos/)
-* [在Windows中安装](https://docs.timescale.com/self-hosted/latest/install/installation-windows/)
-* [使用Docker安装](https://docs.timescale.com/self-hosted/latest/install/installation-docker/)
+从软件包安装TimeScaledb比较复杂耗时，强烈推荐您[使用Docker安装](https://docs.timescale.com/self-hosted/latest/install/installation-docker/)
+
 ::: warning Docker安装提示
 执行docker run时，请添加`-v /your/data/dir:/home/postgres/pgdata/data`参数，以便将数据映射到主机目录。
 :::

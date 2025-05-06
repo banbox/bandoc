@@ -199,6 +199,7 @@ api_server:  # 供外部通过api控制机器人
   users:
     - user: ban
       pwd: 123
+      allow_ips: []
       acc_roles: {user1: admin}
 
 ```
