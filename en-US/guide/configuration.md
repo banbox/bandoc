@@ -97,6 +97,7 @@ pairmgr:
   limit: 999  # Keep a maximum of n symbols in the list
   force_filters: false  # apply pairlists to static pairs force; default: false
   pos_on_rotation: hold  # hold/close the position when rotating the symbol list, default: hold
+  use_latest: false  # When the cron is not enabled, whether to use the latest time to refresh the varieties only takes effect for the backtest. 
 pairlists:  # Filters for trading pairs, applied sequentially in top-down order
   - name: VolumePairList  # Sort all pairs by trading volume in descending order
     limit: 100  # Take the top 100 pairs
@@ -156,7 +157,7 @@ accounts:
         to_user: ChannelUserID
     api_server:  # password & role for dashboard ui
       pwd: abc
-      role: admin
+      role: admin  # admin/guest
 exchange:  # Exchange configuration
   name: binance  # The exchange being used
   binance:  # Parameters for initializing the exchange via banexg, keys will be automatically converted from snake_case to CamelCase.
@@ -202,7 +203,8 @@ api_server:  # For external control of the bot or access to dashboard via API
     - user: ban
       pwd: 123
       allow_ips: []
-      acc_roles: {user1: admin}
+      acc_roles:
+        user1: admin  # The key here corresponds to "accounts", and the value can be admin/guest. 
 ```
 
 ## Important details configuration

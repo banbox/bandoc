@@ -1,4 +1,5 @@
-banbot allows you to perform real-time simulated trading or live trading without modifying your strategies. This document helps you deploy a trading bot to a production environment.
+banbot allows you to perform real-time simulated trading or live trading without modifying your strategies. This document helps you deploy a trading bot to a production environment.  
+Binance's servers are located in Tokyo, Japan. To ensure network stability during long-term real-time operation, it is recommended that you deploy the robot on a Japanese server.
 
 ::: warning Risk Warning
 Banbot currently does not have a large number of live trading users. Although common live trading use cases have passed testing, there is still a possibility that undiscovered bugs may cause financial losses. Use of this software is at your own risk. The author and all related parties assume no responsibility for your trading results.

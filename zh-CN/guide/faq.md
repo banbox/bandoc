@@ -48,3 +48,6 @@ banbot支持仓位或订单的部分退出。只需要`CloseOrders(&strat.ExitRe
 
 ## Get "https://xxx": unexpected EOF
 这是无法从go仓库下载的错误，可能有两个原因：`GOPROXY`指向的go仓库不可用，或者VPN代理节点不可用，尝试切换即可。
+
+## 更多其他问题？
+推荐您询问[DeepWiki](https://deepwiki.com/banbox/banbot)，它将阅读banbot源代码并准确回答您的相关问题。

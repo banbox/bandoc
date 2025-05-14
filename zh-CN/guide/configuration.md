@@ -95,6 +95,7 @@ pairmgr:
   limit: 999 # 标的列表最多保留n个
   force_filters: false  # 是否对pairs应用pairlists，默认false
   pos_on_rotation: hold  # hold/close 品种列表切换时，持仓保留还是立刻平仓
+  use_latest: false  # 未启用cron时，是否使用最新时间刷新品种，仅对回测生效
 pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
   - name: VolumePairList  # 按成交量价值倒序排序所有交易对
     limit: 100  # 取前100个
@@ -154,7 +155,7 @@ accounts:
         to_user: ChannelUserID
     api_server:  # 通过Dashboard访问的密码和角色
       pwd: abc
-      role: admin
+      role: admin  # 可选admin/guest
 exchange:  # 交易所配置
   name: binance  # 当前使用的交易所
   binance:  # 这里传入banexg初始化交易所的参数，key会自动从蛇形转为驼峰。
@@ -200,7 +201,8 @@ api_server:  # 供外部通过api控制机器人
     - user: ban
       pwd: 123
       allow_ips: []
-      acc_roles: {user1: admin}
+      acc_roles: 
+        user1: admin  # 这里的键对应accounts，值可选admin/guest
 
 ```
 

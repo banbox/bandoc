@@ -47,3 +47,6 @@ If a field type in golang is float64, and the value is nan or inf, it will be tr
 
 ## Get "https://xxx": unexpected EOF  
 This is an error that occurs when the download from the Go repository fails. There could be two possible reasons: the Go repository pointed to by `GOPROXY` is unavailable, or the VPN proxy node is not working. Try switching to resolve the issue.
+
+## More other questions?
+We recommend that you ask [DeepWiki](https://deepwiki.com/banbox/banbot), which will read the source code of banbot and accurately answer your relevant questions. 

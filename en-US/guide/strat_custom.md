@@ -28,7 +28,16 @@ root
  |  |-inv.go
  |-main.go
 ```
-Above there are two valid strategy groups `ma` and `grid`. You can also continue to create subfolders in `ma` to manage strategies. Note that all strategy groups need to be registered in `main.go` in the root directory:
+Above there are two valid strategy groups `ma` and `grid`. You can also continue to create subfolders in `ma` to manage strategies. Note that all strategy groups need to be registered in `main.go` in the root directory. then you can register the strategy in any go file under `ma`:  
+```go
+func init() {
+    // Register the strategy with banbot. You can reference this strategy in the configuration file using ma:demo
+    // The `init` function is a special Go function that executes automatically when the package is imported
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
+}
+```
 ```go
 import (
 	"github.com/banbox/banbot/entry"
@@ -58,11 +67,21 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
     }
 }
 ```
+You can set the corresponding policy parameters in `yml`, which will overwrite the default values above:
+```yaml
+run_policy:
+  - name: demo:demo
+    params:
+      atrLen: 9
+      atrLen1: 10
+      atrLen2: 11
+      atrLen3: 12
+```
 ::: warning Tips
 Each item in the yaml configuration `run_policy` corresponds to a call to the strategy function, generating a strategy with specific parameters.
 The same strategy can appear in multiple `run_poolicy` items, that is, the same strategy function may be executed multiple times.
 The `*strat.TradeStrat` returned by the strategy function will be applied to multiple varieties, corresponding to multiple `*strat.StratJob`.
-Therefore, any variables related to a single variety should not be saved in the strategy function, but should be saved through `*strat.StratJob.More`.
+Therefore, any variables related to a single symbol should not be saved in the strategy function, but should be saved through `*strat.StratJob.More`.
 The variables in the strategy function should remain unchanged. Otherwise, it will lead to unexpected states.
 :::
 
@@ -144,7 +163,10 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
-## banta.BarEnv and banta.Series
+## banta: Technical Analysis Library
+The high-performance indicator library banta is used in banbot. It caches the calculation state of indicators for each bar, which is the key to the high performance of banbot. You can visit [DeepWiki](https://deepwiki.com/banbox/banta) to learn more information about banta.
+
+`banta.BarEnv` and `banta.Series` are two key structures in banta.
 
 `banta.BarEnv` is the operating environment of a technical indicator, which stores information such as the current exchange, market, symbol, time period, etc.
 A strategy task will require at least one `banta.BarEnv`. If other symbols or time periods are subscribed through `OnPairInfos`, multiple operating environments will be required.
@@ -368,6 +390,9 @@ type EnterReq struct {
 	StopBars        int     // If the entry limit order exceeds how many bars and is not executed, it will be cancelled 入场限价单超过多少个bar未成交则取消
 }
 ```
+:::tip tip
+You cannot call the `OpenOrder` function to place an order at just any position in your strategy. Instead, you are only permitted to invoke this function within the following callback functions: `OnBar`, `OnOrderChange`, `OnBatchJobs`, and `OnPostApi`.
+:::
 ## Send an exit signal
 
 To send an exit signal, just call the `StratJob.CloseOrders` method and pass a `*strat.ExitReq` parameter.
@@ -419,7 +444,7 @@ Sometimes you may need to perform some calculations (such as correlation coeffic
 In this case, you can use the `OnBatchJobs` or `OnBatchInfos` callback function.
 ```go
 func calcCorrs(jobs []*strat.StratJob, isBig bool) {
-	// Calculate the average correlation coefficient between each variety and other varieties, and save it to More
+	// Calculate the average correlation coefficient between each symbol and other varieties, and save it to More
 	dataArr := make([][]float64, 0, len(jobs))
 	for _, j := range jobs {
 		dataArr = append(dataArr, j.Env.Close.Range(0, 70))
@@ -463,7 +488,7 @@ func BatchDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 				// When the correlation between the large and small cycles is less than 50%, the order will be opened.
 				s.OpenOrder(&strat.EnterReq{Tag: "open"})
 			} else if m.smlCorr > 0.9 {
-				// The current small cycle correlation of the variety is higher than 90%, close the position
+				// The current small cycle correlation of the symbol is higher than 90%, close the position
 				s.CloseOrders(&strat.ExitReq{Tag: "close"})
 			}
 		},
@@ -528,7 +553,87 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
+## Dynamic Modification the Subscription Symbols 
+You can directly specify the `pairs` symbol list in the yml or perform dynamic filtering through `pairlist`. However, you can also listen to the symbol list and modify the return through the `OnSymbols` callback function in the strategy:
+```go
+func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		OnSymbols: func(items []string) []string {
+			hasBTC := false
+			for _, it := range items {
+				if it == "BTC/USDT:USDT" {
+					hasBTC = true
+				}
+			}
+			if !hasBTC {
+				return append([]string{"BTC/USDT:USDT"}, items...)
+			}
+			return items
+		},
+	}
+}
+```
+The above checks whether BTC is in the subscribed varieties, and adds it if it's not.
+:::tip tip
+You need to return the modified symbol list. Not all these varieties will be traded, which is restricted by `run_policy.max_pair` and `TradeStrat.MinTfScore`. So the order of the varieties is important.
+:::
 
+## HTTP Post Interface Callback
+You can initiate a callback to your strategy through an HTTP POST request from an external source. This is only supported for live trading and simulated live trading, and it will only take effect when you enable the `api_server`.
+
+You can call this interface to trigger a strategy callback when a signal appears in platforms like TradingView or Python.
+
+To support executing some logic when receiving a POST request, you need to first configure the `OnPostApi` callback function in the strategy:
+```go
+func PostApi(p *config.RunPolicyConfig) *strat.TradeStrat {
+    return &strat.TradeStrat{
+        OnBar: func(s *strat.StratJob) {
+            // do nothing
+        },
+        OnPostApi: func(client *core.ApiClient, msg map[string]interface{}, jobs map[string]map[string]*strat.StratJob) error {
+			// You can parse the received request by yourself. The following is just an example for reference.
+            action := utils.PopMapVal(msg, "action", "")
+            for acc, pairMap := range jobs {
+                for pairTF, job := range pairMap {
+                    if action == "openLong" {
+                        log.Info("open long from api", zap.String("acc", acc), zap.String("pairTF", pairTF))
+                        job.OpenOrder(&strat.EnterReq{
+                            Tag: "long",
+                        })
+                    } else {
+                        log.Warn("unknown action", zap.String("action", action))
+                    }
+                }
+            }
+            return nil
+        },
+    }
+}
+```
+Then you can refer to [Live Trading](live_trading.md) to configure and start the robot. Note that you need to configure the login password in the yml and enable it:
+```yaml
+api_server:  # For controlling the robot through the api from an external source
+  enable: true
+  bind_ip: 0.0.0.0
+  port: 8001
+  users:
+    - user: api
+      pwd: very_strong_password
+      allow_ips: []
+      acc_roles: 
+        user1: admin
+```
+Then make a POST request to the api at http://127.0.0.1:8001/api/strat_call
+```json
+{
+    "token": "very_strong_password", // This is the password in the api_server
+    "strategy": "ma:postApi", // This is the name of the requested strategy
+    // The first two are fixed and required. The following fields are optional, and you can parse them in the strategy by yourself.
+    "action": "openLong",
+    "data1": 123, // Other arbitrary data to be sent to the strategy
+    "data2": "hello"
+}
+``` 
 ## All Member Functions of StratJob
 **CanOpen(short bool) bool**  
 Determine whether it is currently allowed to open an order (pass `true` to check if short selling is allowed, `false` to check if long buying is allowed).

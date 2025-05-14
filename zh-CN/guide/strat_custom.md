@@ -28,7 +28,17 @@ root
  |  |-inv.go
  |-main.go
 ```
-上面有`ma`和`grid`两个有效的策略组，您也可以在`ma`中继续创建子文件夹管理策略。注意，所有策略组都需要在根目录的`main.go`中注册：
+上面有`ma`和`grid`两个有效的策略组，您也可以在`ma`中继续创建子文件夹管理策略。然后您可在`ma`的任意go文件中注册策略：
+```go
+func init() {
+	// 注册策略到banbot中，后续在配置文件中使用ma:demo即可引用此策略
+	// `init`函数是go中的特殊函数，会在当前包被导入时立刻执行
+	strat.AddStratGroup("ma", map[string]strat.FuncMakeStrat{
+		"demo": Demo,
+	})
+}
+```
+注意，所有策略组都需要在根目录的`main.go`中注册：
 ```go
 import (
 	"github.com/banbox/banbot/entry"
@@ -56,6 +66,16 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 		// 更多内容
     }
 }
+```
+您可在yml中设置对应的策略参数，会覆盖上面的默认值：
+```yaml
+run_policy:
+  - name: demo:demo
+    params:
+      atrLen: 9
+      atrLen1: 10
+      atrLen2: 11
+      atrLen3: 12
 ```
 ::: warning 提示
 yaml配置`run_policy`中的每一项对应一次对策略函数的调用，生成一个特定参数的策略。  
@@ -143,7 +163,10 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
-## banta.BarEnv 和 banta.Series
+## 技术指标库banta
+banbot使用高性能指标库banta，它会对每个bar的指标计算状态进行缓存，这是banbot高性能的关键，您可访问[DeepWiki](https://deepwiki.com/banbox/banta)了解关于banta的更多信息。
+
+`banta.BarEnv` 和 `banta.Series`是banta中的两个关键结构体。
 
 `banta.BarEnv`是某个技术指标的运行环境，其中存储了当前交易所、市场、品种、时间周期等信息。
 一个策略任务至少会需要一个`banta.BarEnv`，如果通过`OnPairInfos`订阅了其他品种或时间周期，则需要多个运行环境。
@@ -366,6 +389,9 @@ type EnterReq struct {
 	StopBars        int     // 入场限价单超过多少个bar未成交则取消
 }
 ```
+:::tip tip
+并非策略的任意位置调用OpenOrder均能开单，您只能在`OnBar`, `OnOrderChange`, `OnBatchJobs`, `OnPostApi`这几个回调函数中调用开单。
+:::
 
 ## 发出离场信号
 
@@ -526,6 +552,89 @@ func DrawDown(pol *config.RunPolicyConfig) *strat.TradeStrat {
 			return 0
 		},
 	}
+}
+```
+## 订阅品种动态修改
+您在yml中可直接指定`pairs`品种列表或通过`pairlist`动态筛选。但您也可在策略中通过`OnSymbols`回调函数监听品种列表并修改返回：
+```go
+func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		OnSymbols: func(items []string) []string {
+			hasBTC := false
+			for _, it := range items {
+				if it == "BTC/USDT:USDT" {
+					hasBTC = true
+				}
+			}
+			if !hasBTC {
+				return append([]string{"BTC/USDT:USDT"}, items...)
+			}
+			return items
+		},
+	}
+}
+```
+上面是检查订阅品种中是否有BTC，没有就加上。
+:::tip tip
+您需返回修改后的品种列表，这些品种不一定全部交易，会受到`run_policy.max_pair`和`TradeStrat.MinTfScore`的限制。所以品种的前后顺序很重要。
+:::
+
+## HTTP Post接口回调
+您可从外部通过http post请求对您的策略发起回调，仅支持实盘交易&模拟实盘，当您启用`api_server`时才可生效。
+
+您可在TradingView或python等其他平台中出现信号时调用此接口触发策略回调。
+
+要支持收到post请求时执行一些逻辑，您需要先在策略中配置`OnPostApi`回调函数：
+```go
+func PostApi(p *config.RunPolicyConfig) *strat.TradeStrat {
+    return &strat.TradeStrat{
+        OnBar: func(s *strat.StratJob) {
+            // do nothing
+        },
+        OnPostApi: func(client *core.ApiClient, msg map[string]interface{}, jobs map[string]map[string]*strat.StratJob) error {
+			// 您可自行解析收到的请求，下面仅做示例参考
+            action := utils.PopMapVal(msg, "action", "")
+            for acc, pairMap := range jobs {
+                for pairTF, job := range pairMap {
+                    if action == "openLong" {
+                        log.Info("open long from api", zap.String("acc", acc), zap.String("pairTF", pairTF))
+                        job.OpenOrder(&strat.EnterReq{
+                            Tag: "long",
+                        })
+                    } else {
+                        log.Warn("unknown action", zap.String("action", action))
+                    }
+                }
+            }
+            return nil
+        },
+    }
+}
+```
+
+然后您可参考[实时交易](live_trading.md)配置并启动机器人。注意需要在yml中配置登录密码并启用：
+```yaml
+api_server:  # 供外部通过api控制机器人
+  enable: true
+  bind_ip: 0.0.0.0
+  port: 8001
+  users:
+    - user: api
+      pwd: very_strong_password
+      allow_ips: []
+      acc_roles: 
+        user1: admin
+```
+
+然后Post api http://127.0.0.1:8001/api/strat_call
+```json
+{
+    "token": "very_strong_password", // 这是api_server中的密码
+    "strategy": "ma:postApi", // 这是请求策略的名称
+    // 前两个是固定必填的，下面字段均可选，可在策略中自行解析
+    "action": "openLong",
+    "data1": 123, // 其他任意需要发送到策略的数据
+    "data2": "hello"
 }
 ```
 

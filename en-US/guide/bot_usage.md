@@ -14,15 +14,15 @@ Running `bot -help` will display a list of subcommand help:
 ```text
 banbot 0.1.5
 please run with a subcommand:
-        trade:      live trade
-        backtest:   backtest with strategies and data
-        spider:     start the spider
-        optimize:   run hyper parameters optimization
-        bt_opt:     backtest over optimize
-        kline:      run kline commands
-        tick:       run tick commands
-        tool:       run tools
-        web:        run web dashboard
+    trade:      live trade
+    backtest:   backtest with strategies and data
+    spider:     start the spider
+    optimize:   run hyper parameters optimization
+    bt_opt:     backtest over optimize
+    kline:      run kline commands
+    tick:       run tick commands
+    tool:       run tools
+    web:        run web dashboard
 ```
 ## Common command parameters
 **Data directory (-datadir)**
@@ -223,12 +223,12 @@ Recalculate the adjust factor (for the Chinese futures market)
 Export the adjust factor to a CSV file
 ```text
 banbot kline:
-        down:   download kline data from exchange
-        load:   load kline data from zip/csv files
-        export: export kline to csv files from db
-        purge:  purge/delete kline data with args
-        correct: sync klines between timeframes
-        adj_calc: recalculate adjust factors
+    down:   download kline data from exchange
+    load:   load kline data from zip/csv files
+    export: export kline to csv files from db
+    purge:  purge/delete kline data with args
+    correct: sync klines between timeframes
+    adj_calc: recalculate adjust factors
 ```
 ## Tick related tools
 **bot tick convert**  
@@ -239,8 +239,8 @@ Aggregate the tick files of the Chinese futures market into 1m period candle csv
 
 ```text
 banbot tick:
-        convert:        convert tick data format
-        to_kline:       build kline from ticks
+    convert:        convert tick data format
+    to_kline:       build kline from ticks
 ```
 
 ## Live Trading Tools
@@ -276,12 +276,47 @@ Input in a CSV/XLSX file, where each row represents one day and each column repr
 
 **bot tool corr**  
 Calculate the correlation coefficient for a group of varieties selected by YAML, a correlation matrix image can be output at regular intervals, or an average correlation coefficient CSV file can be output.
+
+**Bot Tool sim_bt**
+Execute rolling simulation backtesting, extract trading varieties in each interval from the log file, and conduct backtesting; export the order records and enters2.html.
+
+**Bot Tool merge_assets**
+Merge the assets.html in multiple backtesting reports into one for convenient comparison.
+
+**Bot Tool bt_factor**
+This command is used to test the cross-sectional rotation factor. You can conduct full-volume and full-period backtesting for all varieties using a certain strategy. Then, use this command to filter some varieties based on the performance of some varieties in the previous two years for trading in the following months. Repeat this process until the latest data, combine and output the backtesting report of the filtered varieties.
+
+You can make the following settings in the yml file for full-volume backtesting:
+```yaml
+pairmgr:
+  cron: ''
+  use_latest: true  # This will use the latest date to determine the list of varieties
+pairlists:
+  - name: VolumePairList
+    back_period: 30d
+```
+
+Then implement your factor and register it in `strat.FactorMap`.
+
+Then execute:
+```shell
+bot tool bt_factor -factor name -interval 4M -in @backtest\abc\orders.gob -out @backtest\abc_name
+```
+
+**Bot Tool bt_result**
+Reconstruct the backtesting report from the orders.gob file of the backtesting result. It can output assets.html, enters.html, detail.json, orders.csv, etc.
+
 ```text
 banbot tool:
-        collect_opt:    collect result of optimize, and print in order   
-        load_cal:       load calenders
-        cmp_orders:     compare backTest orders with exchange orders
-        data_server:    serve a grpc server as data feeder
-        calc_perfs:     calculate sharpe/sortino ratio for input data
-        corr:           calculate correlation matrix for symbols
+    collect_opt:    collect result of optimize, and print in order
+    load_cal:       load calenders
+    cmp_orders:     compare backTest orders with exchange orders
+    data_server:    serve a grpc server as data feeder
+    calc_perfs:     calculate sharpe/sortino ratio for input data
+    corr:           calculate correlation matrix for symbols
+    sim_bt:         run backtest simulation from report
+    list_strats:    list registered strategies
+    merge_assets:   merge multiple assets.html files into one
+    bt_factor:      backtest factors with orders
+    bt_result:      build backtest result from orders.gob and config
 ```

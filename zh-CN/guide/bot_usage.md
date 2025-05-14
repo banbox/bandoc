@@ -221,13 +221,13 @@ Usage of backtest:
 导出复权因子到csv文件.
 ```text
 banbot kline:
-        down:       download kline data from exchange
-        load:       load kline data from zip/csv files
-        export:     export kline to csv files from db
-        purge:      purge/delete kline data with args
-        correct:    sync klines between timeframes
-        adj_calc:   recalculate adjust factors
-        adj_export: export adjust factors to csv
+    down:       download kline data from exchange
+    load:       load kline data from zip/csv files
+    export:     export kline to csv files from db
+    purge:      purge/delete kline data with args
+    correct:    sync klines between timeframes
+    adj_calc:   recalculate adjust factors
+    adj_export: export adjust factors to csv
 ```
 ## Tick相关工具
 **bot tick convert**  
@@ -238,8 +238,8 @@ banbot kline:
 
 ```text
 banbot tick:
-        convert:        convert tick data format
-        to_kline:       build kline from ticks
+    convert:        convert tick data format
+    to_kline:       build kline from ticks
 ```
 
 ## 实盘交易工具
@@ -275,12 +275,47 @@ banbot tick:
 
 **bot tool corr**  
 为yaml筛选后的一组品种计算相关系数，可以每隔一段时间输出一个相关矩阵图片，也可以输出平均相关系数csv文件。
+
+**bot tool sim_bt**  
+执行滚动模拟回测，从日志文件中提取每个区间的交易品种，并进行回测；导出订单记录和enters2.html
+
+**bot tool merge_assets**  
+将多个回测报告中的assets.html合并为一个，方便对比
+
+**bot tool bt_factor**  
+此命令用于测试截面轮动因子，您可针对所有品种使用某策略进行全量全周期回测，然后使用此命令，根据前面2年一些品种表现筛选一些品种用于后续几个月交易，如此滚动直至最新，组合并输出筛选品种的回测报告。
+
+您可在yml中进行下面设置来进行全量回测：
+```yaml
+pairmgr:
+  cron: ''
+  use_latest: true  # 这会使用最新日期确定品种列表
+pairlists:
+  - name: VolumePairList
+    back_period: 30d
+```
+
+然后实现您的因子并注册到`strat.FactorMap`中。
+
+然后执行：
+```shell
+bot tool bt_factor -factor name -interval 4M -in @backtest\abc\orders.gob -out @backtest\abc_name
+```
+
+**bot tool bt_result**  
+从回测结果的orders.gob文件重建回测报告。可输出：assets.html, enters.html, detail.json, orders.csv等。
+
 ```text
 banbot tool:
-        collect_opt:    collect result of optimize, and print in order
-        load_cal:       load calenders
-        cmp_orders:     compare backTest orders with exchange orders
-        data_server:    serve a grpc server as data feeder
-        calc_perfs:     calculate sharpe/sortino ratio for input data
-        corr:           calculate correlation matrix for symbols
+    collect_opt:    collect result of optimize, and print in order
+    load_cal:       load calenders
+    cmp_orders:     compare backTest orders with exchange orders
+    data_server:    serve a grpc server as data feeder
+    calc_perfs:     calculate sharpe/sortino ratio for input data
+    corr:           calculate correlation matrix for symbols
+    sim_bt:         run backtest simulation from report
+    list_strats:    list registered strategies
+    merge_assets:   merge multiple assets.html files into one
+    bt_factor:      backtest factors with orders
+    bt_result:      build backtest result from orders.gob and config
 ```
