@@ -96,7 +96,7 @@ type TradeStrat struct {
 	Version       int // 策略版本号
 	WarmupNum     int // K线预热的长度
 	MinTfScore    float64 // 最小时间周期质量，默认0.8
-	WatchBook     bool // 是否监听订单簿实时深度信息
+    WsSubs        map[string]string    // websocket订阅: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool // 是否启用回撤止损（即跟踪止损）
 	BatchInOut    bool    // 是否批量执行入场/出场
 	BatchInfo     bool    // 是否对OnInfoBar后执行批量处理
@@ -113,7 +113,9 @@ type TradeStrat struct {
 	OnStartUp           func(s *StratJob) // 启动时回调。初次执行前调用
 	OnBar               func(s *StratJob) // 每个K线的回调函数
 	OnInfoBar           func(s *StratJob, e *ta.BarEnv, pair, tf string)   // 其他依赖的bar数据
-	OnTrades            func(s *StratJob, trades []*banexg.Trade)          // 逐笔交易数据
+	OnWsTrades          func(s *StratJob, pair string, trades []*banexg.Trade) // 逐笔交易数据
+    OnWsDepth           func(s *StratJob, dep *banexg.OrderBook)               // 推送深度信息
+    OnWsKline           func(s *StratJob, pair string, k *banexg.Kline)        // Websocket推送的实时K线(可能未完成)
 	OnBatchJobs         func(jobs []*StratJob)                             // 当前时间所有标的job，用于批量开单/平仓
 	OnBatchInfos        func(tf string, jobs map[string]*JobEnv)            // 当前时间所有info标的job，用于批量处理
 	OnCheckExit         func(s *StratJob, od *ormo.InOutOrder) *ExitReq     // 自定义订单退出逻辑
@@ -578,6 +580,49 @@ func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
 :::tip tip
 您需返回修改后的品种列表，这些品种不一定全部交易，会受到`run_policy.max_pair`和`TradeStrat.MinTfScore`的限制。所以品种的前后顺序很重要。
 :::
+
+## Websocket高频数据订阅
+您可在策略中订阅交易所通过Websocket推送的高频数据，包括：未完成K线，逐笔交易、订单簿深度。目前暂时仅支持实时交易，回测时尚不支持。
+注意从spider发送到机器人进程目前约有1ms延迟，另外交易所到您本地视网络情况也有一定延迟。
+
+下面是一个示例：
+```go
+import (
+	"fmt"
+	"github.com/banbox/banbot/config"
+	"github.com/banbox/banbot/core"
+	"github.com/banbox/banbot/strat"
+	"github.com/banbox/banexg"
+	"github.com/banbox/banexg/log"
+)
+
+func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		WsSubs: map[string]string{
+			core.WsSubDepth: "",
+			core.WsSubTrade: "",
+			core.WsSubKLine: "",
+		},
+		OnBar: func(s *strat.StratJob) {
+			e := s.Env
+			log.Info(fmt.Sprintf("OnBar %v: %v", e.TimeStop, e.Close.Get(0)))
+		},
+		OnWsKline: func(s *strat.StratJob, pair string, k *banexg.Kline) {
+			log.Info(fmt.Sprintf("OnWsKline %v: %v", k.Time, k.Close))
+		},
+		OnWsTrades: func(s *strat.StratJob, pair string, trades []*banexg.Trade) {
+			last := trades[len(trades)-1]
+			log.Info(fmt.Sprintf("OnWsTrades %v %v, %v", last.Timestamp, last.Price, last.Amount))
+		},
+		OnWsDepth: func(s *strat.StratJob, dep *banexg.OrderBook) {
+			bp1, bm1 := dep.Bids.Price[0], dep.Bids.Size[0]
+			ap1, am1 := dep.Asks.Price[0], dep.Asks.Size[0]
+			log.Info(fmt.Sprintf("OnWsDepth %v %v, %v,, %v, %v", dep.TimeStamp, bp1, bm1, ap1, am1))
+		},
+	}
+}
+```
+如上，您可通过`WsSubs`订阅所需的数据，值可默认为空或`_cur_`表示当前品种，也可使用其他品种，或同时订阅多个品种：`BTC/USDT:USDT,_cur_`，多个品种应当以逗号隔开。
 
 ## HTTP Post接口回调
 您可从外部通过http post请求对您的策略发起回调，仅支持实盘交易&模拟实盘，当您启用`api_server`时才可生效。

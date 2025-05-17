@@ -12,7 +12,7 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `Version int` - 策略版本号
 - `WarmupNum int` - 预热所需的K线数量
 - `MinTfScore float64` - 最小时间周期质量，默认0.8
-- `WatchBook bool` - 是否监控订单簿
+- `WsSubs map[string]string` - websocket订阅: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 - `DrawDownExit bool` - 是否启用回撤退出
 - `BatchInOut bool` - 是否批量执行入场/出场
 - `BatchInfo bool` - 是否对OnInfoBar后执行批量处理

@@ -12,7 +12,7 @@ Public fields:
 - `Version int` - Strategy version number
 - `WarmupNum int` - Number of candlesticks needed for warmup
 - `MinTfScore float64` - Minimum time frame quality, default 0.8
-- `WatchBook bool` - Whether to monitor order book
+- `WsSubs map[string]string` - WsSubs        map[string]string    // websocket subscription: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 - `DrawDownExit bool` - Whether to enable drawdown exit
 - `BatchInOut bool` - Whether to batch execute entry/exit
 - `BatchInfo bool` - Whether to perform batch processing after OnInfoBar

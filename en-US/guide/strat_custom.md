@@ -96,7 +96,7 @@ type TradeStrat struct {
 	Version       int     
 	WarmupNum     int     // candle preheating length
 	MinTfScore    float64 // Minimum time cycle quality, default 0.8 最小时间周期质量，默认0.8
-	WatchBook     bool    // Whether to monitor the real-time depth information of the order book
+    WsSubs        map[string]string    // websocket subscription: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool    // Whether to enable retracement stop loss (i.e. trailing stop loss)
 	BatchInOut    bool    // Whether to batch execute entry/exit 是否批量执行入场/出场
 	BatchInfo     bool    // whether to perform batch processing after OninfoBar 是否对OnInfoBar后执行批量处理
@@ -113,7 +113,9 @@ type TradeStrat struct {
 	OnStartUp           func(s *StratJob)                                   // Callback at startup. Called before the first execution
 	OnBar               func(s *StratJob)                                   // Callback function for each K line
 	OnInfoBar           func(s *StratJob, e *ta.BarEnv, pair, tf string)   // Other dependent bar data 其他依赖的bar数据
-	OnTrades            func(s *StratJob, trades []*banexg.Trade)          // Transaction by transaction data 逐笔交易数据
+    OnWsTrades          func(s *StratJob, pair string, trades []*banexg.Trade) // Websocket public trade data 逐笔交易数据
+    OnWsDepth           func(s *StratJob, dep *banexg.OrderBook)               // Websocket order book websocket推送深度信息
+    OnWsKline           func(s *StratJob, pair string, k *banexg.Kline)        // websocket real-time kline(may unfinish) Websocket推送的实时K线
 	OnBatchJobs         func(jobs []*StratJob)                             // All target jobs at the current time, used for bulk opening/closing of orders 当前时间所有标的job，用于批量开单/平仓
 	OnBatchInfos        func(tf string, jobs map[string]*JobEnv)            // All info marked jobs at the current time, used for batch processing 当前时间所有info标的job，用于批量处理
 	OnCheckExit         func(s *StratJob, od *ormo.InOutOrder) *ExitReq     // Custom order exit logic 自定义订单退出逻辑
@@ -577,6 +579,50 @@ The above checks whether BTC is in the subscribed varieties, and adds it if it's
 :::tip tip
 You need to return the modified symbol list. Not all these varieties will be traded, which is restricted by `run_policy.max_pair` and `TradeStrat.MinTfScore`. So the order of the varieties is important.
 :::
+
+## Websocket High-Frequency Data Subscription
+You can subscribe to high-frequency data pushed by exchanges via Websocket in the strategy, including: incomplete K-lines, tick-by-tick trades, and order book depth. Currently, only real-time trading is supported, and backtesting is not supported yet.
+
+**Note**: There is approximately a 1ms delay from the spider sending data to the robot process. Additionally, there is a certain delay from the exchange to your local system depending on network conditions.
+
+Here is an example:
+```go
+import (
+	"fmt"
+	"github.com/banbox/banbot/config"
+	"github.com/banbox/banbot/core"
+	"github.com/banbox/banbot/strat"
+	"github.com/banbox/banexg"
+	"github.com/banbox/banexg/log"
+)
+
+func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		WsSubs: map[string]string{
+			core.WsSubDepth: "",
+			core.WsSubTrade: "",
+			core.WsSubKLine: "",
+		},
+		OnBar: func(s *strat.StratJob) {
+			e := s.Env
+			log.Info(fmt.Sprintf("OnBar %v: %v", e.TimeStop, e.Close.Get(0)))
+		},
+		OnWsKline: func(s *strat.StratJob, pair string, k *banexg.Kline) {
+			log.Info(fmt.Sprintf("OnWsKline %v: %v", k.Time, k.Close))
+		},
+		OnWsTrades: func(s *strat.StratJob, pair string, trades []*banexg.Trade) {
+			last := trades[len(trades)-1]
+			log.Info(fmt.Sprintf("OnWsTrades %v %v, %v", last.Timestamp, last.Price, last.Amount))
+		},
+		OnWsDepth: func(s *strat.StratJob, dep *banexg.OrderBook) {
+			bp1, bm1 := dep.Bids.Price[0], dep.Bids.Size[0]
+			ap1, am1 := dep.Asks.Price[0], dep.Asks.Size[0]
+			log.Info(fmt.Sprintf("OnWsDepth %v %v, %v,, %v, %v", dep.TimeStamp, bp1, bm1, ap1, am1))
+		},
+	}
+}
+```
+As above, you can subscribe to the required data through `WsSubs`. The value can be left empty by default, or use `_cur_` to represent the current variety. You can also use other varieties or subscribe to multiple varieties simultaneously, such as `BTC/USDT:USDT,_cur_`. Multiple varieties should be separated by commas.
 
 ## HTTP Post Interface Callback
 You can initiate a callback to your strategy through an HTTP POST request from an external source. This is only supported for live trading and simulated live trading, and it will only take effect when you enable the `api_server`.
