@@ -19,6 +19,7 @@ The corn expression will also be executed during backtesting to refresh the inst
 * CorrelationFilter
 * VolatilityFilter
 * AgeFilter
+* BlockFilter
 * OffsetFilter
 * ShuffleFilter
   The first of the yaml instrument filter list must be `VolumePairList`, which can return a list of instruments from all instruments in the market.
@@ -79,6 +80,12 @@ Filter by the listing time of the symbol.
 ```yaml
 - name: AgeFilter # Filter by the listing days of the target
   min: 5
+```
+## BlockFilter
+A variety blacklist filter used to filter specified varieties.
+```yaml
+ - name: BlockFilter
+   pairs: [BTC/USDT:USDT]
 ```
 ## OffsetFilter
 According to the given offset, take the specified number of symbols. Usually used at the end

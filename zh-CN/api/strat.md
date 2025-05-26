@@ -103,6 +103,8 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `TakeProfitRate float64` - 止盈退出比率，0表示全部退出，需介于(0,1]之间
 - `TakeProfitTag string` - 止盈原因
 - `StopBars int` - 入场限价单超过多少个bar未成交则取消
+- `ClientID string` - 用于设置提交到交易所的ClientOrderID尾部部分。
+- `Infos map[string]string` - 用于保存到订单的额外信息
 
 ### ExitReq
 平仓请求结构体。

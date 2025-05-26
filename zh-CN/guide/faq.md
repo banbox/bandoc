@@ -1,3 +1,16 @@
+## 如何升级banbot到最新版本？
+**Docker**  
+使用最新docker镜像启动banbot即可，可在[DockerHub](https://hub.docker.com/r/banbot/banbot/tags)查看最新版本。
+
+**本地安装**  
+在您的策略代码项目（环境变量BanStratDir指向的目录）下编辑`go.mod`，将`github.com/banbox/banbot`后面的版本号，更新为最新；
+然后在当前目录下打开终端，执行`go mod tidy`，应用修改加载依赖即可。
+
+::: tip tip
+您可在[github](https://github.com/banbox/banbot/releases)或[gitee](https://gitee.com/banbox/banbot/releases)查看最新可用版本。
+如果您喜欢测试最新特性，可使用带`-beta.?`后缀的不稳定版本。大多数人可能希望使用最新稳定版本如`va.b.c`
+:::
+
 ## 为什么不提供预编译的安装包？
 量化策略大多需要自行编写代码，banbot为了在兼顾开发效率的同时尽可能提升性能，选择golang作为系统和策略的统一语言，这也对用户提供了最大自由度。  
 golang的哲学是将一切（banbot和您的策略代码）编译为单个可执行文件，您可以非常方便地将其分发给任何人并直接运行。  

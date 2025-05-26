@@ -128,6 +128,8 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
     min: 0.05  # 波动分数最小值，此值越小，允许一些在1d级别上变化非常小的标的
   - name: AgeFilter  # 按标的的上市天数过滤
     min: 5
+  - name: BlockFilter
+    pairs: [BTC/USDT:USDT]
   - name: OffsetFilter  # 偏移限定数量选择。一般用在最后
     reverse: false  # reverse array
     offset: 10  # 从第10个开始取

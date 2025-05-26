@@ -1,3 +1,16 @@
+## How to upgrade banbot to the latest version?
+**Docker**  
+Just start banbot with the latest docker image, and you can check the latest version on [DockerHub](https://hub.docker.com/r/banbot/banbot/tags).
+
+**Local Installation**  
+In your strategy code project (the directory pointed to by the environment variable `BanStratDir`), edit the `go.mod` file, update the version number after `github.com/banbox/banbot` to the latest one;  
+Then open a terminal in the current directory and execute `go mod tidy` to apply the changes and load the dependencies.
+
+::: tip tip  
+You can check the latest available versions on [github](https://github.com/banbox/banbot/releases) or [gitee](https://gitee.com/banbox/banbot/releases).  
+If you like to test the latest features, you can use the unstable version with the suffix `-beta.?`. Most people may prefer to use the latest stable version such as `v{a}.{b}.{c}`.  
+:::
+
 ## Why not provided precompiled installation packages?
 Most quantitative strategies require writing code independently. To balance development efficiency and maximize performance, banbot chooses golang as the unified language for both the system and strategies, which also provides users with the greatest freedom.  
 The philosophy of golang is to compile everything (banbot and your strategy code) into a single executable file, which you can easily distribute to anyone and run directly.  

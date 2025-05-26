@@ -390,6 +390,8 @@ type EnterReq struct {
 	TakeProfitRate  float64 // Take profit exit ratio, 0 indicates full exit, needs to be between (0,1) 止盈退出比率，0表示全部退出，需介于(0,1]之间
 	TakeProfitTag   string  // Reason for profit taking 止盈原因
 	StopBars        int     // If the entry limit order exceeds how many bars and is not executed, it will be cancelled 入场限价单超过多少个bar未成交则取消
+    ClientID        string  // Used to set the trailing part of the ClientOrderID submitted to the exchange.  
+    Infos           map[string]string // Used to set additional information saved in the order.
 }
 ```
 :::tip tip

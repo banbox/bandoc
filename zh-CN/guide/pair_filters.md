@@ -16,6 +16,7 @@
 * CorrelationFilter
 * VolatilityFilter
 * AgeFilter
+* BlockFilter
 * OffsetFilter
 * ShuffleFilter
 
@@ -77,6 +78,12 @@ yaml的品种过滤器列表的第一个必须是`VolumePairList`，它可以从
 ```yaml
   - name: AgeFilter  # 按标的的上市天数过滤
     min: 5
+```
+## BlockFilter
+品种黑名单过滤器，用于过滤指定品种。
+```yaml
+ - name: BlockFilter
+   pairs: [BTC/USDT:USDT]
 ```
 ## OffsetFilter
 按给定偏移，取指定数量的品种。一般用在最后

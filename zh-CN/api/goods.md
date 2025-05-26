@@ -65,6 +65,10 @@ goods 包提供了商品和交易对相关的功能。
 - `Max float64` - 波动分数最大值
 - `Min float64` - 波动分数最小值
 
+### BlockFilter
+品种黑名单过滤器，用于过滤指定品种。
+- `Pairs string[]` - 需要过滤的品种
+
 ### AgeFilter
 上市时间过滤器。
 - `Min int` - 最小上市天数

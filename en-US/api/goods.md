@@ -70,6 +70,10 @@ Listing time filter.
 - `Min int` - Minimum listing days
 - `Max int` - Maximum listing days
 
+### BlockFilter
+A variety blacklist filter used to filter specified varieties.
+- `Pairs string[]` - Varieties to be filtered
+
 ### OffsetFilter
 Offset filter.
 - `Reverse bool` - Whether to reverse

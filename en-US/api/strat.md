@@ -103,6 +103,8 @@ Public fields:
 - `TakeProfitRate float64` - Take profit exit ratio, 0 means full exit, must be between (0,1]
 - `TakeProfitTag string` - Reason for take profit
 - `StopBars int` - Number of bars after which unfilled entry limit order will be cancelled
+- `ClientID string` - Used to set the trailing part of the ClientOrderID submitted to the exchange.
+- `Infos map[string]string` - Used to store additional information for the order.
 
 ### ExitReq
 Close position request structure.

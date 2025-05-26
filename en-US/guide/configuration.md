@@ -130,6 +130,8 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
     min: 0.05  # Minimum volatility score, lower values allow symbols with less volatility on the daily level
   - name: AgeFilter  # Filter symbols based on listing days
     min: 5
+  - name: BlockFilter  # disable specified pairs
+    pairs: [BTC/USDT:USDT]
   - name: OffsetFilter  # Offset limit filter, typically used last
     reverse: false  # reverse array
     offset: 10  # Start from the 10th item
