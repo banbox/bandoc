@@ -173,6 +173,17 @@ database:  # 数据库配置
   url: postgresql://postgres:123@[127.0.0.1]:5432/bantd3
 spider_addr: 127.0.0.1:6789  # 爬虫监听的端口和地址
 rpc_channels:  # 支持的全部rpc渠道
+  # 邮件通知渠道
+  mail_notify:  # 渠道名称（可自定义）
+    type: mail  # 渠道类型：mail
+    disable: false  # 是否禁用此渠道
+    msg_types: [exception]  # 消息类型：exception（异常）
+    accounts: []  # 指定账户（空表示所有账户）
+    keywords: []  # 关键词过滤（空表示不过滤）
+    retry_delay: 1000  # 重试延迟（毫秒）
+    min_intv_secs: 300  # 最小发送间隔（秒）
+    touser: 'recipient@abc.com'  # 收件人邮箱地址
+  # 企业微信通知渠道
   wx_notify:  # rpc的渠道名
     corp_id: ww0f5246485154fgf
     agent_id: '100034234'
@@ -182,7 +193,6 @@ rpc_channels:  # 支持的全部rpc渠道
     msg_types: [exception]  # 允许发送的消息类型
     accounts: []  # 允许的账户，为空允许所有
     keywords: []  # 消息过滤关键词
-    retry_num: 0  # 重试次数
     retry_delay: 1000  # 重试间隔
     disable: true  # 是否禁用
 webhook:  # 发送消息的配置
@@ -194,6 +204,19 @@ webhook:  # 发送消息的配置
     content: '{name}: {status}'
   exception:
     content: '{name}: {status}'
+mail:  # 邮件通知配置
+  enable: false  # 是否启用邮件功能
+  host: smtp.example.com  # SMTP服务器地址
+  port: 465  # SMTP端口（通常为465或587）
+  username: user1@example.com  # 邮箱用户名
+  password: your_password  # 邮箱密码或应用密码
+bt_in_live:  # 实盘定时回测对比功能
+  cron: "0 0 * * *"  # Cron表达式，每天0点执行
+  account: "account1"  # 指定执行回测的账户
+  mail_to:  # 邮件通知收件人列表
+    - "trader1@example.com"
+    - "manager@example.com"
+show_lang_code: "zh-CN"  # 显示语言代码，支持 zh-CN, en-US 等
 api_server:  # 供外部通过api控制机器人
   enable: true
   bind_ip: 0.0.0.0
@@ -203,7 +226,7 @@ api_server:  # 供外部通过api控制机器人
     - user: ban
       pwd: 123
       allow_ips: []
-      acc_roles: 
+      acc_roles:
         user1: admin  # 这里的键对应accounts，值可选admin/guest
 
 ```
@@ -274,3 +297,56 @@ banbot提供了`ntp_lang_code`配置项，可用于自动检测本地时间误�
 `relay_sim_unfinish`配置为`true`时，会在开始交易某个品种时，自动回测前面500根K线，得到未平仓订单，然后按这些订单立即入场。
 
 此配置项在回测和实盘中都有效。
+
+## 邮件通知配置
+
+banbot支持邮件通知功能，可以在发生异常或其他重要事件时发送邮件通知。
+
+### 基础邮件配置
+
+在配置文件中添加邮件服务器配置：
+
+```yaml
+mail:
+  enable: true                    # 是否启用邮件功能
+  host: smtp.example.com         # SMTP服务器地址
+  port: 465                      # SMTP端口（通常为465或587）
+  username: user1@example.com    # 邮箱用户名
+  password: your_password        # 邮箱密码或应用密码
+```
+
+> **授权密码**: 一般需要使用授权密码而非登录密码  
+> **防火墙**: 确保服务器放行SMTP端口
+
+### 邮件通知渠道配置
+
+在`rpc_channels`中配置邮件通知渠道：
+
+```yaml
+rpc_channels:
+  mail_notify:                   # 渠道名称（可自定义）
+    type: mail                   # 渠道类型：mail
+    disable: false               # 是否禁用此渠道
+    msg_types: [exception]       # 消息类型：exception（异常）
+    accounts: []                 # 指定账户（空表示所有账户）
+    keywords: []                 # 关键词过滤（空表示不过滤）
+    retry_delay: 1000           # 重试延迟（毫秒）
+    min_intv_secs: 300          # 最小发送间隔（秒）
+    touser: 'recipient@abc.com'  # 收件人邮箱地址
+```
+> **发送频率**: 建议设置`min_intv_secs`避免频繁发送邮件
+
+## 实盘定时回测对比功能
+
+此功能允许在实盘运行期间定时执行回测，并将回测订单结果与实盘订单进行对比，帮助确认策略在实盘中的表现是否符合预期。
+
+### 配置实盘回测
+
+```yaml
+bt_in_live:
+  cron: "30 3 0 * * *"           # Cron表达式(秒 分钟 小时 日 月 星期)，每天00:03:30执行
+  account: "user1"               # 指定执行回测的账户
+  mail_to:                       # 邮件通知收件人列表
+    - "trader1@example.com"
+    - "manager@example.com"
+```

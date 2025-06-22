@@ -391,10 +391,16 @@ type EnterReq struct {
 	StopBars        int     // 入场限价单超过多少个bar未成交则取消
     ClientID        string  // 用于设置提交到交易所的ClientOrderID尾部部分。
     Infos           map[string]string // 设置保存到订单的额外信息
+	Log             bool // 是否自动记录错误日志
 }
 ```
+
+当`OpenOrder`返回错误时，表示开单失败，您可`log.Error`记录错误信息，也可在`EnterReq`中设置`Log`为true，让系统自动记录错误日志。
+
 :::tip tip
-并非策略的任意位置调用OpenOrder均能开单，您只能在`OnBar`, `OnOrderChange`, `OnBatchJobs`, `OnPostApi`这几个回调函数中调用开单。
+并非策略的任意位置调用OpenOrder均能开单，默认只有在`OnBar`, `OnOrderChange`, `OnBatchJobs`, `OnPostApi`这几个回调函数中调用开平仓会即刻执行。
+
+如果您需要在其他回调中也即刻入场，可自行调用`_, _, err := biz.GetOdMgr(s.Account).ProcessOrders(nil, s)`提交处理
 :::
 
 ## 发出离场信号
@@ -418,8 +424,12 @@ type ExitReq struct {
 	UnOpenOnly bool    // True时只退出尚未入场的订单
 	FilledOnly bool    // True时只退出已入场的订单
 	Force      bool    // 是否强制退出
+	Log        bool    // 是否自动记录错误日志
 }
 ```
+
+当`CloseOrders`返回错误时，表示平仓失败，您可`log.Error`记录错误信息，也可在`ExitReq`中设置`Log`为true，让系统自动记录错误日志。
+
 
 ## 止损和止盈
 
@@ -611,6 +621,11 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 		},
 		OnWsKline: func(s *strat.StratJob, pair string, k *banexg.Kline) {
 			log.Info(fmt.Sprintf("OnWsKline %v: %v", k.Time, k.Close))
+            s.OpenOrder(&strat.EnterReq{Tag: "long"})
+            _, _, err := biz.GetOdMgr(s.Account).ProcessOrders(nil, s)
+            if err != nil {
+                log.Error("process order fail", zap.Error(err))
+            }
 		},
 		OnWsTrades: func(s *strat.StratJob, pair string, trades []*banexg.Trade) {
 			last := trades[len(trades)-1]
@@ -625,6 +640,8 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 }
 ```
 如上，您可通过`WsSubs`订阅所需的数据，值可默认为空或`_cur_`表示当前品种，也可使用其他品种，或同时订阅多个品种：`BTC/USDT:USDT,_cur_`，多个品种应当以逗号隔开。
+
+这三个高频回调中默认未支持开平仓，如果需要您可仿照上面示例代码，自行调用`ProcessOrders`提交处理订单。
 
 ## HTTP Post接口回调
 您可从外部通过http post请求对您的策略发起回调，仅支持实盘交易&模拟实盘，当您启用`api_server`时才可生效。

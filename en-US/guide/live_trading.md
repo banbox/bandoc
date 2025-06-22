@@ -104,10 +104,35 @@ However, these files can only record the log output during normal operation. If 
 :::
 
 ## 5. Notifications, DashBoard, and Monitoring
-**Notifications**  
-You can configure `rpc_channels` in the YML file for notifications. Messages will be sent to your social apps (currently supporting WeCom) when the bot starts, stops, enters a position, or exits a position.
+**Notifications**
+You can configure `rpc_channels` in the YML file for notifications. Messages will be sent to your social apps when the bot starts, stops, enters a position, or exits a position. Currently supported:
+- **WeWork**: Send messages through WeWork bot
+- **Email Notifications**: Send email notifications via SMTP
 
+**WeWork Notification Setup**
 You can follow the WeCom plugin in WeChat (scan the QR code from the WeCom PC management console) to receive these messages in WeChat.
+
+**Email Notification Setup**
+Configure email notifications to receive timely email alerts when system exceptions occur:
+
+```yaml
+# Email service configuration
+mail:
+  enable: true
+  host: smtp.qq.com
+  port: 465
+  username: your_email@qq.com
+  password: your_authorization_code
+
+# Email notification channel
+rpc_channels:
+  mail_exception:
+    type: mail
+    disable: false
+    msg_types: [exception]
+    min_intv_secs: 300  # Send at most once every 5 minutes
+    touser: 'alert@company.com'
+```
 
 **DashBoard UI**  
 You can configure `api_server` in the yml file. This will start a web service simultaneously when the bot is launched. After the bot is started, you can access the bot's DashBoard using the configured username and password to view the trading overview and manage the bot.
@@ -125,7 +150,23 @@ ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 If you need to expose the dashboard to the Internet, it is strongly recommended that you configure https through nginx and set a strong account and password.
 :::
 
-**Monitoring**  
+**Live Trading Backtest Comparison**
+banbot supports scheduled execution of backtests during live trading to compare results with live trading performance:
+
+```yaml
+# Live trading backtest configuration
+bt_in_live:
+  cron: "0 0 * * *"  # Execute at 0:00 daily
+  account: "account1"
+  mail_to: ["trader@company.com"]
+```
+
+This feature can help you:
+- Verify whether the strategy's performance in live trading meets backtest expectations
+- Detect deviations between live trading and backtesting in time
+- Receive regular strategy performance reports via email
+
+**Monitoring**
 You can use `crontab` to periodically execute the [check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh) script to check the bot's status and send email notifications.
 ```shell
 # for centos 8

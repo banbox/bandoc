@@ -103,10 +103,35 @@ spider进程日志会自动保存到`@logs/spider.log`；机器人进程日志�
 :::
 
 ## 5. 消息通知、DashBoard和监控
-**消息通知**  
-您可在yml中配置`rpc_channels`消息通知，当机器人启动、停止、入场、平仓时发送消息到您的社交APP（目前支持企业微信）。
+**消息通知**
+您可在yml中配置`rpc_channels`消息通知，当机器人启动、停止、入场、平仓时发送消息到您的社交APP。目前支持：
+- **企业微信**: 通过企业微信机器人发送消息
+- **邮件通知**: 通过SMTP发送邮件通知
 
+**企业微信通知设置**
 您微信中关注企业微信插件（登录企业微信PC管理后台查看二维码），即可从微信收到上面消息。
+
+**邮件通知设置**
+配置邮件通知可以在系统异常时及时收到邮件提醒：
+
+```yaml
+# 邮件服务配置
+mail:
+  enable: true
+  host: smtp.qq.com
+  port: 465
+  username: your_email@qq.com
+  password: your_authorization_code
+
+# 邮件通知渠道
+rpc_channels:
+  mail_exception:
+    type: mail
+    disable: false
+    msg_types: [exception]
+    min_intv_secs: 300  # 5分钟内最多发送一次
+    touser: 'alert@company.com'
+```
 
 **DashBoard UI**  
 您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。
@@ -124,7 +149,23 @@ ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 如果您需要将dashboard暴露到互联网，强烈建议您通过nginx等配置https，并设置一个较强的账号和密码。
 :::
 
-**监控存活**  
+**实盘回测对比**
+banbot支持在实盘运行期间定时执行回测，将结果与实盘表现进行对比：
+
+```yaml
+# 实盘回测配置
+bt_in_live:
+  cron: "0 0 * * *"  # 每天0点执行
+  account: "account1"
+  mail_to: ["trader@company.com"]
+```
+
+此功能可以帮助您：
+- 验证策略在实盘中的表现是否符合回测预期
+- 及时发现实盘与回测的偏差
+- 通过邮件接收定期的策略表现报告
+
+**监控存活**
 您可使用`crontab`定期执行[check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh)脚本，检查机器人存活情况，发送邮件通知。
 ```shell
 # for centos 8

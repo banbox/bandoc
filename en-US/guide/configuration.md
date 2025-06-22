@@ -175,6 +175,17 @@ database:
   url: postgresql://postgres:123@[127.0.0.1]:5432/ban
 spider_addr: 127.0.0.1:6789  # Port and address monitored by the spider process
 rpc_channels:  # RPC channels for sending message notifications
+  # Email notification channel
+  mail_notify:  # Channel name (customizable)
+    type: mail  # Channel type: mail
+    disable: false  # Whether to disable this channel
+    msg_types: [exception]  # Message types: exception
+    accounts: []  # Specified accounts (empty means all accounts)
+    keywords: []  # Keyword filtering (empty means no filtering)
+    retry_delay: 1000  # Retry delay (milliseconds)
+    min_intv_secs: 300  # Minimum sending interval (seconds)
+    touser: 'recipient@abc.com'  # Recipient email address
+  # WeWork notification channel
   wx_notify:  # Name of the RPC channel
     corp_id: ww0f12345678b7e
     agent_id: '1000005'
@@ -184,9 +195,8 @@ rpc_channels:  # RPC channels for sending message notifications
     msg_types: [exception]  # Allowed message types to send
     accounts: []  # Allowed accounts, allows all if empty
     keywords: []  # Message filter keywords
-    retry_num: 0
-    retry_delay: 1000
-    disable: true
+    retry_delay: 1000  # Retry delay
+    disable: true  # Whether to disable
 webhook:  # Message types that can be sent via RPC
   entry:
     content: "{name} {action}\\nSymbol: {pair} {timeframe}\\nTag: {strategy}  {enter_tag}\\nPrice: {price:.5f}\\nCost: {value:.2f}"
@@ -196,6 +206,19 @@ webhook:  # Message types that can be sent via RPC
     content: '{name}: {status}'
   exception:
     content: '{name}: {status}'
+mail:  # Email notification configuration
+  enable: false  # Whether to enable email functionality
+  host: smtp.example.com  # SMTP server address
+  port: 465  # SMTP port (usually 465 or 587)
+  username: user1@example.com  # Email username
+  password: your_password  # Email password or app password
+bt_in_live:  # Live trading scheduled backtest comparison feature
+  cron: "0 0 * * *"  # Cron expression, execute at 0:00 daily
+  account: "account1"  # Specify the account to execute backtest
+  mail_to:  # Email notification recipient list
+    - "trader1@example.com"
+    - "manager@example.com"
+show_lang_code: "zh-CN"  # Display language code, supports zh-CN, en-US, etc.
 api_server:  # For external control of the bot or access to dashboard via API
   enable: true
   bind_ip: 0.0.0.0
@@ -206,7 +229,8 @@ api_server:  # For external control of the bot or access to dashboard via API
       pwd: 123
       allow_ips: []
       acc_roles:
-        user1: admin  # The key here corresponds to "accounts", and the value can be admin/guest. 
+        user1: admin  # The key here corresponds to "accounts", and the value can be admin/guest.
+
 ```
 
 ## Important details configuration
@@ -275,3 +299,56 @@ For strategies with long holding periods in large cycles, where an order may hol
 When `relay_sim_unfinish` is set to `true`, it will automatically backtest the previous 500 K-lines when starting to trade a product, obtain the unliquidated orders, and then enter the positions immediately according to these orders.
 
 This configuration item is effective in both backtesting and live trading.
+
+## Email Notification Configuration
+
+banbot supports email notification functionality, which can send email alerts when exceptions or other important events occur.
+
+### Basic Email Configuration
+
+Add email server configuration to the configuration file:
+
+```yaml
+mail:
+  enable: true                    # Whether to enable email functionality
+  host: smtp.example.com         # SMTP server address
+  port: 465                      # SMTP port (usually 465 or 587)
+  username: user1@example.com    # Email username
+  password: your_password        # Email password or app password
+```
+
+> **Authorization Password**: Generally need to use authorization password instead of login password
+> **Firewall**: Ensure the server allows SMTP port access
+
+### Email Notification Channel Configuration
+
+Configure email notification channels in `rpc_channels`:
+
+```yaml
+rpc_channels:
+  mail_notify:                   # Channel name (customizable)
+    type: mail                   # Channel type: mail
+    disable: false               # Whether to disable this channel
+    msg_types: [exception]       # Message types: exception
+    accounts: []                 # Specified accounts (empty means all accounts)
+    keywords: []                 # Keyword filtering (empty means no filtering)
+    retry_delay: 1000           # Retry delay (milliseconds)
+    min_intv_secs: 300          # Minimum sending interval (seconds)
+    touser: 'recipient@abc.com'  # Recipient email address
+```
+> **Sending Frequency**: It's recommended to set `min_intv_secs` to avoid frequent email sending
+
+## Live Trading Scheduled Backtest Comparison Feature
+
+This feature allows scheduled execution of backtests during live trading and compares backtest order results with live trading orders to help confirm whether the strategy's performance in live trading meets expectations.
+
+### Configure Live Trading Backtest
+
+```yaml
+bt_in_live:
+  cron: "30 3 0 * * *"           # Cron expression (second minute hour day month weekday), execute at 00:03:30 daily
+  account: "user1"               # Specify the account to execute backtest
+  mail_to:                       # Email notification recipient list
+    - "trader1@example.com"
+    - "manager@example.com"
+```

@@ -361,9 +361,9 @@ Then perform type conversion in `OnBar` and `OnInfoBar` and assign it to the `m`
 m, _ := s.More.(*Demo2Sta)
 ```
 
-## Issue an entry signal
+## Send an entry signal
 
-To issue an entry signal, you only need to call the `StratJob.OpenOrder` method and pass a `*strat.EnterReq` parameter.
+To Send an entry signal, you only need to call the `StratJob.OpenOrder` method and pass a `*strat.EnterReq` parameter.
 
 The simplest case is to only assign a value to the `Tag` property of `EnterReq`, and use the default parameters for all others. That is, open a long order according to the default order amount and leverage multiple. There is no stop profit or stop loss.
 
@@ -390,12 +390,18 @@ type EnterReq struct {
 	TakeProfitRate  float64 // Take profit exit ratio, 0 indicates full exit, needs to be between (0,1) 止盈退出比率，0表示全部退出，需介于(0,1]之间
 	TakeProfitTag   string  // Reason for profit taking 止盈原因
 	StopBars        int     // If the entry limit order exceeds how many bars and is not executed, it will be cancelled 入场限价单超过多少个bar未成交则取消
-    ClientID        string  // Used to set the trailing part of the ClientOrderID submitted to the exchange.  
+    ClientID        string  // Used to set the trailing part of the ClientOrderID submitted to the exchange.
     Infos           map[string]string // Used to set additional information saved in the order.
+	Log             bool // Whether to automatically log error messages
 }
 ```
+
+When `OpenOrder` returns an error, it indicates that opening the order failed. You can use `log.Error` to record error information, or set `Log` to true in `EnterReq` to let the system automatically log error messages.
+
 :::tip tip
-You cannot call the `OpenOrder` function to place an order at just any position in your strategy. Instead, you are only permitted to invoke this function within the following callback functions: `OnBar`, `OnOrderChange`, `OnBatchJobs`, and `OnPostApi`.
+Calls to `OpenOrder` do not guarantee order execution at arbitrary positions within the strategy. By default, opening and closing positions will only be executed immediately when called within the following callback functions: `OnBar`, `OnOrderChange`, `OnBatchJobs`, and `OnPostApi`.
+
+If you need to submit enter order immediately in other callbacks as well, you can call `_, _, err := biz.GetOdMgr(s.Account).ProcessOrders(nil, s)` on your own to submit and process the order.
 :::
 ## Send an exit signal
 
@@ -418,8 +424,13 @@ type ExitReq struct {
 	UnOpenOnly bool    // When True, only exit orders that have not yet entered the venue True时只退出尚未入场的订单
 	FilledOnly bool    // Only exit orders that have already entered when True True时只退出已入场的订单
 	Force      bool    // Whether to force exit 是否强制退出
+	Log        bool    // Whether to automatically log error messages
 }
 ```
+
+When `CloseOrders` returns an error, it indicates that closing the position failed. You can use `log.Error` to record error information, or set `Log` to true in `ExitReq` to let the system automatically log error messages.
+
+
 ## Stop Loss and Take Profit
 
 In addition to setting the stop loss and take profit of an order when entering the market, you can also directly set the stop loss and take profit of a certain order at any time:
@@ -611,6 +622,11 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 		},
 		OnWsKline: func(s *strat.StratJob, pair string, k *banexg.Kline) {
 			log.Info(fmt.Sprintf("OnWsKline %v: %v", k.Time, k.Close))
+            s.OpenOrder(&strat.EnterReq{Tag: "long"})
+            _, _, err := biz.GetOdMgr(s.Account).ProcessOrders(nil, s)
+            if err != nil {
+                log.Error("process order fail", zap.Error(err))
+            }
 		},
 		OnWsTrades: func(s *strat.StratJob, pair string, trades []*banexg.Trade) {
 			last := trades[len(trades)-1]
@@ -625,6 +641,8 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 }
 ```
 As above, you can subscribe to the required data through `WsSubs`. The value can be left empty by default, or use `_cur_` to represent the current variety. You can also use other varieties or subscribe to multiple varieties simultaneously, such as `BTC/USDT:USDT,_cur_`. Multiple varieties should be separated by commas.
+
+In these three high-frequency callbacks, opening and closing positions are not supported by default. If needed, you can follow the example code above and call `ProcessOrders` on your own to submit and process orders.
 
 ## HTTP Post Interface Callback
 You can initiate a callback to your strategy through an HTTP POST request from an external source. This is only supported for live trading and simulated live trading, and it will only take effect when you enable the `api_server`.
