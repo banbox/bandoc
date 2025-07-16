@@ -3,7 +3,7 @@ This page introduces some basic principles and concepts of banbot.
 ## Related Terminology
 * Strategy: Your trading strategy, including how to calculate indicators and open/close positions when receiving candlestick data.
 * Order: A complete entry and exit of a strategy execution corresponds to an order.
-* Trading Pair/Symbol: The symbol code for a tradeable market on an exchange. For cryptocurrencies, it is usually in the format Base/Quote (e.g., Spot BTC/USDT, USDT-margined contract BTC/USDT:USDT, Coin-margined contract BTC/USDT:BTC).
+* Trading Pair/Symbol: The symbol code for a tradeable market on an exchange.
 * Timeframe: The time interval of the trading candlestick (e.g., `5m`, `1h`).
 * Indicator: Technical indicators (such as SMA, EMA, RSI, etc.).
 * Leverage: Used in futures contracts, Margin = Nominal Value / Leverage.
@@ -14,6 +14,20 @@ This page introduces some basic principles and concepts of banbot.
 All profit calculations of banbot include fees. For backtesting, hyperparameter optimization, and real-time simulation modes, the default exchange fees will be used. For live trading, the actual fees charged by the exchange (after deducting rebates, etc.) will be applied.
 
 ## Symbol Naming
+For cryptocurrencies, it is usually in the format Base/Quote (e.g., Spot BTC/USDT, USDT-margined contract BTC/USDT:USDT, Coin-margined contract BTC/USDT:BTC). **It is recommended to write only the Base part directly in `pairs`**, and banbot will automatically complete the trading pair based on the first item in `stake_currency` and `market_type`.
+
+```yaml
+stake_currency: [USDT]
+market_type: spot
+pairs: [BTC, ETH, DASH]
+```
+The above configuration is exactly the same as the following configuration:
+```yaml
+stake_currency: [USDT]
+market_type: spot
+pairs: [BTC/USDT, ETH/USDT, DASH/USDT]
+```
+
 In cryptocurrency trading, two concepts are frequently involved: **base currency** and **quote currency**. The former is the object of the current trade, while the latter is the currency used for pricing and exchange. There may be differences in the naming of trading pairs across different exchanges. We maintain a unified naming standard and automatically handle differences between exchanges.
 
 #### Spot Trading Pair Naming

@@ -3,7 +3,7 @@
 ## 相关术语
 * 策略(strategy)：您的交易策略，包括收到K线时如何计算指标和开平仓等。
 * 订单(Order)：策略执行的一次完整入场和出场对应一个订单。
-* 交易对/品种(symbol)：交易所的某个市场可交易的品种代码。数字货币通常用Base/Quote格式（如现货BTC/USDT，U本位合约BTC/USDT:USDT，币本位合约BTC/USDT:BTC）
+* 交易对/品种(symbol)：交易所的某个市场可交易的品种代码。
 * 时间周期(timeframe)：交易的K线时间间隔（例如`5m`，`1h`）
 * 指标(indicator)：技术指标（如SMA、EMA、RSI等）
 * 杠杆倍率(leverage)：期货合约中使用，保证金=名义价值/杠杆倍率
@@ -14,6 +14,20 @@
 banbot的所有利润计算均包含手续费。对于回测、超参数优化、实时模拟模式，将使用交易所默认手续费；对于实盘交易，将使用交易所收取的实际手续费（扣除返佣等）。
 
 ## 品种命名
+数字货币通常用Base/Quote格式（如现货BTC/USDT，U本位合约BTC/USDT:USDT，币本位合约BTC/USDT:BTC）**推荐在`pairs`中直接写Base部分**，banbot将根据`stake_currency`第一项和`market_type`自动补全交易对。
+
+```yaml
+stake_currency: [USDT]
+market_type: spot
+pairs: [BTC, ETH, DASH]
+```
+上面配置和下面配置完全相同：
+```yaml
+stake_currency: [USDT]
+market_type: spot
+pairs: [BTC/USDT, ETH/USDT, DASH/USDT]
+```
+
 加密货币交易中经常涉及两个概念：**基础货币**和**报价货币**。前者是当前想交易的对象，后者是希望用哪种货币定价并兑换。不同交易所之间交易对命名可能有差异，我们按照统一的命名规范进行维护，并自动处理不同交易所之间的差异。
 
 #### 现货交易对命名
