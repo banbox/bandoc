@@ -62,9 +62,9 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
     atrLen1 := pol.Def("atrLen1", 9, core.PNorm(3, 20))
     atrLen2 := pol.Def("atrLen2", 9, core.PNormF(3, 20, 12, 1))
     atrLen3 := pol.Def("atrLen3", 9, core.PUniform(3, 20))
-		other1 := pol.More["other1"].(string)
-		other2 := pol.More["other2"].(int)
-		other3 := pol.More["other3"].(float64)
+    other1 := pol.More["other1"].(string)
+    other2 := pol.More["other2"].(int)
+    other3 := pol.More["other3"].(float64)
     return &strat.TradeStrat{
 		// more
     }
@@ -79,9 +79,9 @@ run_policy:
       atrLen1: 10
       atrLen2: 11
       atrLen3: 12
-		other1: value1
-		other2: 123
-		other3: 1.23
+    other1: value1
+    other2: 123
+    other3: 1.23
 ```
 ::: warning Tips
 Each item in the yaml configuration `run_policy` corresponds to a call to the strategy function, generating a strategy with specific parameters.
