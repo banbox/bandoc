@@ -430,6 +430,31 @@ type ExitReq struct {
 
 当`CloseOrders`返回错误时，表示平仓失败，您可`log.Error`记录错误信息，也可在`ExitReq`中设置`Log`为true，让系统自动记录错误日志。
 
+对于`ExitReq.Tag`，您可传入固定的字符串区分不同的退出原因，`core`包内置了以下常用标签：
+
+```go
+const (
+    ExitTagUnknown     = "unknown"      // 未知原因
+    ExitTagCancel      = "cancel"       // 用户取消
+    ExitTagBotStop     = "bot_stop"     // 机器人停止
+    ExitTagForceExit   = "force_exit"   // 强制退出
+    ExitTagNoMatch     = "no_match"     // 无匹配订单
+    ExitTagUserExit    = "user_exit"    // 用户主动退出
+    ExitTagThird       = "third"        // 第三方触发
+    ExitTagCli         = "cli"          // 命令行触发
+    ExitTagFatalErr    = "fatal_err"    // 致命错误
+    ExitTagPairDel     = "pair_del"     // 品种删除
+    ExitTagStopLoss    = "stop_loss"    // 止损触发且亏损
+    ExitTagSLTake      = "sl_take"      // 止损触发且盈利
+    ExitTagTakeProfit  = "take_profit"  // 止盈触发
+    ExitTagDrawDown    = "draw_down"    // 回撤止损
+    ExitTagDataStuck   = "data_stuck"   // 长时间未收到K线数据自动平仓
+    ExitTagLiquidation = "liquidation"  // 强制平仓
+    ExitTagEnvEnd      = "env_end"      // 除权、主力合约切换等原因
+    ExitTagEntExp      = "ent_expire"   // 入场限价单过期
+    ExitTagExitDelay   = "exit_delay"   // 实盘重启时平仓应该更早退出的订单
+)
+```
 
 ## 止损和止盈
 

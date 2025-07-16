@@ -430,6 +430,31 @@ type ExitReq struct {
 
 When `CloseOrders` returns an error, it indicates that closing the position failed. You can use `log.Error` to record error information, or set `Log` to true in `ExitReq` to let the system automatically log error messages.
 
+For `ExitReq.Tag`, you can pass in a fixed string to distinguish different exit reasons. The `core` package has built-in common tags:
+
+```go
+const (
+    ExitTagUnknown     = "unknown"      // Unknown reason
+    ExitTagCancel      = "cancel"       // User cancel
+    ExitTagBotStop     = "bot_stop"     // Bot stop
+    ExitTagForceExit   = "force_exit"   // Force exit
+    ExitTagNoMatch     = "no_match"     // No matching orders
+    ExitTagUserExit    = "user_exit"    // User initiated exit
+    ExitTagThird       = "third"        // Third party triggered
+    ExitTagCli         = "cli"          // Command line triggered
+    ExitTagFatalErr    = "fatal_err"    // Fatal error
+    ExitTagPairDel     = "pair_del"     // Symbol deleted
+    ExitTagStopLoss    = "stop_loss"    // Stop loss triggered with loss
+    ExitTagSLTake      = "sl_take"      // Stop loss triggered with profit
+    ExitTagTakeProfit  = "take_profit"  // Take profit triggered
+    ExitTagDrawDown    = "draw_down"    // Drawdown stop loss
+    ExitTagDataStuck   = "data_stuck"   // Auto close due to no K-line data for extended period
+    ExitTagLiquidation = "liquidation"  // Forced liquidation
+    ExitTagEnvEnd      = "env_end"      // Due to ex-dividend, main contract switch, etc.
+    ExitTagEntExp      = "ent_expire"   // Entry limit order expired
+    ExitTagExitDelay   = "exit_delay"   // Orders that should have exited earlier during live trading restart
+)
+```
 
 ## Stop Loss and Take Profit
 
