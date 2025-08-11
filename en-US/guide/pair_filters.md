@@ -85,7 +85,7 @@ Filter by the listing time of the symbol.
 A variety blacklist filter used to filter specified varieties.
 ```yaml
  - name: BlockFilter
-   pairs: [BTC/USDT:USDT]
+   pairs: [BTC]
 ```
 ## OffsetFilter
 According to the given offset, take the specified number of symbols. Usually used at the end

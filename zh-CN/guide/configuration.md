@@ -72,10 +72,10 @@ run_policy:  # 运行的策略，可以多个策略同时运行；也可以一�
     stake_rate: 1 # 此策略的开单倍率
     stop_loss: 0  # 此策略的止损比率，如 5% 或 0.05
     dirt: any # any/long/short
-    pairs: [BTC/USDT:USDT]
+    pairs: [BTC]
     params: {atr: 15}
     pair_params:
-      BTC/USDT:USDT: {atr:14}
+      BTC: {atr:14}
     strat_perf: # 和根strat_perf配置相同
       enable: false
 strat_perf:
@@ -129,7 +129,7 @@ pairlists:  # 交易对过滤器，按从上到下的顺序逐个过滤应用。
   - name: AgeFilter  # 按标的的上市天数过滤
     min: 5
   - name: BlockFilter
-    pairs: [BTC/USDT:USDT]
+    pairs: [BTC]
   - name: OffsetFilter  # 偏移限定数量选择。一般用在最后
     reverse: false  # reverse array
     offset: 10  # 从第10个开始取

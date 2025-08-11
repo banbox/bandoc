@@ -19,7 +19,7 @@ You don't need to implement candlestick data downloading, banbot will automatica
 
 You can execute the following command to actively download candlestick data:
 
-`bot kline down -timeframes 1h,1d -timerange 20240101-20250101 -pairs BTC/USDT,ETH/USDT`
+`bot kline down -timeframes 1h,1d -timerange 20240101-20250101 -pairs BTC,ETH`
 
 Where `timeframes` is a required parameter, and the rest will be parsed from the yaml configuration file if not specified.
 
@@ -55,7 +55,7 @@ When you need to export candlesticks for further reading by other programs, it's
 
 You can execute the following command to export:
 
-`bot kline export -out @data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
+`bot kline export -out @data -timeframes 1h,1d -pairs BTC,ETH -tz UTC`
 
 Where `-out` and `-timeframes` are required parameters. `-out` should be a directory. When `pairs` is not specified, banbot will use all symbols under the current yaml configured exchange and market.
 
@@ -86,7 +86,7 @@ The csv data requires fixed columns: time, open, high, low, close, volume. (Time
 ## Deleting Candlesticks
 You can use the following command to clean candlestick data from the database:
 
-`bot kline purge -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT`
+`bot kline purge -timeframes 1h,1d -pairs BTC,ETH`
 
 Where `-timeframes` is a required parameter. When `-pairs` is not specified, it will use the `pairs` list from the yaml configuration, and if that's also empty, it will default to deleting all symbol data under the yaml configured exchange and market.
 
@@ -95,7 +95,7 @@ Before starting deletion, summary information will be output, requiring you to i
 ## Correcting Errors in Candlesticks
 While using banbot, sometimes misoperations may cause errors in `kInfo` or `KHole` that don't match the actual candlesticks. This will lead to runtime errors. You can run the following command to correct these errors:
 
-`bot kline correct -pairs BTC/USDT`
+`bot kline correct -pairs BTC`
 
 Where `-pairs` is an optional parameter. If left empty, correction will be executed for all symbols, which may take an hour or two depending on the data size.
 

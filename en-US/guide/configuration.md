@@ -74,10 +74,10 @@ run_policy:  # The strategy to run, multiple strategies can run simultaneously o
     stake_rate: 1 # The stake amount rate for this strategy
     stop_loss: 0 # Stop loss rate for this strategy, e.g., 5% or 0.05
     dirt: any  # any/long/short
-    pairs: [BTC/USDT:USDT]
+    pairs: [BTC]
     params: {atr: 15}
     pair_params:
-      BTC/USDT:USDT: {atr:14}
+      BTC: {atr:14}
     strat_perf:  # Same as root-level strat_perf configuration
       enable: false
 strat_perf:
@@ -131,7 +131,7 @@ pairlists:  # Filters for trading pairs, applied sequentially in top-down order
   - name: AgeFilter  # Filter symbols based on listing days
     min: 5
   - name: BlockFilter  # disable specified pairs
-    pairs: [BTC/USDT:USDT]
+    pairs: [BTC]
   - name: OffsetFilter  # Offset limit filter, typically used last
     reverse: false  # reverse array
     offset: 10  # Start from the 10th item

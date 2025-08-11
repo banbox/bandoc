@@ -19,7 +19,7 @@ sid+timeframe应在此表中唯一对应一条记录。若当前是10:37分，�
 
 您可执行下面命令主动下载K线数据：
 
-`bot kline down -timeframes 1h,1d -timerange 20240101-20250101 -pairs BTC/USDT,ETH/USDT`
+`bot kline down -timeframes 1h,1d -timerange 20240101-20250101 -pairs BTC,ETH`
 
 其中`timeframes`是必填参数项，其余的如果未指定则默认从yaml配置文件中解析。
 
@@ -55,7 +55,7 @@ klines:
 
 您可执行下面命令导出：
 
-`bot kline export -out @data -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT -tz UTC`
+`bot kline export -out @data -timeframes 1h,1d -pairs BTC,ETH -tz UTC`
 
 其中`-out`和`-timeframes`是必填参数，`-out`应当是一个目录，当您未指定`pairs`时，banbot将使用当前yaml配置的交易所和市场下所有的品种。
 
@@ -86,7 +86,7 @@ csv内的数据要求固定列为：时间、开、高、低、收、成交量�
 ## 删除K线
 您可使用下面命令从数据库中清理K线数据：
 
-`bot kline purge -timeframes 1h,1d -pairs BTC/USDT,ETH/USDT`
+`bot kline purge -timeframes 1h,1d -pairs BTC,ETH`
 
 其中`-timeframes`是必填参数。当`-pairs`未指定时，将使用yaml配置中的`pairs`列表，如果也为空，则默认删除yaml配置的交易所市场下所有的品种数据。
 
@@ -95,7 +95,7 @@ csv内的数据要求固定列为：时间、开、高、低、收、成交量�
 ## 纠正K线中的错误
 您在使用banbot过程中，有时候一些误操作可能导致`kInfo`或`KHole`中出现错误，和实际K线不匹配，这将导致运行时的一些错误，您可运行下面命令纠正此错误：
 
-`bot kline correct -pairs BTC/USDT`
+`bot kline correct -pairs BTC`
 
 其中`-pairs`是可选参数，如果留空将对所有品种全部执行纠正，这视数据大小，可能耗费一两个小时。
 

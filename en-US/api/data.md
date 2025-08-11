@@ -14,13 +14,13 @@ Both backtesting and live trading require subscribing to candlestick data, and m
 
 candlestick data for a single instrument may be used by multiple strategies simultaneously. To avoid redundant data fetching by each strategy, the `IKlineFeeder` interface is introduced to support backtesting (`DBKlineFeeder`) and live trading (`KlineFeeder` + `KLineWatcher`).
 
-Each `KlineFeeder` corresponds to one instrument and can include data for multiple timeframes. For example, the instrument BTC/USDT might be used by multiple strategies, subscribing to the 5m, 1h, and 1d timeframes. To avoid redundant data reading, only the smallest timeframe (in this case, 5m) will fetch the candlestick data; larger timeframe data will be aggregated from the smallest timeframe.
+Each `KlineFeeder` corresponds to one instrument and can include data for multiple timeframes. For example, the instrument BTC might be used by multiple strategies, subscribing to the 5m, 1h, and 1d timeframes. To avoid redundant data reading, only the smallest timeframe (in this case, 5m) will fetch the candlestick data; larger timeframe data will be aggregated from the smallest timeframe.
 
 #### Suitable Scenarios for Provider and Feeder
 **Fetching data for multiple instruments and timeframes with consistent start and end times**. For example, during backtesting or live trading, a set of strategies is run over a specific period, involving multiple instruments and different timeframes. It is recommended to use `Provider` + `Feeder` in such cases. If data needs to be fetched for different time periods separately, multiple `Provider` + `Feeder` instances should be initialized.
 
 #### Unsuitable Scenarios for Provider and Feeder
-**Fetching data for different timeframes with inconsistent start and end times**. For example, if you want to fetch the last 1,000 candlesticks for both 1m and 1h timeframes for BTC/USDT for backtesting or other tasks, forcing the use of `Feeder` would result in the 1m timeframe fetching 60 * 1,000 candlesticks. In such cases, it is better to directly call `orm.GetOHLCV` to fetch data for each timeframe separately or initialize `Feeder` twice to fetch the data separately.
+**Fetching data for different timeframes with inconsistent start and end times**. For example, if you want to fetch the last 1,000 candlesticks for both 1m and 1h timeframes for BTC for backtesting or other tasks, forcing the use of `Feeder` would result in the 1m timeframe fetching 60 * 1,000 candlesticks. In such cases, it is better to directly call `orm.GetOHLCV` to fetch data for each timeframe separately or initialize `Feeder` twice to fetch the data separately.
 
 ## Important Structures
 

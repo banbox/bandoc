@@ -245,11 +245,11 @@ banbot tick:
 
 ## Live Trading Tools
 **bot live down_order**  
-`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC/USDT,ETH/USDT`  
+`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC,ETH`
 Download orders for the specified account to the `@exgOrders/` directory. The saved file format is `[exchange]_[market]_[account]_[apiKeyPrefix].gob`, such as `binance_linear_user1_C1uMI.gob`. This can be used with `bot tool cmp_orders` to compare backtest orders.
 
 **bot live close_order**  
-`-account user1 -pair BTC/USDT,ETH/USDT -strat ma:demo1,ma:demo2 -exg true`  
+`-account user1 -pair BTC,ETH -strat ma:demo1,ma:demo2 -exg true`
 Close positions for the specified user's eligible orders.
 
 ## Other tools

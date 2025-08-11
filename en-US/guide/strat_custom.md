@@ -607,12 +607,12 @@ func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
 		OnSymbols: func(items []string) []string {
 			hasBTC := false
 			for _, it := range items {
-				if it == "BTC/USDT:USDT" {
+				if it == "BTC" {
 					hasBTC = true
 				}
 			}
 			if !hasBTC {
-				return append([]string{"BTC/USDT:USDT"}, items...)
+				return append([]string{"BTC"}, items...)
 			}
 			return items
 		},
@@ -671,7 +671,7 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
-As above, you can subscribe to the required data through `WsSubs`. The value can be left empty by default, or use `_cur_` to represent the current variety. You can also use other varieties or subscribe to multiple varieties simultaneously, such as `BTC/USDT:USDT,_cur_`. Multiple varieties should be separated by commas.
+As above, you can subscribe to the required data through `WsSubs`. The value can be left empty by default, or use `_cur_` to represent the current variety. You can also use other varieties or subscribe to multiple varieties simultaneously, such as `BTC,_cur_`. Multiple varieties should be separated by commas.
 
 In these three high-frequency callbacks, opening and closing positions are not supported by default. If needed, you can follow the example code above and call `ProcessOrders` on your own to submit and process orders.
 

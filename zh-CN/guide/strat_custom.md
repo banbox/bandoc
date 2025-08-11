@@ -607,12 +607,12 @@ func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
 		OnSymbols: func(items []string) []string {
 			hasBTC := false
 			for _, it := range items {
-				if it == "BTC/USDT:USDT" {
+				if it == "BTC" {
 					hasBTC = true
 				}
 			}
 			if !hasBTC {
-				return append([]string{"BTC/USDT:USDT"}, items...)
+				return append([]string{"BTC"}, items...)
 			}
 			return items
 		},
@@ -670,7 +670,7 @@ func ws(p *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
-如上，您可通过`WsSubs`订阅所需的数据，值可默认为空或`_cur_`表示当前品种，也可使用其他品种，或同时订阅多个品种：`BTC/USDT:USDT,_cur_`，多个品种应当以逗号隔开。
+如上，您可通过`WsSubs`订阅所需的数据，值可默认为空或`_cur_`表示当前品种，也可使用其他品种，或同时订阅多个品种：`BTC,_cur_`，多个品种应当以逗号隔开。
 
 这三个高频回调中默认未支持开平仓，如果需要您可仿照上面示例代码，自行调用`ProcessOrders`提交处理订单。
 

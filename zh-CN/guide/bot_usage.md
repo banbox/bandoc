@@ -244,11 +244,11 @@ banbot tick:
 
 ## 实盘交易工具
 **bot live down_order**  
-`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC/USDT,ETH/USDT`
+`-account user1 -exchange binance -market linear -timestart 20250401 -timeend 20250405 -pairs BTC,ETH`
 下载指定账户的订单到`@exgOrders/`目录下，保存的文件格式为`[exchange]_[market]_[account]_[apiKeyPrefix].gob`，如`binance_linear_user1_C1uMI.gob`。可用于`bot tool cmp_orders`对比回测订单。
 
 **bot live close_order**  
-`-account user1 -pair BTC/USDT,ETH/USDT -strat ma:demo1,ma:demo2 -exg true`  
+`-account user1 -pair BTC,ETH -strat ma:demo1,ma:demo2 -exg true`
 对指定用户的符合订单进行平仓。
 
 ## 其他工具
