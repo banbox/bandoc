@@ -101,7 +101,7 @@ type TradeStrat struct {
 	Name          string // 策略名称，无需设置，会自动设置为注册时的名称
 	Version       int // 策略版本号
 	WarmupNum     int // K线预热的长度
-	MinTfScore    float64 // 最小时间周期质量，默认0.8
+	MinTfScore    float64 // 最小时间周期质量，默认0.75
     WsSubs        map[string]string    // websocket订阅: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool // 是否启用回撤止损（即跟踪止损）
 	BatchInOut    bool    // 是否批量执行入场/出场
@@ -131,6 +131,9 @@ type TradeStrat struct {
 	OnShutDown          func(s *StratJob)                                  // 机器人停止时回调
 }
 ```
+:::tip tip
+`MinTfScore`是针对每个品种在指定周期k线通过价格变动、bar实体占比等计算的分数，用于淘汰变动太小，波动不足的交易对；或计算交易对的最佳周期。阈值默认取0.75，小于此阈值的交易所将会被过滤，如需禁用，可设为非零较小值0.0001
+:::
 
 ## 简单策略示例
 ```go

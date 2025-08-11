@@ -101,7 +101,7 @@ type TradeStrat struct {
 	Name          string  // The strategy name does not need to be set and will be automatically set to the name used during registration
 	Version       int     
 	WarmupNum     int     // candle preheating length
-	MinTfScore    float64 // Minimum time cycle quality, default 0.8 最小时间周期质量，默认0.8
+	MinTfScore    float64 // Minimum time cycle quality, default 0.75 最小时间周期质量，默认0.75
     WsSubs        map[string]string    // websocket subscription: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool    // Whether to enable retracement stop loss (i.e. trailing stop loss)
 	BatchInOut    bool    // Whether to batch execute entry/exit 是否批量执行入场/出场
@@ -131,6 +131,9 @@ type TradeStrat struct {
 	OnShutDown          func(s *StratJob)                                  // Callback when the robot stops 机器人停止时回调
 }
 ```
+:::tip tip
+`MinTfScore` is a score calculated for each trading pair over a specified period of k-line data, based on factors such as price movement and the proportion of the bar's real body. It is used to filter out trading pairs with insufficient movement or volatility, or to determine the optimal trading period for a pair. The default threshold is set to 0.75, and trading pairs with scores below this threshold will be filtered out. To disable this filter, set the threshold to a very small non-zero value such as 0.0001.
+:::
 
 ## Simple strategy example
 ```go
