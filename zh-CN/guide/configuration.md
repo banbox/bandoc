@@ -17,6 +17,8 @@ banbot会尝试从数据目录下默认读取两个配置文件：`config.yml`�
 `config.local.yml`中建议存放本地相关的配置，如交易所api/secret，api_server等配置。
 
 ## 完整Yaml配置
+> 您可使用环境变量替换配置中的敏感内容，比如`${bnb_user1_key}`
+
 ```yaml
 name: local  # 机器人名称，用于在消息通知中区分不同机器人
 env: prod  # 运行环境，prod表示生产网络，test表示测试网络，dry_run表示模拟实盘交易
@@ -85,10 +87,7 @@ strat_perf:
   min_job_num: 10 # 最小标的数量，默认10，最小7
   mid_weight: 0.2 # 收益中间档的开单权重
   bad_weight: 0.1 # 收益较差档开单权重
-pairs:  # 给定交易币种，如不为空，pairlists会被忽略
-- SOL/USDT:USDT
-- UNFI/USDT:USDT
-- SFP/USDT:USDT
+pairs: [SOL, UNFI, SFP]  # 给定交易币种，如不为空，pairlists会被忽略
 pairmgr:
   cron: '25 1 0 */2 * *' # 秒 分钟 小时 天 月 星期
   offset: 0  # 标的列表忽略前n个
@@ -147,8 +146,8 @@ accounts:
     max_open_orders: 0  # 此账户允许的最大同时持仓订单数
     binance:
       prod:  # 生产网络的key和secret，指定env: prod时此项必填
-        api_key: vvv
-        api_secret: vvv
+        api_key: ${bnb_user1_key}
+        api_secret: ${bnb_user1_secret}
       test:  # 测试网络的key和secret，指定env: test时此项必填
         api_key: vvv
         api_secret: vvv

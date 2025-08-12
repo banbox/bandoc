@@ -19,6 +19,8 @@ You can create these two configuration files directly. You don't need to pass th
 It is recommended to store local related configurations in `config.local.yml`, such as exchange api/secret, api_server and other configurations.
 
 ## Complete Yaml configuration
+> You can use environment variables to replace sensitive content in the configuration, such as `${bnb_user1_key}`
+
 ```yaml
 name: local  # Bot name, used to distinguish different bots in message notifications
 env: prod  # Running environment, prod represents production network, test represents test network (Binance testnet), dry_run represents simulation
@@ -87,10 +89,7 @@ strat_perf:
   min_job_num: 10  # Minimum number of symbols, default is 10, minimum is 7
   mid_weight: 0.2  # Weight for orders in the middle performance range
   bad_weight: 0.1  # Weight for orders in the poor performance range
-pairs:  # Given trading pairs, if not empty, pairlists will be ignored
-- SOL/USDT:USDT
-- UNFI/USDT:USDT
-- SFP/USDT:USDT
+pairs: [SOL, UNFI, SFP] # Given trading pairs, if not empty, pairlists will be ignored
 pairmgr:
   cron: '25 1 0 */2 * *' # Second Minute Hour Day Month Weekday
   offset: 0  # Ignore the first n symbols in the list
@@ -149,8 +148,8 @@ accounts:
     max_open_orders: 0  # max open orders for this account
     binance:
       prod:  # API key and secret for production network, required when env is set to prod
-        api_key: vvv
-        api_secret: vvv
+        api_key: ${bnb_user1_key}
+        api_secret: ${bnb_user1_secret}
       test:  # API key and secret for test network, required when env is set to test
         api_key: vvv
         api_secret: vvv

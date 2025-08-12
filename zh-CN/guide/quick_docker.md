@@ -47,7 +47,7 @@ docker run -d --name banbot -p 8000:8000 --network mynet -v /root:/root banbot/b
 ```yml
 time_start: "20240701"
 time_end: "20250701"
-pairs: ['ETH/USDT']  # 您可指定多个品种回测，如果忽略此项，则通过pairlists动态计算品种列表
+pairs: ['ETH']  # 您可指定多个品种回测，如果忽略此项，则通过pairlists动态计算品种列表
 run_policy:
   - name: ma:demo
     run_timeframes: [15m]

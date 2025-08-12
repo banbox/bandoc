@@ -78,7 +78,7 @@ wallet_amounts:
   USDT: 1000
 time_start: "20240701"
 time_end: "20250701"
-pairs: ['ETH/USDT']
+pairs: ['ETH']
 run_policy:
   - name: ma:demo
     run_timeframes: [15m]

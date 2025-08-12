@@ -103,7 +103,7 @@ spider进程日志会自动保存到`@logs/spider.log`；机器人进程日志�
 :::
 
 ## 5. 消息通知、DashBoard和监控
-**消息通知**
+### 消息通知
 您可在yml中配置`rpc_channels`消息通知，当机器人启动、停止、入场、平仓时发送消息到您的社交APP。目前支持：
 - **企业微信**: 通过企业微信机器人发送消息
 - **邮件通知**: 通过SMTP发送邮件通知
@@ -133,9 +133,21 @@ rpc_channels:
     touser: 'alert@company.com'
 ```
 
-**DashBoard UI**  
+### DashBoard UI
 您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。
-
+```yaml
+api_server:
+  enable: enable
+  bind_ip: 127.0.0.1
+  port: 8001  # 需在防火墙放行或通过nginx反向代理
+  jwt_secret_key: '[very_strong_secret]'
+  users:
+    - user: ban
+      pwd: '123'
+      allow_ips: []  # 允许的客户端ip
+      acc_roles: 
+        user1: admin  # user1对应accounts中的用户key
+```
 上面的web服务是以http启动的，建议您将`bind_ip`设为服务器本地或内网ip，以避免未授权的访问。
 
 如果您需要从本地主机访问服务器的Dashboard，您可通过ssh连接到运行机器人的服务器，然后通过端口转发将对本地端口的请求转发到服务器端口：
@@ -144,28 +156,28 @@ ssh -L [本地端口]:[服务器bind_ip]:[服务器端口] [用户名]@[服务�
 # e.g. 
 ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 ```
-
 ::: tip Tip 
 如果您需要将dashboard暴露到互联网，强烈建议您通过nginx等配置https，并设置一个较强的账号和密码。
 :::
 
-**实盘回测对比**
-banbot支持在实盘运行期间定时执行回测，将结果与实盘表现进行对比：
+![image](/img/dash_login_cn.png)
+> 本地启动实盘，或ssh端口转发后，机器人的访问url都是127.0.0.1:[port]，其中port是`api_server.port`的值。  
+> 如果您通过nginx反向代理，这两个地址应当是从nginx访问的地址，比如"https://bot.myserver.com/8001"
+
+### 实盘回测对比
+banbot支持在实盘运行期间定时执行同样配置的回测，将回测订单记录逐个与实盘未平仓订单和交易所持仓进行对比，检查实盘是否有订单漏开、错开等情况：
 
 ```yaml
 # 实盘回测配置
 bt_in_live:
-  cron: "0 0 * * *"  # 每天0点执行
+  cron: "0 0 * * *"  # 回测频率，corn表达式，每天0点执行
   account: "account1"
-  mail_to: ["trader@company.com"]
+  mail_to: ["trader@company.com"]  # 对比结果将发送到配置的邮箱
+mail:  # 您还需要设置邮件发送方，具体可参考上面邮件通知
+  enable: true
 ```
 
-此功能可以帮助您：
-- 验证策略在实盘中的表现是否符合回测预期
-- 及时发现实盘与回测的偏差
-- 通过邮件接收定期的策略表现报告
-
-**监控存活**
+### 监控存活
 您可使用`crontab`定期执行[check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh)脚本，检查机器人存活情况，发送邮件通知。
 ```shell
 # for centos 8

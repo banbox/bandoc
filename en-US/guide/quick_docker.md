@@ -51,7 +51,7 @@ You can start new backtest tasks on the backtest management page. All configurat
 ```yml
 time_start: "20240701"
 time_end: "20250701"
-pairs: ['ETH/USDT']  # You can specify multiple pairs. If omitted, the pair list will be calculated dynamically through pairlists
+pairs: ['ETH']  # You can specify multiple pairs. If omitted, the pair list will be calculated dynamically through pairlists
 run_policy:
   - name: ma:demo
     run_timeframes: [15m]

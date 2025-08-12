@@ -104,7 +104,7 @@ However, these files can only record the log output during normal operation. If 
 :::
 
 ## 5. Notifications, DashBoard, and Monitoring
-**Notifications**
+### Notifications
 You can configure `rpc_channels` in the YML file for notifications. Messages will be sent to your social apps when the bot starts, stops, enters a position, or exits a position. Currently supported:
 - **WeWork**: Send messages through WeWork bot
 - **Email Notifications**: Send email notifications via SMTP
@@ -134,9 +134,21 @@ rpc_channels:
     touser: 'alert@company.com'
 ```
 
-**DashBoard UI**  
+### DashBoard UI
 You can configure `api_server` in the yml file. This will start a web service simultaneously when the bot is launched. After the bot is started, you can access the bot's DashBoard using the configured username and password to view the trading overview and manage the bot.
-
+```yaml
+api_server:
+  enable: enable
+  bind_ip: 127.0.0.1
+  port: 8001  # Needs to be allowed in firewall or through nginx reverse proxy
+  jwt_secret_key: '[very_strong_secret]'
+  users:
+    - user: ban
+      pwd: '123'
+      allow_ips: []  # Allowed client IPs
+      acc_roles:
+        user1: admin  # user1 corresponds to the user key in accounts
+```
 The web service mentioned above is started with HTTP. It is recommended that you set the `bind_ip` to the local or intranet IP of the server to prevent unauthorized access.
 
 If you need to access the server's Dashboard from your local machine, you can connect to the server running the bot via SSH and then use port forwarding to forward requests from a local port to the server port:
@@ -150,23 +162,24 @@ ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 If you need to expose the dashboard to the Internet, it is strongly recommended that you configure https through nginx and set a strong account and password.
 :::
 
-**Live Trading Backtest Comparison**
-banbot supports scheduled execution of backtests during live trading to compare results with live trading performance:
+![image](/img/dash_login_en.png)
+> When starting a live trading locally or after SSH port forwarding, the access URL for the robot is always 127.0.0.1:[port], where [port] is the value of `api_server.port`.  
+> If you use an nginx reverse proxy, these two addresses should be the ones accessed from nginx, such as "https://bot.myserver.com/8001"
+
+### Live Trading vs Backtesting Comparison
+Banbot supports scheduled execution of backtests with the same configuration during live trading. It compares each backtest order record with the open orders in live trading and the exchange positions one by one to check for issues such as missed or incorrectly placed orders in live trading:
 
 ```yaml
 # Live trading backtest configuration
 bt_in_live:
-  cron: "0 0 * * *"  # Execute at 0:00 daily
+  cron: "0 0 * * *"  # Backtest frequency, cron expression, executed at 0:00 daily
   account: "account1"
-  mail_to: ["trader@company.com"]
+  mail_to: ["trader@company.com"]  # The comparison results will be sent to the configured email addresses
+mail:  # You also need to set up the email sender; for details, refer to the email notification above
+  enable: true
 ```
 
-This feature can help you:
-- Verify whether the strategy's performance in live trading meets backtest expectations
-- Detect deviations between live trading and backtesting in time
-- Receive regular strategy performance reports via email
-
-**Monitoring**
+### Monitoring
 You can use `crontab` to periodically execute the [check_bot.sh](https://github.com/banbox/banbot/blob/main/doc/check_bot.sh) script to check the bot's status and send email notifications.
 ```shell
 # for centos 8
