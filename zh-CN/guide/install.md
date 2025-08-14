@@ -7,6 +7,8 @@ banbot开箱即用地支持[banta](https://github.com/banbox/banta)高性能指�
 ## 安装TimeScaleDB数据库
 从软件包安装TimeScaledb比较复杂耗时，强烈推荐您[使用Docker安装](https://docs.timescale.com/self-hosted/latest/install/installation-docker/)
 
+拉取镜像时选择`light`版本即可，不需要选择带`-ha`后缀的（占用资源更多）
+
 ::: warning Docker安装提示
 执行docker run时，请添加`-v /your/data/dir:/home/postgres/pgdata/data`参数，以便将数据映射到主机目录。
 :::

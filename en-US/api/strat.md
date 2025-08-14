@@ -14,6 +14,7 @@ Public fields:
 - `MinTfScore float64` - Minimum time frame quality, default 0.75
 - `WsSubs map[string]string` - WsSubs        map[string]string    // websocket subscription: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 - `DrawDownExit bool` - Whether to enable drawdown exit
+- `HedgeOff bool` - turn off future hedge mode
 - `BatchInOut bool` - Whether to batch execute entry/exit
 - `BatchInfo bool` - Whether to perform batch processing after OnInfoBar
 - `StakeRate float64` - Relative basic amount billing rate
@@ -88,6 +89,7 @@ Public fields:
 - `Short bool` - Whether to short sell
 - `OrderType int` - Order type
 - `Limit float64` - Entry price for limit order, order will be submitted as limit order when specified
+- `Stop float64` - Stop price, buy orders enter when the price rises to the trigger price (vice versa for sell orders).
 - `CostRate float64` - Opening ratio, default 1x according to configuration, used for calculating LegalCost
 - `LegalCost float64` - Amount in fiat currency, ignores CostRate when specified
 - `Leverage float64` - Leverage ratio

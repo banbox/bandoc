@@ -104,6 +104,7 @@ type TradeStrat struct {
 	MinTfScore    float64 // 最小时间周期质量，默认0.75
     WsSubs        map[string]string    // websocket订阅: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool // 是否启用回撤止损（即跟踪止损）
+    HedgeOff      bool    // 关闭合约双向持仓
 	BatchInOut    bool    // 是否批量执行入场/出场
 	BatchInfo     bool    // 是否对OnInfoBar后执行批量处理
 	StakeRate     float64 // 相对基础金额开单倍率
@@ -383,6 +384,7 @@ type EnterReq struct {
 	Short           bool    // 是否做空
 	OrderType       int     // 订单类型, core.OrderType*
 	Limit           float64 // 限价单入场价格，指定时订单将作为限价单提交
+    Stop            float64 // 止损(触发价格)，做多订单时价格上涨到触发价格才入场（做空相反）
 	CostRate        float64 // 开仓倍率、默认按配置1倍。用于计算LegalCost
 	LegalCost       float64 // 花费法币金额。指定时忽略CostRate
 	Leverage        float64 // 杠杆倍数
@@ -403,6 +405,14 @@ type EnterReq struct {
 	Log             bool // 是否自动记录错误日志
 }
 ```
+
+如果需要触发价格入场，可以设置`Limit`或`Stop`参数。
+
+`Limit`是限价订单，做多订单可设置更低的价格挂单等待成交，做空订单可设置更高的价格挂单等待成交。
+
+`Stop`是触发订单（止损），做多订单可设置更高的价格等待突破后入场，做空订单可设置更低的价格挂单等待跌破后入场。
+
+比如当前价格100，希望在价格上涨到120时限价122入场做多，可设置`{Stop: 120, Limit: 122}`
 
 当`OpenOrder`返回错误时，表示开单失败，您可`log.Error`记录错误信息，也可在`EnterReq`中设置`Log`为true，让系统自动记录错误日志。
 

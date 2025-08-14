@@ -14,6 +14,7 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `MinTfScore float64` - 最小时间周期质量，默认0.75
 - `WsSubs map[string]string` - websocket订阅: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 - `DrawDownExit bool` - 是否启用回撤退出
+- `HedgeOff bool` -关闭合约双向持仓
 - `BatchInOut bool` - 是否批量执行入场/出场
 - `BatchInfo bool` - 是否对OnInfoBar后执行批量处理
 - `StakeRate float64` - 相对基础金额开单倍率
@@ -88,6 +89,7 @@ strat 包提供了交易策略相关的功能定义和实现。
 - `Short bool` - 是否做空
 - `OrderType int` - 订单类型
 - `Limit float64` - 限价单入场价格，指定时订单将作为限价单提交
+- `Stop float64` - 止损(触发价格)，做多订单时价格上涨到触发价格才入场（做空相反）
 - `CostRate float64` - 开仓倍率，默认按配置1倍，用于计算LegalCost
 - `LegalCost float64` - 花费法币金额，指定时忽略CostRate
 - `Leverage float64` - 杠杆倍数

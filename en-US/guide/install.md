@@ -7,6 +7,8 @@ Banbot supports the high-performance indicator library [banta](https://github.co
 ## Install TimeScaleDB database
 Installing TimeScaleDB from a software package is quite complex and time-consuming. We strongly recommend [installing with Docker](https://docs.timescale.com/self-hosted/latest/install/installation-docker/).  
 
+When pulling the image, choose the `light` version. Avoid the `-ha` suffix (uses more resources).
+
 ::: warning Docker installation tips
 When executing docker run, please add the `-v /your/data/dir:/home/postgres/pgdata/data` parameter to map the data to the host directory.
 :::

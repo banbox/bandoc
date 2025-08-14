@@ -104,6 +104,7 @@ type TradeStrat struct {
 	MinTfScore    float64 // Minimum time cycle quality, default 0.75 最小时间周期质量，默认0.75
     WsSubs        map[string]string    // websocket subscription: core.WsSubKLine, core.WsSubTrade, core.WsSubDepth
 	DrawDownExit  bool    // Whether to enable retracement stop loss (i.e. trailing stop loss)
+    HedgeOff      bool    // turn off future hedge mode 关闭合约双向持仓
 	BatchInOut    bool    // Whether to batch execute entry/exit 是否批量执行入场/出场
 	BatchInfo     bool    // whether to perform batch processing after OninfoBar 是否对OnInfoBar后执行批量处理
 	StakeRate     float64 // Relative basic amount billing rate 相对基础金额开单倍率
@@ -384,6 +385,7 @@ type EnterReq struct {
 	Short           bool    // Whether to short sell or not 是否做空
 	OrderType       int     // 订单类型, core.OrderType*
 	Limit           float64 // The entry price of a limit order will be submitted as a limit order when specified 限价单入场价格，指定时订单将作为限价单提交
+    Stop            float64 // Stop price, buy orders enter when the price rises to the trigger price (vice versa for sell orders). 
 	CostRate        float64 // The opening ratio is set to 1 times by default according to the configuration. Used for calculating LegalList 开仓倍率、默认按配置1倍。用于计算LegalCost
 	LegalCost       float64 // Spend the amount in fiat currency. Ignore CostRate when specified 花费法币金额。指定时忽略CostRate
 	Leverage        float64 // Leverage ratio 杠杆倍数
@@ -404,6 +406,13 @@ type EnterReq struct {
 	Log             bool // Whether to automatically log error messages
 }
 ```
+To trigger an entry at a specific price, you can set the `Limit` or `Stop` parameters.
+
+`Limit` would put a limit order. For a long order, you can set a lower price to enter the position. For a short order, you can set a higher price to enter the position.
+
+`Stop` would put a trigger order (stop order). For a long order, you can set a higher price to enter after a breakout. For a short order, you can set a lower price to enter after a breakdown.
+
+For example, if the current price is 100 and you want to enter a long position with a limit price of 122 when the price rises to 120, you can set `{Stop: 120, Limit: 122}`.
 
 When `OpenOrder` returns an error, it indicates that opening the order failed. You can use `log.Error` to record error information, or set `Log` to true in `EnterReq` to let the system automatically log error messages.
 
