@@ -115,6 +115,7 @@ core 包提供了系统核心的数据结构、常量和错误定义。
 
 参数：
 - `symbol string` - 交易对符号
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 返回：
 - `float64` - 最新价格
@@ -124,6 +125,7 @@ core 包提供了系统核心的数据结构、常量和错误定义。
 
 参数：
 - `symbol string` - 交易对符号
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 返回：
 - `float64` - 处理后的价格
@@ -133,13 +135,15 @@ core 包提供了系统核心的数据结构、常量和错误定义。
 
 参数：
 - `pair string` - 交易对名称
-- `price float64` - 价格值
+- `ask float64` - 卖一价
+- `bid float64` - 买一价
 
 ### SetPrices
 批量设置多个交易对的价格。
 
 参数：
 - `data map[string]float64` - 交易对价格映射
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 ### IsMaker
 判断当前价格是否为做市商价格。

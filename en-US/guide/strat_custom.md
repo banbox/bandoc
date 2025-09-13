@@ -155,6 +155,7 @@ func init() {
 	})
 }
 
+```go
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	smlLen := int(pol.Def("smlLen", 5, core.PNorm(3, 10)))
 	bigLen := int(pol.Def("bigLen", 20, core.PNorm(10, 40)))
@@ -174,6 +175,9 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 		},
 	}
 }
+```
+> You can use indicators in any callback function, but please note: **all indicators must be registered and called once in OnBar first**; otherwise, indicator calculations will result in errors.
+
 ```
 ## banta: Technical Analysis Library
 The high-performance indicator library banta is used in banbot. It caches the calculation state of indicators for each bar, which is the key to the high performance of banbot. You can visit [DeepWiki](https://deepwiki.com/banbox/banta) to learn more information about banta.
@@ -500,6 +504,7 @@ For all open long orders, a stop loss of 50% of the position is set. When the pr
 ## Batch task processing
 Sometimes you may need to perform some calculations (such as correlation coefficients) for all symbols of the current strategy together, get some intermediate states to save, or open or close orders together.
 In this case, you can use the `OnBatchJobs` or `OnBatchInfos` callback function.
+> Note that the jobs parameter of OnBatchJobs is obtained from a map, so the order is not guaranteed.
 ```go
 func calcCorrs(jobs []*strat.StratJob, isBig bool) {
 	// Calculate the average correlation coefficient between each symbol and other varieties, and save it to More
@@ -566,6 +571,8 @@ func BatchDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
+> Note that all indicators used in OnBatchJobs or OnBatchInfos must also be called once in OnBar; otherwise, the indicator calculation will be incorrect.
+
 ## Custom exit logic
 You can perform custom exit logic checks on each candlestick, for each open order:
 ```go

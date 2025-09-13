@@ -175,6 +175,8 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
+> 您可在任意回调函数中使用指标，但注意，**所有指标都必须先在OnBar中注册调用一遍**；否则指标计算会出现错误。
+
 ## 技术指标库banta
 banbot使用高性能指标库banta，它会对每个bar的指标计算状态进行缓存，这是banbot高性能的关键，您可访问[DeepWiki](https://deepwiki.com/banbox/banta)了解关于banta的更多信息。
 
@@ -501,6 +503,7 @@ s.SetAllStopLoss(core.OdDirtLong, &ormo.ExitTrigger{
 ## 批量任务处理
 有时候您可能需要针对当前策略的所有品种一起进行某些计算（比如相关系数），得到一些中间状态保存，或者一起进行开单或平仓。
 这时候您可以使用`OnBatchJobs`或`OnBatchInfos`回调函数。
+> 注意OnBatchJobs的jobs参数是从map得到，不保证顺序
 ```go
 func calcCorrs(jobs []*strat.StratJob, isBig bool) {
 	// 计算各个品种与其他品种的平均相关系数，并保存到More中
@@ -567,6 +570,8 @@ func BatchDemo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	}
 }
 ```
+> 注意所有在OnBatchJobs或OnBatchInfos中使用的指标，都必须也在OnBar中调用一次；否则指标计算不正确。
+
 ## 自定义退出逻辑
 您可以在每个K线，为每个打开的订单，执行自定义的退出逻辑检查：
 ```go

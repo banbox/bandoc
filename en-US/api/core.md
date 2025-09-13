@@ -115,6 +115,7 @@ Get latest price for trading pair.
 
 Parameters:
 - `symbol string` - Trading pair symbol
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 Returns:
 - `float64` - Latest price
@@ -124,6 +125,7 @@ Safely get trading pair price, including fiat currency handling logic.
 
 Parameters:
 - `symbol string` - Trading pair symbol
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 Returns:
 - `float64` - Processed price
@@ -133,13 +135,15 @@ Set latest price for trading pair.
 
 Parameters:
 - `pair string` - Trading pair name
-- `price float64` - Price value
+- `ask float64` - ask price
+- `bid float64` - bid price
 
 ### SetPrices
 Batch set prices for multiple trading pairs.
 
 Parameters:
 - `data map[string]float64` - Trading pair price mapping
+- `side string` - banexg.OdSideBuy/OdSideBuy/""
 
 ### IsMaker
 Determine if current price is a market maker price.
