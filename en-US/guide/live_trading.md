@@ -8,7 +8,7 @@ If you are planning to start live trading, please ensure that your strategy or y
 :::
 
 ::: tip Technical Support
-We offer preferential live trading servers to help you set up a live trading environment, and provide live trading technical support and account management services. [Go to Purchase](https://banbot.site/en-US/services)
+We offer preferential live trading servers, Singapore 4C6G only 60 yuan per month, 1ms latency to Binance, and provide live trading technical support services. [Go to Purchase](https://banbot.site/en-US/services)
 :::
 
 ## 1. Compilation
@@ -110,9 +110,11 @@ You can configure `rpc_channels` in the YML file for notifications. Messages wil
 - **Email Notifications**: Send email notifications via SMTP
 
 **WeWork Notification Setup**
+
 You can follow the WeCom plugin in WeChat (scan the QR code from the WeCom PC management console) to receive these messages in WeChat.
 
 **Email Notification Setup**
+
 Configure email notifications to receive timely email alerts when system exceptions occur:
 
 ```yaml
@@ -133,6 +135,39 @@ rpc_channels:
     min_intv_secs: 300  # Send at most once every 5 minutes
     touser: 'alert@company.com'
 ```
+
+**Telegram Notification Setup**
+
+Configure Telegram bot to receive real-time trading notifications and remote control:
+
+```yaml
+# Telegram notification channel
+rpc_channels:
+  telegram_bot:
+    type: "telegram"
+    token: "YOUR_BOT_TOKEN"           # Required: Telegram Bot Token
+    chat_id: "YOUR_CHAT_ID"           # Required: Chat ID
+    proxy: "http://127.0.0.1:7897"    # Optional: Proxy address
+    msg_types: ["entry", "exit", "status", "exception"]
+    retry_delay: 30
+    min_intv_secs: 5
+```
+
+Obtaining Bot Token and Chat ID:
+1. Find @BotFather in Telegram, send `/newbot` to create a bot and get the Token
+2. Add the bot to your chat, send a message, then visit `https://api.telegram.org/bot<TOKEN>/getUpdates` to get Chat ID
+
+**Telegram Control Commands**
+After configuration, you can control the bot with the following commands:
+
+| Command | Function |
+|---------|----------|
+| `/menu` | Display interactive operation menu (recommended) |
+| `/orders` | View current orders |
+| `/status` | View trading status |
+| `/disable` | Disable opening positions |
+| `/enable` | Enable opening positions |
+| `/closeall` | Close all positions |
 
 ### DashBoard UI
 You can configure `api_server` in the yml file. This will start a web service simultaneously when the bot is launched. After the bot is started, you can access the bot's DashBoard using the configured username and password to view the trading overview and manage the bot.

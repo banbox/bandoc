@@ -7,7 +7,7 @@ banbot现在实盘用户尚不够多，常见实盘用例测试通过，但很�
 :::
 
 ::: tip 技术支持
-我们提供特惠的实盘服务器，帮您搭建好实盘环境，并提供实盘技术支持服务和账户托管服务。[去选购](https://banbot.site/zh-CN/services)
+我们提供特惠的实盘服务器，新加坡4C6G每月仅60元，到币安延迟1ms，并提供实盘技术支持服务。[去选购](https://banbot.site/zh-CN/services)
 :::
 
 ## 1. 编译
@@ -109,9 +109,11 @@ spider进程日志会自动保存到`@logs/spider.log`；机器人进程日志�
 - **邮件通知**: 通过SMTP发送邮件通知
 
 **企业微信通知设置**
+
 您微信中关注企业微信插件（登录企业微信PC管理后台查看二维码），即可从微信收到上面消息。
 
 **邮件通知设置**
+
 配置邮件通知可以在系统异常时及时收到邮件提醒：
 
 ```yaml
@@ -132,6 +134,39 @@ rpc_channels:
     min_intv_secs: 300  # 5分钟内最多发送一次
     touser: 'alert@company.com'
 ```
+
+**Telegram通知设置**
+
+配置Telegram机器人可以实时接收交易通知和进行远程控制：
+
+```yaml
+# Telegram通知渠道
+rpc_channels:
+  telegram_bot:
+    type: "telegram"
+    token: "YOUR_BOT_TOKEN"           # 必填：Telegram Bot Token
+    chat_id: "YOUR_CHAT_ID"           # 必填：聊天ID
+    proxy: "http://127.0.0.1:7897"    # 可选：代理地址
+    msg_types: ["entry", "exit", "status", "exception"]
+    retry_delay: 30
+    min_intv_secs: 5
+```
+
+获取Bot Token和Chat ID：
+1. 在Telegram中找到@BotFather，发送`/newbot`创建机器人并获取Token
+2. 将机器人添加到聊天，发送消息后访问`https://api.telegram.org/bot<TOKEN>/getUpdates`获取Chat ID
+
+**Telegram控制命令**
+配置完成后可通过以下命令控制机器人：
+
+| 命令 | 功能 |
+|------|------|
+| `/menu` | 显示交互式操作菜单（推荐） |
+| `/orders` | 查看当前订单 |
+| `/status` | 查看交易状态 |
+| `/disable` | 禁止开单 |
+| `/enable` | 启用开单 |
+| `/closeall` | 平仓所有订单 |
 
 ### DashBoard UI
 您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。
