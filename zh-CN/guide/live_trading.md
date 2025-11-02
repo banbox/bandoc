@@ -59,7 +59,7 @@ go build -o bot
 ## 2. 准备数据库
 安装并启动TimeScaledb，建议使用docker快速启动，[文档](https://docs.timescale.com/self-hosted/latest/install/)
 
-保存您的数据库连接字符串：`postgresql://postgres:123@[timescaledb]:5432/ban`（您可能需要修改其中的密码或数据库名称等）
+保存您的数据库连接字符串：`postgresql://postgres:123@timescaledb:5432/ban`（您可能需要修改其中的密码或数据库名称等）
 
 ::: tip 提示
 您无需创建数据库和相关表结构，banbot启动时会自动初始化数据库和相关表结构
@@ -137,36 +137,91 @@ rpc_channels:
 
 **Telegram通知设置**
 
-配置Telegram机器人可以实时接收交易通知和进行远程控制：
+banbot支持两种Telegram通知方式：官方机器人和自定义机器人。
+
+**方式一：官方机器人（推荐）**
+
+使用banbot官方Telegram机器人，无需申请Bot Token，配置最简单：
 
 ```yaml
-# Telegram通知渠道
 rpc_channels:
   telegram_bot:
-    type: "telegram"
-    token: "YOUR_BOT_TOKEN"           # 必填：Telegram Bot Token
-    chat_id: "YOUR_CHAT_ID"           # 必填：聊天ID
-    proxy: "http://127.0.0.1:7897"    # 可选：代理地址
-    msg_types: ["entry", "exit", "status", "exception"]
-    retry_delay: 30
+    type: telegram
+    disable: false
+    secret: ""  # 可选：自定义UUID v4格式密钥，留空自动生成
+    msg_types: [entry, exit, status, exception]
+    min_intv_secs: 5
+```
+
+启动机器人后，日志会输出类似以下信息：
+```
+Manage Your Bot On https://t.me/trade_banbot?start=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
+点击链接或在Telegram中搜索`@trade_banbot`，发送`/start xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`即可绑定。
+
+::: tip 提示
+官方机器人方式无需配置代理，通过加密通道连接，适合网络受限环境。
+:::
+
+**方式二：自定义机器人**
+
+创建专属Telegram机器人，拥有完全控制权：
+
+```yaml
+rpc_channels:
+  telegram_bot:
+    type: telegram
+    disable: false
+    token: "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"  # 必填：Bot Token
+    chat_id: "987654321"                           # 必填：聊天ID
+    proxy: "http://127.0.0.1:7897"                 # 可选：代理地址
+    msg_types: [entry, exit, status, exception]
     min_intv_secs: 5
 ```
 
 获取Bot Token和Chat ID：
-1. 在Telegram中找到@BotFather，发送`/newbot`创建机器人并获取Token
-2. 将机器人添加到聊天，发送消息后访问`https://api.telegram.org/bot<TOKEN>/getUpdates`获取Chat ID
+1. 在Telegram中找到`@BotFather`，发送`/newbot`创建机器人并获取Token
+2. 将机器人添加到聊天，发送任意消息后访问：
+   ```
+   https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+   ```
+   在返回的JSON中找到`chat.id`字段值
+
+::: warning 注意
+自定义机器人需要能访问Telegram API。如网络受限，需配置`proxy`代理地址。
+:::
+
+**通用配置说明**
+
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `type` | 渠道类型，必须为`telegram` | - |
+| `disable` | 是否禁用此通知渠道 | `false` |
+| `msg_types` | 消息类型：`entry`入场、`exit`平仓、`status`状态、`exception`异常 | `[]` |
+| `min_intv_secs` | 最小发送间隔（秒），避免消息过于频繁 | `0` |
+| `retry_delay` | 发送失败后重试延迟（秒） | `30` |
 
 **Telegram控制命令**
-配置完成后可通过以下命令控制机器人：
+
+配置完成后可通过以下命令远程控制机器人：
 
 | 命令 | 功能 |
 |------|------|
 | `/menu` | 显示交互式操作菜单（推荐） |
-| `/orders` | 查看当前订单 |
-| `/status` | 查看交易状态 |
-| `/disable` | 禁止开单 |
-| `/enable` | 启用开单 |
-| `/closeall` | 平仓所有订单 |
+| `/account` | 查看账户列表和切换账户 |
+| `/switch [账户名]` | 切换到指定账户 |
+| `/orders` | 查看当前账户的订单列表 |
+| `/close [订单ID\|all]` | 平仓指定订单或所有订单 |
+| `/status` | 查看当前账户的交易状态 |
+| `/disable [小时]` | 禁止当前账户开单（默认1小时） |
+| `/enable` | 重新启用当前账户开单 |
+| `/wallet` | 查看当前账户钱包余额 |
+| `/help` | 显示帮助信息 |
+
+::: tip 多账户管理
+如配置了多个交易账户，使用`/account`查看所有账户，通过`/switch`切换账户后，所有操作（查看订单、平仓、禁用开单等）都针对当前激活账户。
+:::
 
 ### DashBoard UI
 您可在yml中配置`api_server`，这将会在启动机器人时同时启动一个web服务，然后您可在机器人启动后通过配置的账号密码访问机器人的DashBoard，查看交易概况并管理机器人。

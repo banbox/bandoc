@@ -129,7 +129,8 @@ type TradeStrat struct {
 	OnOrderChange       func(s *StratJob, od *ormo.InOutOrder, chgType int) // 订单更新回调
 	GetDrawDownExitRate CalcDDExitRate                                     // 计算跟踪止盈回撤退出的比率
 	PickTimeFrame       PickTimeFrameFunc                                  // 为指定币选择适合的交易周期
-	OnShutDown          func(s *StratJob)                                  // 机器人停止时回调
+	OnShutDown          func(s *StratJob)                                  // 每个策略任务停止时回调
+	OnStratExit         func()                                             // 策略配置退出时回调，在所有OnShutDown之后执行
 }
 ```
 :::tip tip
@@ -642,8 +643,76 @@ func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
 您需返回修改后的品种列表，这些品种不一定全部交易，会受到`run_policy.max_pair`和`TradeStrat.MinTfScore`的限制。所以品种的前后顺序很重要。
 :::
 
+## 策略退出回调
+当机器人停止时（回测结束或实盘停止），系统会依次调用策略的退出回调函数，用于清理资源或保存状态。
+
+### OnShutDown
+`OnShutDown`在每个策略任务（`StratJob`）停止时调用，参数为当前任务对象。由于一个策略可能运行在多个账号、多个品种、多个周期上，此函数会被调用多次。
+
+适用场景：
+- 保存单个品种的运行状态
+- 清理品种相关的资源
+- 记录品种级别的统计信息
+
+```go
+func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		OnBar: func(s *strat.StratJob) {
+			// 策略逻辑
+		},
+		OnShutDown: func(s *strat.StratJob) {
+			log.Info("job shutdown", 
+				zap.String("pair", s.Symbol.Symbol),
+				zap.String("tf", s.TimeFrame),
+				zap.String("account", s.Account))
+		},
+	}
+}
+```
+
+### OnStratExit
+`OnStratExit`在策略配置退出时调用，无参数。每个策略配置只调用一次，在所有`OnShutDown`执行完毕后执行。
+
+适用场景：
+- 关闭策略级别的全局资源（如数据库连接、文件句柄）
+- 保存策略整体的统计数据
+- 清理策略共享的状态
+
+```go
+func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
+	// 策略级别的资源
+	var logFile *os.File
+	var err error
+	
+	return &strat.TradeStrat{
+		OnBar: func(s *strat.StratJob) {
+			if logFile == nil {
+				logFile, err = os.Create("strategy.log")
+				if err != nil {
+					log.Error("create log file fail", zap.Error(err))
+				}
+			}
+			// 策略逻辑
+		},
+		OnStratExit: func() {
+			if logFile != nil {
+				logFile.Close()
+				log.Info("strategy log file closed")
+			}
+		},
+	}
+}
+```
+
+:::warning 注意
+- `OnShutDown`接收`*StratJob`参数，可访问品种、账号等信息
+- `OnStratExit`无参数，用于清理策略级别的全局资源
+- 执行顺序：先执行所有`OnShutDown`，再执行`OnStratExit`
+- 同一策略函数可能因不同参数被调用多次，但每个配置的`OnStratExit`只执行一次
+:::
+
 ## Websocket高频数据订阅
-您可在策略中订阅交易所通过Websocket推送的高频数据，包括：未完成K线，逐笔交易、订单簿深度。目前暂时仅支持实时交易，回测时尚不支持。
+您可在策略中订阅交易所通过Websocket推送的高频数据，包括：未完成K线，逐笔交易、订单簿深度。支持实时交易和回测。
 注意从spider发送到机器人进程目前约有1ms延迟，另外交易所到您本地视网络情况也有一定延迟。
 
 下面是一个示例：

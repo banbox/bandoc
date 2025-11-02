@@ -129,7 +129,8 @@ type TradeStrat struct {
 	OnOrderChange       func(s *StratJob, od *ormo.InOutOrder, chgType int) // Order update callback 订单更新回调
 	GetDrawDownExitRate CalcDDExitRate                                     // Calculate the ratio of tracking profit taking, drawdown, and exit 计算跟踪止盈回撤退出的比率
 	PickTimeFrame       PickTimeFrameFunc                                  // Choose a suitable trading cycle for the specified currency 为指定币选择适合的交易周期
-	OnShutDown          func(s *StratJob)                                  // Callback when the robot stops 机器人停止时回调
+	OnShutDown          func(s *StratJob)                                  // Callback when each strategy task stops 每个策略任务停止时回调
+	OnStratExit         func()                                             // Callback when strategy config exits, executed after all OnShutDown 策略配置退出时回调，在所有OnShutDown之后执行
 }
 ```
 :::tip tip
@@ -643,8 +644,76 @@ The above checks whether BTC is in the subscribed varieties, and adds it if it's
 You need to return the modified symbol list. Not all these varieties will be traded, which is restricted by `run_policy.max_pair` and `TradeStrat.MinTfScore`. So the order of the varieties is important.
 :::
 
+## Strategy Exit Callbacks
+When the bot stops (backtest ends or live trading stops), the system calls strategy exit callback functions in sequence to clean up resources or save state.
+
+### OnShutDown
+`OnShutDown` is called when each strategy task (`StratJob`) stops, with the current task object as parameter. Since a strategy may run on multiple accounts, multiple symbols, and multiple timeframes, this function will be called multiple times.
+
+Use cases:
+- Save individual symbol's running state
+- Clean up symbol-related resources
+- Record symbol-level statistics
+
+```go
+func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
+	return &strat.TradeStrat{
+		OnBar: func(s *strat.StratJob) {
+			// Strategy logic
+		},
+		OnShutDown: func(s *strat.StratJob) {
+			log.Info("job shutdown",
+				zap.String("pair", s.Symbol.Symbol),
+				zap.String("tf", s.TimeFrame),
+				zap.String("account", s.Account))
+		},
+	}
+}
+```
+
+### OnStratExit
+`OnStratExit` is called when the strategy config exits, with no parameters. It's called once per strategy config, after all `OnShutDown` executions complete.
+
+Use cases:
+- Close strategy-level global resources (e.g., database connections, file handles)
+- Save strategy-wide statistics
+- Clean up strategy-shared state
+
+```go
+func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
+	// Strategy-level resources
+	var logFile *os.File
+	var err error
+
+	return &strat.TradeStrat{
+		OnBar: func(s *strat.StratJob) {
+			if logFile == nil {
+				logFile, err = os.Create("strategy.log")
+				if err != nil {
+					log.Error("create log file fail", zap.Error(err))
+				}
+			}
+			// Strategy logic
+		},
+		OnStratExit: func() {
+			if logFile != nil {
+				logFile.Close()
+				log.Info("strategy log file closed")
+			}
+		},
+	}
+}
+```
+
+:::warning Note
+- `OnShutDown` receives `*StratJob` parameter, can access symbol, account info
+- `OnStratExit` has no parameters, used to clean up strategy-level global resources
+- Execution order: all `OnShutDown` first, then `OnStratExit`
+- Same strategy function may be called multiple times with different parameters, but each config's `OnStratExit` executes only once
+:::
+
 ## Websocket High-Frequency Data Subscription
-You can subscribe to high-frequency data pushed by exchanges via Websocket in the strategy, including: incomplete K-lines, tick-by-tick trades, and order book depth. Currently, only real-time trading is supported, and backtesting is not supported yet.
+You can subscribe to high-frequency data pushed by exchanges via Websocket in the strategy, including: incomplete K-lines, tick-by-tick trades, and order book depth. Supports both live trading and backtesting.
 
 **Note**: There is approximately a 1ms delay from the spider sending data to the robot process. Additionally, there is a certain delay from the exchange to your local system depending on network conditions.
 

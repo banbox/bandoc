@@ -25,7 +25,7 @@ accounts:
         api_key: your_api_key_here
         api_secret: your_secret_here
 database:
-  url: postgresql://postgres:123@[timescaledb]:5432/ban
+  url: postgresql://postgres:123@timescaledb:5432/ban
 # 中国大陆不能直接访问币安api，请务必设置vpn代理为您本地代理地址，且需在代理软件中允许来自局域网的连接
 exchange:
   binance:

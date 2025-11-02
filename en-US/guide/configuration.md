@@ -171,7 +171,7 @@ database:
   retention: all
   max_pool_size: 50
   auto_create: true  # Whether to automatically create the database if it does not exist
-  url: postgresql://postgres:123@[127.0.0.1]:5432/ban
+  url: postgresql://postgres:123@127.0.0.1:5432/ban
 spider_addr: 127.0.0.1:6789  # Port and address monitored by the spider process
 rpc_channels:  # RPC channels for sending message notifications
   # Email notification channel

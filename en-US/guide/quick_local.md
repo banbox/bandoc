@@ -89,7 +89,7 @@ accounts:
         api_key: vvv
         api_secret: vvv
 database:
-  url: postgresql://postgres:123@[127.0.0.1]:5432/ban
+  url: postgresql://postgres:123@127.0.0.1:5432/ban
 # If the Binance API cannot be accessed in your region, please set the VPN proxy, HTTP_PROXY or system proxy
 #exchange:
 #  binance:

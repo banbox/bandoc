@@ -60,7 +60,7 @@ go build -o bot
 ## 2. Preparing the Database
 Install and start TimeScaledb. It is recommended to use Docker for a quick setup. Refer to the [documentation](https://docs.timescale.com/self-hosted/latest/install/).
 
-Save your database connection string: `postgresql://postgres:123@[timescaledb]:5432/ban` (You may need to modify the password or database name, etc.)
+Save your database connection string: `postgresql://postgres:123@timescaledb:5432/ban` (You may need to modify the password or database name, etc.)
 
 ::: tip Note
 You do not need to create the database or related table structures. banbot will automatically initialize the database and related table structures upon startup.
@@ -138,36 +138,91 @@ rpc_channels:
 
 **Telegram Notification Setup**
 
-Configure Telegram bot to receive real-time trading notifications and remote control:
+banbot supports two Telegram notification methods: official bot and custom bot.
+
+**Method 1: Official Bot (Recommended)**
+
+Use banbot's official Telegram bot, no need to apply for Bot Token, simplest configuration:
 
 ```yaml
-# Telegram notification channel
 rpc_channels:
   telegram_bot:
-    type: "telegram"
-    token: "YOUR_BOT_TOKEN"           # Required: Telegram Bot Token
-    chat_id: "YOUR_CHAT_ID"           # Required: Chat ID
-    proxy: "http://127.0.0.1:7897"    # Optional: Proxy address
-    msg_types: ["entry", "exit", "status", "exception"]
-    retry_delay: 30
+    type: telegram
+    disable: false
+    secret: ""  # Optional: custom UUID v4 format secret, auto-generated if empty
+    msg_types: [entry, exit, status, exception]
+    min_intv_secs: 5
+```
+
+After starting the bot, the log will output information similar to:
+```
+Manage Your Bot On https://t.me/trade_banbot?start=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
+Click the link or search for `@trade_banbot` in Telegram, send `/start xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` to bind.
+
+::: tip Tip
+The official bot method requires no proxy configuration, connects through encrypted channels, suitable for network-restricted environments.
+:::
+
+**Method 2: Custom Bot**
+
+Create your own Telegram bot with full control:
+
+```yaml
+rpc_channels:
+  telegram_bot:
+    type: telegram
+    disable: false
+    token: "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"  # Required: Bot Token
+    chat_id: "987654321"                           # Required: Chat ID
+    proxy: "http://127.0.0.1:7897"                 # Optional: Proxy address
+    msg_types: [entry, exit, status, exception]
     min_intv_secs: 5
 ```
 
 Obtaining Bot Token and Chat ID:
-1. Find @BotFather in Telegram, send `/newbot` to create a bot and get the Token
-2. Add the bot to your chat, send a message, then visit `https://api.telegram.org/bot<TOKEN>/getUpdates` to get Chat ID
+1. Find `@BotFather` in Telegram, send `/newbot` to create a bot and get the Token
+2. Add the bot to your chat, send any message, then visit:
+   ```
+   https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+   ```
+   Find the `chat.id` field value in the returned JSON
+
+::: warning Note
+Custom bot requires access to Telegram API. If network is restricted, configure `proxy` address.
+:::
+
+**Common Configuration**
+
+| Parameter | Description | Default |
+|-----------|-------------|----------|
+| `type` | Channel type, must be `telegram` | - |
+| `disable` | Whether to disable this notification channel | `false` |
+| `msg_types` | Message types: `entry` for entry, `exit` for exit, `status` for status, `exception` for exceptions | `[]` |
+| `min_intv_secs` | Minimum send interval (seconds), avoid too frequent messages | `0` |
+| `retry_delay` | Retry delay after send failure (seconds) | `30` |
 
 **Telegram Control Commands**
-After configuration, you can control the bot with the following commands:
+
+After configuration, you can remotely control the bot with the following commands:
 
 | Command | Function |
 |---------|----------|
 | `/menu` | Display interactive operation menu (recommended) |
-| `/orders` | View current orders |
-| `/status` | View trading status |
-| `/disable` | Disable opening positions |
-| `/enable` | Enable opening positions |
-| `/closeall` | Close all positions |
+| `/account` | View account list and switch accounts |
+| `/switch [account]` | Switch to specified account |
+| `/orders` | View current account's order list |
+| `/close [orderID\|all]` | Close specified order or all orders |
+| `/status` | View current account's trading status |
+| `/disable [hours]` | Disable current account from opening positions (default 1 hour) |
+| `/enable` | Re-enable current account to open positions |
+| `/wallet` | View current account's wallet balance |
+| `/help` | Display help information |
+
+::: tip Multi-Account Management
+If multiple trading accounts are configured, use `/account` to view all accounts, switch accounts via `/switch`, and all operations (view orders, close positions, disable opening, etc.) apply to the currently active account.
+:::
 
 ### DashBoard UI
 You can configure `api_server` in the yml file. This will start a web service simultaneously when the bot is launched. After the bot is started, you can access the bot's DashBoard using the configured username and password to view the trading overview and manage the bot.
@@ -188,7 +243,7 @@ The web service mentioned above is started with HTTP. It is recommended that you
 
 If you need to access the server's Dashboard from your local machine, you can connect to the server running the bot via SSH and then use port forwarding to forward requests from a local port to the server port:
 ```shell
-ssh -L [local_port]:[server_bind_ip]:[server_port] [username]@[server_public_address]
+ssh -L [local_port]:[server_bind_ip]:[server_port] [username]@server_public_address
 # e.g. 
 ssh -L 8001:127.0.0.1:8001 your_username@remote_server_address
 ```
