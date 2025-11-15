@@ -27,6 +27,7 @@ export default defineConfig({
                         { text: '命令行', link: '/zh-CN/guide/bot_usage' },
                         { text: '配置', link: '/zh-CN/guide/configuration' },
                         { text: '自定义策略', link: '/zh-CN/guide/strat_custom' },
+                        { text: '回测', link: '/zh-CN/guide/backtest' },
                         { text: '品种管理器', link: '/zh-CN/guide/pair_filters' },
                         { text: '实时交易', link: '/zh-CN/guide/live_trading' },
                         { text: '常见问题', link: '/zh-CN/guide/faq' }

@@ -65,6 +65,7 @@ run_timeframes: [5m]  # All allowed timeframes for the bot. The strategy will ch
 run_policy:  # The strategy to run, multiple strategies can run simultaneously or a strategy can be run with different parameters
   - name: Demo  # Strategy name
     run_timeframes: [5m]  # Timeframes supported by this strategy, overrides the root run_timeframes when provided
+    refine_tf: 1m  # Matching period, a string or a number, where a number represents a reduction factor relative to timeframes: '1m', '5m', '3-6', 5
     filters:  # All filters from pairlists can be used
     - name: OffsetFilter  # Offset limit filter, typically used last
       offset: 10  # Start from the 10th item

@@ -25,6 +25,7 @@ export default defineConfig({
                         { text: 'Commands', link: '/en-US/guide/bot_usage' },
                         { text: 'Configuration', link: '/en-US/guide/configuration' },
                         { text: 'Custom Strategy', link: '/en-US/guide/strat_custom' },
+                        { text: 'Backtesting', link: '/en-US/guide/backtest' },
                         { text: 'Symbol Manager', link: '/en-US/guide/pair_filters' },
                         { text: 'Live Trading', link: '/en-US/guide/live_trading' },
                         { text: 'Q & A', link: '/en-US/guide/faq' }
