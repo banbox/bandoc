@@ -19,10 +19,7 @@ export default defineConfig({
                     text: '开始',
                     items: [
                         { text: '介绍', link: '/zh-CN/guide/start' },
-                        { text: '快速体验(Docker)', link: '/zh-CN/guide/quick_docker' },
                         { text: '快速开始', link: '/zh-CN/guide/quick_local' },
-                        { text: '安装', link: '/zh-CN/guide/install' },
-                        { text: '初始化项目', link: '/zh-CN/guide/init_project' },
                         { text: 'Banbot基础', link: '/zh-CN/guide/basic' },
                         { text: '命令行', link: '/zh-CN/guide/bot_usage' },
                         { text: '配置', link: '/zh-CN/guide/configuration' },
@@ -35,6 +32,7 @@ export default defineConfig({
                 },{
                     text: '进阶',
                     items: [
+                        { text: '初始化新项目', link: '/zh-CN/guide/init_project' },
                         {text: '自定义CMD', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'K线工具', link: '/zh-CN/advanced/kline_tools'},
                         { text: '超参数优化', link: '/zh-CN/guide/hyperopt' },

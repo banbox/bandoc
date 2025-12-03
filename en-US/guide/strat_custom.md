@@ -156,7 +156,6 @@ func init() {
 	})
 }
 
-```go
 func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 	smlLen := int(pol.Def("smlLen", 5, core.PNorm(3, 10)))
 	bigLen := int(pol.Def("bigLen", 20, core.PNorm(10, 40)))
@@ -179,9 +178,8 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 ```
 > You can use indicators in any callback function, but please note: **all indicators must be registered and called once in OnBar first**; otherwise, indicator calculations will result in errors.
 
-```
 ## banta: Technical Analysis Library
-The high-performance indicator library banta is used in banbot. It caches the calculation state of indicators for each bar, which is the key to the high performance of banbot. You can visit [DeepWiki](https://deepwiki.com/banbox/banta) to learn more information about banta.
+The high-performance indicator library [banta](https://github.com/banbox/banta) is used in banbot. It caches the calculation state of indicators for each bar, which is the key to the high performance of banbot. You can visit [DeepWiki](https://deepwiki.com/banbox/banta) to learn more information about banta.
 
 `banta.BarEnv` and `banta.Series` are two key structures in banta.
 

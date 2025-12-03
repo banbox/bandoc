@@ -40,7 +40,6 @@ BanBot文档项目旨在为BanBot量化交易机器人的用户和开发者提�
 - install.md: 提供了安装 BanBot 运行环境的说明，包括 TimeScaleDB 和 Go。
 - live_trading.md: 详细介绍了如何部署 BanBot 进行实盘交易，包括编译、配置和启动机器人。
 - pair_filters.md: 介绍了所有可用的交易对过滤器及其配置。
-- quick_docker.md: 提供了使用 Docker 快速体验 BanBot 的指南。
 - quick_local.md: 提供了在本地环境中快速配置和运行 BanBot 的分步指南。
 - roll_btopt.md: 介绍了如何使用滚动回测功能。
 - start.md: 介绍了banbot：主要特性、UI支持、支持交易所、Q&A等。

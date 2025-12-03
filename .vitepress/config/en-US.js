@@ -17,10 +17,7 @@ export default defineConfig({
                     text: 'Start',
                     items: [
                         { text: 'Introduce', link: '/en-US/guide/start' },
-                        { text: 'Quick Experience (Docker)', link: '/en-US/guide/quick_docker' },
                         { text: 'Quick Start', link: '/en-US/guide/quick_local' },
-                        { text: 'Install', link: '/en-US/guide/install' },
-                        { text: 'Initialize the project', link: '/en-US/guide/init_project' },
                         { text: 'Banbot Basics', link: '/en-US/guide/basic' },
                         { text: 'Commands', link: '/en-US/guide/bot_usage' },
                         { text: 'Configuration', link: '/en-US/guide/configuration' },
@@ -33,6 +30,7 @@ export default defineConfig({
                 },{
                     text: 'Advanced',
                     items: [
+                        { text: 'Initialize new project', link: '/en-US/guide/init_project' },
                         {text: 'Custom commands', link: '/zh-CN/advanced/custom_cmd'},
                         {text: 'CandleStick Tools', link: '/en-US/advanced/kline_tools'},
                         { text: 'Hyperparameter optimization', link: '/en-US/guide/hyperopt' },

@@ -179,7 +179,7 @@ func Demo(pol *config.RunPolicyConfig) *strat.TradeStrat {
 > 您可在任意回调函数中使用指标，但注意，**所有指标都必须先在OnBar中注册调用一遍**；否则指标计算会出现错误。
 
 ## 技术指标库banta
-banbot使用高性能指标库banta，它会对每个bar的指标计算状态进行缓存，这是banbot高性能的关键，您可访问[DeepWiki](https://deepwiki.com/banbox/banta)了解关于banta的更多信息。
+banbot使用高性能指标库[banta](https://github.com/banbox/banta)，它会对每个bar的指标计算状态进行缓存，这是banbot高性能的关键，您可访问[DeepWiki](https://deepwiki.com/banbox/banta)了解关于banta的更多信息。
 
 `banta.BarEnv` 和 `banta.Series`是banta中的两个关键结构体。
 

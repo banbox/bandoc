@@ -1,9 +1,37 @@
-您可按照下面步骤快速在本地配置并运行banbot而无需docker：
+## docker一键启动
+推荐使用[runbanbot(docker)](https://gitee.com/banbox/runbanbot/)一键启动，无需配置，开箱即用；
+
+启动成功后，浏览器访问[127.0.0.1:8000/zh-CN](http://127.0.0.1:8000/zh-CN)即可打开Web UI；
+
+您可在WebUI中添加/修改策略、回测、数据管理等；也可使用VsCode或GoLand打开`docker-compose.yml`同目录下的`strats`策略项目，直接编辑策略（这需要本地安装golang）
+
+如果您使用runbanbot启动，则无需再阅读当前页面。
+
+如果希望本地安装启动，您可按照下面步骤快速在本地配置并运行banbot：
+
+## Step 1. 本地安装
+您需要安装TimeScaledb和Golang开发环境：
+* TimeScaleDB：基于postgresql的高性能时序数据库，用于存储K线等公开数据（订单等使用sqlite存储）。
+* golang：建议使用最新版本
 
 您也可以查看B站的[安装教程视频](https://www.bilibili.com/video/BV1QuLozqEzg/)
 
-## Step 1. 安装
-您需要安装TimeScaledb和Golang开发环境，请参考[指引](./install.md)
+### 安装TimeScaleDB数据库
+从软件包安装TimeScaledb比较复杂耗时，强烈推荐您使用[runbanbot(docker)](https://gitee.com/banbox/runbanbot/)一键启动；
+
+您也可仅使用docker启动数据库，不启动banbot：
+```shell
+docker compose up -d timescaledb
+```
+
+banbot仅使用TimeScaledb用于存储K线或品种等公开数据，您回测或实盘时的订单等数据将通过`gob`或`sqlite`方式存储到文件。
+
+### 安装golang
+请从golang的官网下载[安装](https://go.dev/doc/install)
+
+::: tip TIP
+如果您的网络环境不能直接访问golang.org，请配置[国内源](https://learnku.com/go/wikis/38122)
+:::
 
 ## Step 2. 获取示例策略项目并编译
 您可使用git直接拉取示例项目：`git clone https://github.com/banbox/banstrats`  
@@ -28,6 +56,8 @@ go build -o bot.exe
 ```
 :::
 <img style="width:480px;margin-top:10px" src="/img/compile.jpg"/>
+
+当您在策略项目下执行`go build`时，您的策略将和banbot源码一起打包为单个可执行文件，您可使用此文件回测、实盘、或启动WebUI等。
 
 ## Step 3. 配置环境变量
 为方便后续使用，您需要设置环境变量`BanDataDir`和`BanStratDir`。
@@ -104,3 +134,5 @@ exchange:
 关于命令行的更多用法[请参考](./bot_usage.md)
 
 <img style="width:780px;margin-top:10px" src="/img/run_webui.jpg"/>
+
+管理策略项目时，我们推荐使用AI IDE；您也可以使用`Visual Studio Code`或`GoLand`

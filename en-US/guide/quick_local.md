@@ -1,7 +1,43 @@
-You can quickly configure and run banbot locally without docker by following the steps below:
+## One-click Start with Docker
+It is recommended to use [runbanbot (docker)](https://gitee.com/banbox/runbanbot/) for one-click startup, with no configuration required and ready to use out of the box.
 
-## Step 1. Installation
-You need to install TimeScaledb and the Golang development environment. Please refer to the [guide](./install.md).
+After a successful startup, open your browser and visit [127.0.0.1:8000/zh-CN](http://127.0.0.1:8000/zh-CN) to access the Web UI.
+
+In the Web UI, you can add/modify strategies, run backtests, manage data, etc.  
+You can also use VS Code or GoLand to open the `strats` directory located next to `docker-compose.yml` and edit strategies directly (this requires Golang to be installed locally).
+
+If you are using runbanbot to start the service, you do not need to continue reading this page.
+
+If you prefer to install and start it locally, you can follow the steps below to quickly configure and run banbot locally:
+
+## Step 1. Local Installation
+You need to install TimeScaleDB and the Golang development environment:
+* TimeScaleDB: a high-performance time-series database based on PostgreSQL, used to store public data such as candlesticks (order data is stored using sqlite).
+* Golang: it is recommended to use the latest version.
+
+You may also refer to the installation tutorial video on Bilibili:  
+https://www.bilibili.com/video/BV1QuLozqEzg/
+
+### Install TimeScaleDB
+Installing TimeScaleDB from packages is relatively complex and time-consuming, so it is strongly recommended to use [runbanbot (docker)](https://gitee.com/banbox/runbanbot/) for one-click startup.
+
+You can also start only the database using Docker without starting banbot:
+```shell
+docker compose up -d timescaledb
+```
+
+banbot uses TimeScaleDB only to store public data such as candlesticks or symbols.
+Your order data during backtesting or live trading will be stored in files using either `gob` or `sqlite`.
+
+### Install Golang
+
+Download and install Golang from the official website:
+[https://go.dev/doc/install](https://go.dev/doc/install)
+
+::: tip TIP
+If your network environment cannot directly access golang.org, please configure a [domestic mirror](https://learnku.com/go/wikis/38122).
+:::
+
 
 ## Step 2. Get the example strategy project and compile it
 You can directly pull the example project using git: `git clone https://github.com/banbox/banstrats`  
@@ -26,6 +62,8 @@ go build -o bot.exe
 ```
 :::
 <img style="width:480px;margin-top:10px" src="/img/compile.jpg"/>
+
+When you execute `go build` in your policy project, your policy will be packaged together with the banbot source code into a single executable file, which you can use for backtesting, live testing, or launching the WebUI, etc.
 
 ## Step 3. Configure environment variables
 For convenience in subsequent use, you need to set the environment variables `BanDataDir` and `BanStratDir`.
@@ -104,3 +142,5 @@ You can also visit `http://127.0.0.1:8000/en-US` to experience it.
 For more usage of the command line, [please refer to](./bot_usage.md).
 
 <img style="width:780px;margin-top:10px" src="/img/run_webui.jpg"/>
+
+When managing strategy projects, we recommend using AI IDE; you can also use `Visual Studio Code` or `GoLand`.
