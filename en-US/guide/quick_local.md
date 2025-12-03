@@ -1,7 +1,7 @@
 ## One-click Start with Docker
 It is recommended to use [runbanbot (docker)](https://gitee.com/banbox/runbanbot/) for one-click startup, with no configuration required and ready to use out of the box.
 
-After a successful startup, open your browser and visit [127.0.0.1:8000/zh-CN](http://127.0.0.1:8000/zh-CN) to access the Web UI.
+After a successful startup, open your browser and visit [127.0.0.1:8000/en-US](http://127.0.0.1:8000/en-US) to access the Web UI.
 
 In the Web UI, you can add/modify strategies, run backtests, manage data, etc.  
 You can also use VS Code or GoLand to open the `strats` directory located next to `docker-compose.yml` and edit strategies directly (this requires Golang to be installed locally).

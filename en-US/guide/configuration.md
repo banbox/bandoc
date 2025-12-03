@@ -218,7 +218,7 @@ bt_in_live:  # Live trading scheduled backtest comparison feature
   mail_to:  # Email notification recipient list
     - "trader1@example.com"
     - "manager@example.com"
-show_lang_code: "zh-CN"  # Display language code, supports zh-CN, en-US, etc.
+show_lang_code: "en-US"  # Display language code, supports zh-CN, en-US, etc.
 api_server:  # For external control of the bot or access to dashboard via API
   enable: true
   bind_ip: 0.0.0.0
