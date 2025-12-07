@@ -71,11 +71,15 @@ You can download the [GitHub repository](https://github.com/banbox/bandoc/) of t
 **[More Common Questions](./faq.md)**
 
 ## Community Support
-For any questions not covered in the documentation, or if you need more information about the robot, or just want to communicate with each other, 
-please join our [Discord server](https://discord.com/invite/XXjA8ctqga)
+Welcome to the group chat, where we share questions, experiences, ideas, and strategies.
+When scanning the green WeChat QR code, please add the note “banbot.”
+<p style="display:flex;gap:20px;justify-content:center">
+<img style="width:180px" src="/img/wechat_banbot.jpg"/>
+<img style="width:180px" src="/img/telegram_banbot.png"/>
+<img style="width:180px" src="/img/discord_banbot.png"/>
+</p>
 
-[telegram group](https://t.me/banbot_quant)
+### Communities Links
+[Discord Server](https://discord.com/invite/XXjA8ctqga)
 
-### Other communities
-Due to time difference or network problems in China, your message in Discord may not be replied in time. You can also add the developer in WeChat, note banbot, and join the group chat.
-<img style="width:180px;margin-top:10px" src="/img/wechat.jpg"/>
+[Telegram Group](https://t.me/banbot_quant)

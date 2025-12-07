@@ -71,10 +71,15 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 **[更多常见问题](./faq.md)**
 
 ## 社区支持
-对于文档中任何未覆盖到的问题，或需要有关机器人的更多信息，或只是互相交流，欢迎添加开发者微信，备注banbot，加入群聊。
-<img style="width:180px;margin-top:10px" src="/img/wechat.jpg"/>
+欢迎加入群聊，交流问题、经验、灵感和策略。  
+扫描微信绿色二维码请备注banbot。
+<p style="display:flex;gap:20px;justify-content:center">
+<img style="width:180px" src="/img/wechat_banbot.jpg"/>
+<img style="width:180px" src="/img/telegram_banbot.png"/>
+<img style="width:180px" src="/img/discord_banbot.png"/>
+</p>
 
-### 其他社群
+### 社群链接
 [Discord服务器](https://discord.com/invite/XXjA8ctqga)
 
 [telegram群组](https://t.me/banbot_quant)
