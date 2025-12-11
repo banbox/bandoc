@@ -6,7 +6,7 @@ After a successful startup, open your browser and visit [127.0.0.1:8000/en-US](h
 In the Web UI, you can add/modify strategies, run backtests, manage data, etc.  
 You can also use VS Code or GoLand to open the `strats` directory located next to `docker-compose.yml` and edit strategies directly (this requires Golang to be installed locally).
 
-If you are using runbanbot to start the service, you do not need to continue reading this page.
+If you are using runbanbot to start the service, you do not need to continue reading this page. After installation, you might want to check out [banbot: from beginner to advanced](https://www.bilibili.com/video/BV1b72CBXEQu/)
 
 If you prefer to install and start it locally, you can follow the steps below to quickly configure and run banbot locally:
 
@@ -142,5 +142,7 @@ You can also visit `http://127.0.0.1:8000/en-US` to experience it.
 For more usage of the command line, [please refer to](./bot_usage.md).
 
 <img style="width:780px;margin-top:10px" src="/img/run_webui.jpg"/>
+
+Next, you might want to check out [banbot from beginner to advanced](https://www.bilibili.com/video/BV1b72CBXEQu/)
 
 When managing strategy projects, we recommend using AI IDE; you can also use `Visual Studio Code` or `GoLand`.

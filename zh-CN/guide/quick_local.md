@@ -5,7 +5,7 @@
 
 您可在WebUI中添加/修改策略、回测、数据管理等；也可使用VsCode或GoLand打开`docker-compose.yml`同目录下的`strats`策略项目，直接编辑策略（这需要本地安装golang）
 
-如果您使用runbanbot启动，则无需再阅读当前页面。
+如果您使用runbanbot启动，则无需再阅读当前页面。安装完成后，您可能希望了解[banbot从入门到进阶](https://www.bilibili.com/video/BV1b72CBXEQu/)
 
 如果希望本地安装启动，您可按照下面步骤快速在本地配置并运行banbot：
 
@@ -131,8 +131,8 @@ exchange:
 
 您也可以访问`http://127.0.0.1:8000/zh-CN` 体验。
 
-关于命令行的更多用法[请参考](./bot_usage.md)
-
 <img style="width:780px;margin-top:10px" src="/img/run_webui.jpg"/>
+
+接下来您可能希望了解[banbot从入门到进阶](https://www.bilibili.com/video/BV1b72CBXEQu/)
 
 管理策略项目时，我们推荐使用AI IDE；您也可以使用`Visual Studio Code`或`GoLand`
