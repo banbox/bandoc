@@ -1,6 +1,9 @@
 ## How to upgrade banbot to the latest version?
 **Docker**  
-Just start banbot with the latest docker image, and you can check the latest version on [DockerHub](https://hub.docker.com/r/banbot/banbot/tags).
+```bash
+docker compose pull banbot
+docker compose up -d banbot
+```
 
 **Local Installation**  
 In your strategy code project (the directory pointed to by the environment variable `BanStratDir`), edit the `go.mod` file, update the version number after `github.com/banbox/banbot` to the latest one;  

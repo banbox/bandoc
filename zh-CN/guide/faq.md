@@ -1,6 +1,9 @@
 ## 如何升级banbot到最新版本？
 **Docker**  
-使用最新docker镜像启动banbot即可，可在[DockerHub](https://hub.docker.com/r/banbot/banbot/tags)查看最新版本。
+```bash
+docker compose pull banbot
+docker compose up -d banbot
+```
 
 **本地安装**  
 在您的策略代码项目（环境变量BanStratDir指向的目录）下编辑`go.mod`，将`github.com/banbox/banbot`后面的版本号，更新为最新；
