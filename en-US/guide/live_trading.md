@@ -78,14 +78,16 @@ You can configure multiple strategies and accounts. If you need to run multiple 
 For detailed configuration, refer to the [Configuration File](./configuration.md).
 
 ::: tip Note
-`config.local.yml` takes precedence over `config.yml`. You can modify your configuration in either of these files. There is no need to specify these configuration file paths during startup; they will be automatically read.
+It is recommended to use a sub-account for live trading and only transfer the necessary funds. If you use `stake_pct` and there are other assets in the account, it will calculate the order amount using all assets, which may lead to calculation errors.  
+`config.local.yml` takes precedence over `config.yml`. You can modify your configuration in either of these files. There is no need to specify these configuration file paths during startup; they will be automatically read.  
+Dry-run mode uses 1-minute K-line matching for local orders, so order status will have a 1-minute delay.
 :::
 
 ## 4. Starting the Trading Bot
 You need to start both the spider process and the bot process. The spider process is used to subscribe to and update public data such as candlestick charts and order books, saving them to the database.
 The bot process subscribes to candlestick data and other information from the spider process and executes trading strategies. You can start multiple bot processes to run different strategies.
 
-Strategies and trading accounts consume minimal resources. On a 2-core, 2GB VPS, you can start dozens of bot processes, each configured with hundreds of strategies and trading accounts.
+Strategies and trading accounts consume minimal resources. On a 2-core, 2GB VPS, you can start multiple bot processes, and a single bot process can be configured with hundreds of strategies and hundreds of trading accounts.
 
 **Starting the Spider**  
 Execute `bot spider` to start the spider process immediately. It is recommended to start it in the background and dump the logs:
