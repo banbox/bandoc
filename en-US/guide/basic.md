@@ -101,7 +101,7 @@ The execution of backtesting and live trading involves various aspects. To ensur
 * DataProvider: Integrates all the symbols involved in backtesting/live trading (each symbol corresponds to a Feeder, and each Feeder supports multiple timeframes), and executes received candlesticks via callback functions.
 * Order Manager (OrderMgr): In backtesting, it matches the order request based on candlesticks; in live trading, it submits the order to the exchange and monitors the execution progress for real-time updates.
 * Wallets: During backtesting, it simulates the available balance, frozen amount, unrealized P&L, etc., based on order execution; in live trading, it monitors the exchange's account wallet status for real-time updates.
-* Exchange: Based on banexg, it supports Binance's REST/websocket, used for downloading candlesticks, querying market information, order processing, and listening to websocket streams.
+* Exchange: Based on banexg, it supports Binance and OKX's REST/websocket, used for downloading candlesticks, querying market information, order processing, and listening to websocket streams.
 * PairFilters: Supports filtering and sorting all symbols based on given filters. Hardcoded symbol lists can also be used.
 * Notifications (Notify): Sends notifications when bots open positions or signals appear. Currently, only WeChat is supported.
 * Rest API: The rest API can be enabled during live trading, allowing users to view and manage bots via a web UI.

@@ -1,5 +1,5 @@
 Banbot is a high-performance, easy-to-use, multi-variety, multi-strategy, multi-period, multi-account event-driven trading robot. It supports backtesting, hyperparameter tuning, and real-time trading.
-Currently only supports Binance Exchange, and the robot can be viewed through the WebUI.
+Currently only supports Binance and OKX Exchange, and the robot can be viewed through the WebUI.
 ::: danger Disclaimer
 This software is for research and educational purposes only. Do not invest more money than you can afford. Use this software at your own risk. The author and all related parties are not responsible for your trading results.
 
@@ -29,11 +29,12 @@ For managing live trading robots, it is recommended to deploy on servers closer 
 ![image](https://docs.banbot.site/dashboard.gif)
 
 ## Supported exchanges
-Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently only supports Binance Exchange, but it can also be easily connected to other exchanges.
+Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently only supports Binance and OKX Exchange, but it can also be easily connected to other exchanges.
 
 | logo                                                                                                            | id      | name              | ver | websocket |
 |-----------------------------------------------------------------------------------------------------------------|---------|-------------------|-----|-----------|
 | ![binance](https://user-images.githubusercontent.com/1294454/29604020-d5483cdc-87ee-11e7-94c7-d1a8d9169293.jpg) | binance | spot/usd-m/coin-m | *   | Y         |
+| ![okx](https://user-images.githubusercontent.com/1294454/152485636-38b19e4a-bece-4dec-979a-5982859ffc04.jpg) | okx | spot/usd-m/coin-m | *   | Y         |
 
 ## Skill Requirements
 * Basic Linux/Windows operations (environment variables, command line, editing configuration files)

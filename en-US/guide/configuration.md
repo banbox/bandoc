@@ -154,6 +154,11 @@ accounts:
       test:  # API key and secret for test network, required when env is set to test
         api_key: vvv
         api_secret: vvv
+    okx:
+      prod:
+        api_key: ${okx_user1_key}
+        api_secret: ${okx_user1_secret}
+        password: ${okx_user1_password}
     rpc_channels:  # send msg to social app(or control with commands)
       - name: wx_bot
         to_user: ChannelUserID

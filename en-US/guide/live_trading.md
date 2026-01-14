@@ -1,5 +1,5 @@
 banbot allows you to perform real-time simulated trading or live trading without modifying your strategies. This document helps you deploy a trading bot to a production environment.  
-Binance's servers are located in Tokyo, Japan. To ensure network stability during long-term real-time operation, it is recommended that you deploy the robot on a Japanese server.
+Binance's servers are located in Tokyo, Japan. To ensure network stability during long-term real-time operation, it is recommended that you deploy the robot on a server close to the exchange servers.
 
 ::: warning Risk Warning
 Banbot currently does not have a large number of live trading users. Although common live trading use cases have passed testing, there is still a possibility that undiscovered bugs may cause financial losses. Use of this software is at your own risk. The author and all related parties assume no responsibility for your trading results.
@@ -8,7 +8,7 @@ If you are planning to start live trading, please ensure that your strategy or y
 :::
 
 ::: tip Technical Support
-We offer preferential live trading servers, Singapore 4C6G only 60 yuan per month, 1ms latency to Binance, and provide live trading technical support services. [Go to Purchase](https://banbot.site/en-US/services)
+We offer preferential live trading servers and provide live trading technical support services, Singapore 4C8G only 60 yuan per month, Japan 4C6G 85 yuan per month. [Go to Purchase](https://banbot.site/en-US/services)
 :::
 
 ## 1. Compilation

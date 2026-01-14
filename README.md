@@ -10,7 +10,7 @@ To compile the bot documentation:
 ```shell
 npm run build
 ```
-Then package the output directory `bot\.vitepress\dist` and upload it to the server:
+Then package the output directory `.vitepress\dist` and upload it to the server:
 
 这是banbot的文档仓库，本项目使用[vitepress](https://vitepress.dev/)生成文档站点。
 
@@ -24,4 +24,4 @@ Then package the output directory `bot\.vitepress\dist` and upload it to the ser
 ```shell
 npm run build
 ```
-然后打包输出目录`bot\.vitepress\dist`上传到服务器：
+然后打包输出目录`.vitepress\dist`上传到服务器：

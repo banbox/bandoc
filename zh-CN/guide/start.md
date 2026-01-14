@@ -1,5 +1,5 @@
 banbot是一个高性能、易用、多品种、多策略、多周期、多账户的事件驱动交易机器人。支持回测、超参数调优和实盘交易。
-目前仅支持币安交易所，可通过WebUI查看机器人。
+目前仅支持币安、欧易交易所，可通过WebUI查看机器人。
 ::: danger 免责声明
 本软件仅用于研究和教育目的，请勿投入超过您承受能力的资金。使用本软件风险自负。作者和所有关联方对您的交易结果不承担任何责任。  
 
@@ -29,11 +29,12 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 ![image](https://docs.banbot.site/dashboard.gif)
 
 ## 支持的交易所
-基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前仅支持币安交易所，但也能比较容易对接其他交易所。
+基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前仅支持币安、欧易交易所，但也能比较容易对接其他交易所。
 
 | logo                                                                                                            | id      | name              | ver | websocket | 
 |-----------------------------------------------------------------------------------------------------------------|---------|-------------------|-----|-----------|
 | ![binance](https://user-images.githubusercontent.com/1294454/29604020-d5483cdc-87ee-11e7-94c7-d1a8d9169293.jpg) | binance | spot/usd-m/coin-m | *   | Y         |
+| ![okx](https://user-images.githubusercontent.com/1294454/152485636-38b19e4a-bece-4dec-979a-5982859ffc04.jpg) | okx | spot/usd-m/coin-m | *   | Y         |
 
 ## 技能要求
 * Linux/Windows基本操作（环境变量、命令行、编辑配置文件）

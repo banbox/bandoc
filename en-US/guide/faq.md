@@ -27,7 +27,7 @@ So you only need to [pull the example strategy project](./init_project.md), use 
 **Not Currently Supported**: High-frequency trading, arbitrage trading (including triangular arbitrage, cross-exchange arbitrage, and term arbitrage, etc.), pair trading, statistical arbitrage.
 
 ## Supported markets
-Banbot supports Binance's spot, U-margined contracts, and coin-margined contracts. You are welcome to submit pull requests to support more exchanges and markets.
+Banbot supports Binance and OKX's spot, U-margined contracts, and coin-margined contracts. You are welcome to submit pull requests to support more exchanges and markets.
 
 Not currently supported: Stocks, futures, foreign exchange, bonds, decentralized cryptocurrency exchanges, etc.
 

@@ -101,7 +101,7 @@ pairs: [BTC/USDT, ETH/USDT, DASH/USDT]
 * 数据提供器(DataProvider)：整合回测/实盘涉及的所有品种(每个品种对应一个Feeder，一个Feeder支持多个时间周期)，将收到的K线通过回调函数执行。
 * 订单管理器(OrderMgr)：回测时对订单请求根据K线撮合成交；实盘时提交到交易所并监听成交进度实时更新。
 * 钱包(Wallets)：回测时根据订单成交模拟钱包的可用余额、冻结金额、未实现盈亏等；实盘时监听交易所账户钱包状态实时更新。
-* 交易所(Exchange)：基于banexg支持币安交易所的rest/websocket，用于下载K线、查询市场信息、订单处理、监听ws等。
+* 交易所(Exchange)：基于banexg支持币安、欧易交易所的rest/websocket，用于下载K线、查询市场信息、订单处理、监听ws等。
 * 品种管理器(PairFilters)：支持基于所有品种，按给定的过滤器筛选并排序。也可使用硬编码的品种列表。
 * 消息通知(Notify)：在机器人开单、出现信号时发送通知，目前仅支持微信。
 * Rest Api：实盘交易时可启用rest api，然后通过web ui查看和管理机器人。

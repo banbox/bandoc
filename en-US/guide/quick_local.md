@@ -122,16 +122,16 @@ run_policy:
     run_timeframes: [15m]
 accounts:
   user1:
-    binance:
+    binance: # or okx
       prod:
         api_key: vvv
         api_secret: vvv
 database:
   url: postgresql://postgres:123@127.0.0.1:5432/ban
 # If the Binance API cannot be accessed in your region, please set the VPN proxy, HTTP_PROXY or system proxy
-#exchange:
-#  binance:
-#    proxy: http://127.0.0.1:10808  # set `no` to disable system proxy
+exchange:
+  binance: # or okx
+    proxy: http://127.0.0.1:10808  # set `no` to disable system proxy
 ```
 
 ## Step 5. Start WebUI
