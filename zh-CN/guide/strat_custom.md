@@ -423,6 +423,8 @@ type EnterReq struct {
 并非策略的任意位置调用OpenOrder均能开单，默认只有在`OnBar`, `OnOrderChange`, `OnBatchJobs`, `OnPostApi`这几个回调函数中调用开平仓会即刻执行。
 
 如果您需要在其他回调中也即刻入场，可自行调用`_, _, err := biz.GetOdMgr(s.Account).ProcessOrders(nil, s)`提交处理
+
+注意`OnOrderChange`默认只处理当前品种的开平仓信号，如需触发其他品种的开平仓，需自行对其他job调用`ProcessOrders(nil, job)`。
 :::
 
 ## 发出离场信号
@@ -642,6 +644,25 @@ func editPairs(p *config.RunPolicyConfig) *strat.TradeStrat {
 :::tip tip
 您需返回修改后的品种列表，这些品种不一定全部交易，会受到`run_policy.max_pair`和`TradeStrat.MinTfScore`的限制。所以品种的前后顺序很重要。
 :::
+
+## 动态更新交易品种
+您可在策略运行过程中通过`UpdatePairs`方法动态添加或移除交易品种，无需重启机器人。
+
+```go
+// 移除/移除品种并平仓
+s.Strat.UpdatePairs(strat.PairUpdateReq{
+	Add:    []string{"BTC", "ETH"},
+	Remove:        []string{s.Symbol.Symbol},
+	CloseOnRemove: true,
+})
+```
+
+**参数说明：**
+- `Add`: 要添加的品种列表
+- `Remove`: 要移除的品种列表
+- `CloseOnRemove`: 移除时是否关闭订单
+- `ForceAdd`: 是否强制添加（跳过pairlist过滤）
+- `Reason`: 更新原因（可选）
 
 ## 策略退出回调
 当机器人停止时（回测结束或实盘停止），系统会依次调用策略的退出回调函数，用于清理资源或保存状态。
