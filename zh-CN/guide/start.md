@@ -1,5 +1,5 @@
 banbot是一个高性能、易用、多品种、多策略、多周期、多账户的事件驱动交易机器人。支持回测、超参数调优和实盘交易。
-目前仅支持币安、欧易交易所，可通过WebUI查看机器人。
+目前支持币安、欧易、bybit交易所，可通过WebUI查看机器人。
 ::: danger 免责声明
 本软件仅用于研究和教育目的，请勿投入超过您承受能力的资金。使用本软件风险自负。作者和所有关联方对您的交易结果不承担任何责任。  
 
@@ -29,12 +29,15 @@ banbot是一个高性能、易用、多品种、多策略、多周期、多账�
 ![image](https://docs.banbot.site/dashboard.gif)
 
 ## 支持的交易所
-基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前仅支持币安、欧易交易所，但也能比较容易对接其他交易所。
+基于[banexg](https://github.com/banbox/banexg)提供的统一接口，目前支持币安、欧易、bybit交易所。
+
+> 我们支持了[agent工作流脚本](https://github.com/banbox/banexg/blob/main/docs/dev_exg.py)，可基于codex/claude code的实现交易所自动化开发对接。如果您有其他交易所需求，并且有一定开发经验，可使用此脚本快速完成开发。
 
 | logo                                                                                                            | id      | name              | ver | websocket | 
 |-----------------------------------------------------------------------------------------------------------------|---------|-------------------|-----|-----------|
 | ![binance](https://user-images.githubusercontent.com/1294454/29604020-d5483cdc-87ee-11e7-94c7-d1a8d9169293.jpg) | binance | spot/usd-m/coin-m | *   | Y         |
 | ![okx](https://user-images.githubusercontent.com/1294454/152485636-38b19e4a-bece-4dec-979a-5982859ffc04.jpg) | okx | spot/usd-m/coin-m | *   | Y         |
+| ![bybit](https://private-user-images.githubusercontent.com/81727607/382500134-97a5d0b3-de10-423d-90e1-6620960025ed.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjkyNTM1NjgsIm5iZiI6MTc2OTI1MzI2OCwicGF0aCI6Ii84MTcyNzYwNy8zODI1MDAxMzQtOTdhNWQwYjMtZGUxMC00MjNkLTkwZTEtNjYyMDk2MDAyNWVkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI0VDExMTQyOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQwODM4YThmMTU2ZmIyMGI1YjRmYWU0MGVkYzJhN2YyMmYzYzhmNTJjZDM1YzFmYzdjNGRlMGY4OTlmM2RmODMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.3I9CvGTqWpZcZaDBV0_tFQFbOoPyCOxaZ1c6o7q6tMQ) | bybit | spot/usd-m/coin-m | *   | Y         |
 
 ## 技能要求
 * Linux/Windows基本操作（环境变量、命令行、编辑配置文件）

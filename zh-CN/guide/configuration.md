@@ -157,6 +157,10 @@ accounts:
         api_key: ${okx_user1_key}
         api_secret: ${okx_user1_secret}
         password: ${okx_user1_password}
+    bybit:
+      prod:
+        api_key: ${bybit_user1_key}
+        api_secret: ${bybit_user1_secret}
     rpc_channels:  # 通过社交app控制，或发通知到社交app
       - name: wx_bot
         to_user: ChannelUserID

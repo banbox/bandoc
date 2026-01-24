@@ -1,5 +1,5 @@
 Banbot is a high-performance, easy-to-use, multi-variety, multi-strategy, multi-period, multi-account event-driven trading robot. It supports backtesting, hyperparameter tuning, and real-time trading.
-Currently only supports Binance and OKX Exchange, and the robot can be viewed through the WebUI.
+Currently supports Binance, OKX, and Bybit Exchange, and the robot can be viewed through the WebUI.
 ::: danger Disclaimer
 This software is for research and educational purposes only. Do not invest more money than you can afford. Use this software at your own risk. The author and all related parties are not responsible for your trading results.
 
@@ -29,12 +29,15 @@ For managing live trading robots, it is recommended to deploy on servers closer 
 ![image](https://docs.banbot.site/dashboard.gif)
 
 ## Supported exchanges
-Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently only supports Binance and OKX Exchange, but it can also be easily connected to other exchanges.
+Based on the unified interface provided by [banexg](https://github.com/banbox/banexg), currently supports Binance, OKX, and Bybit Exchange.
+
+> We support [agent workflow script](https://github.com/banbox/banexg/blob/main/docs/dev_exg.py), which enables automated exchange integration based on codex/claude code. If you need support for other exchanges and have some development experience, you can use this script to quickly complete the development.
 
 | logo                                                                                                            | id      | name              | ver | websocket |
 |-----------------------------------------------------------------------------------------------------------------|---------|-------------------|-----|-----------|
 | ![binance](https://user-images.githubusercontent.com/1294454/29604020-d5483cdc-87ee-11e7-94c7-d1a8d9169293.jpg) | binance | spot/usd-m/coin-m | *   | Y         |
 | ![okx](https://user-images.githubusercontent.com/1294454/152485636-38b19e4a-bece-4dec-979a-5982859ffc04.jpg) | okx | spot/usd-m/coin-m | *   | Y         |
+| ![bybit](https://private-user-images.githubusercontent.com/81727607/382500134-97a5d0b3-de10-423d-90e1-6620960025ed.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjkyNTM1NjgsIm5iZiI6MTc2OTI1MzI2OCwicGF0aCI6Ii84MTcyNzYwNy8zODI1MDAxMzQtOTdhNWQwYjMtZGUxMC00MjNkLTkwZTEtNjYyMDk2MDAyNWVkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI0VDExMTQyOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQwODM4YThmMTU2ZmIyMGI1YjRmYWU0MGVkYzJhN2YyMmYzYzhmNTJjZDM1YzFmYzdjNGRlMGY4OTlmM2RmODMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.3I9CvGTqWpZcZaDBV0_tFQFbOoPyCOxaZ1c6o7q6tMQ) | bybit | spot/usd-m/coin-m | *   | Y         |
 
 ## Skill Requirements
 * Basic Linux/Windows operations (environment variables, command line, editing configuration files)
