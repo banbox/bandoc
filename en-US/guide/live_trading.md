@@ -57,21 +57,12 @@ go build -o bot
 ```
 :::
 
-## 2. Preparing the Database
-Install and start TimeScaledb. It is recommended to use Docker for a quick setup. Refer to the [documentation](https://docs.timescale.com/self-hosted/latest/install/).
-
-Save your database connection string: `postgresql://postgres:123@timescaledb:5432/ban` (You may need to modify the password or database name, etc.)
-
-::: tip Note
-You do not need to create the database or related table structures. banbot will automatically initialize the database and related table structures upon startup.
-:::
-
-## 3. Editing Configuration
+## 2. Editing Configuration
 Upload the compiled executable file to the `/ban` directory on the target server. Create a directory `/ban/data` as the data directory and set the environment variable `BanDataDir=/ban/data`.
 
 Then execute `/ban/bot init` to generate a YML configuration file in `/ban/data`.
 
-Next, edit the `/ban/data/config.local.yml` file to set the database connection string, exchange keys, single transaction amount, trading strategy, and cycle, etc.
+Next, edit the `/ban/data/config.local.yml` file to set the exchange keys, single transaction amount, trading strategy, and cycle, etc.
 
 You can configure multiple strategies and accounts. If you need to run multiple strategies on different accounts, you can create multiple YML configuration files and start multiple bot processes accordingly.
 
@@ -83,7 +74,7 @@ It is recommended to use a sub-account for live trading and only transfer the ne
 Dry-run mode uses 1-minute K-line matching for local orders, so order status will have a 1-minute delay.
 :::
 
-## 4. Starting the Trading Bot
+## 3. Starting the Trading Bot
 You need to start both the spider process and the bot process. The spider process is used to subscribe to and update public data such as candlestick charts and order books, saving them to the database.
 The bot process subscribes to candlestick data and other information from the spider process and executes trading strategies. You can start multiple bot processes to run different strategies.
 
@@ -105,7 +96,7 @@ The logs for the spider process will be automatically saved to `@logs/spider.log
 However, these files can only record the log output during normal operation. If the robot terminates unexpectedly, the panic error log at the time of exit cannot be recorded. Therefore, it is recommended that when you start the spider and the robot, you redirect the stdout and stderr outputs to a certain file.  
 :::
 
-## 5. Notifications, DashBoard, and Monitoring
+## 4. Notifications, DashBoard, and Monitoring
 ### Notifications
 You can configure `rpc_channels` in the YML file for notifications. Messages will be sent to your social apps when the bot starts, stops, enters a position, or exits a position. Currently supported:
 - **WeWork**: Send messages through WeWork bot

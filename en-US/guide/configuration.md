@@ -177,11 +177,13 @@ exchange:  # Exchange configuration
       linear:  # linear/inverse/main(spot or margin)
         taker: 0.0005
         maker: 0.0002
-database:
+database:  # Database configuration (QuestDB, automatically downloaded and installed on startup)
   retention: all
   max_pool_size: 50
   auto_create: true  # Whether to automatically create the database if it does not exist
-  url: postgresql://postgres:123@127.0.0.1:5432/ban
+  url: postgresql://admin:quest@127.0.0.1:8812/qdb?sslmode=disable
+  qdb_mem_pct: 0.3 # QuestDB memory usage ratio, range 0~1
+  qdb_max_mem_mb: 16384 # Maximum database memory usage, in MB
 spider_addr: 127.0.0.1:6789  # Port and address monitored by the spider process
 rpc_channels:  # RPC channels for sending message notifications
   # Email notification channel

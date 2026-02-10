@@ -18,11 +18,10 @@ features:
     details: one version of the strategy, supporting backtesting, simulated real-time trading and real trading at the same time
   - title: Flexible
     details: Freely combine different symbols, strategies and time periods
-  - title: Event-driven
-    details: No lookahead and implement your strategy logic more freely
   - title: Scalability
     details: A batch of strategies can be applied to multiple exchange accounts at the same time
+  - title: LLM Integration
+    details: Built-in large language model invocation and management, with multi-model failover and concurrency control
   - title: Hyperparameter tuning
     details: Support bayes/tpe/random/cmaes/ipop-cmaes/bipop-cmaes
 ---
-

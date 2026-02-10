@@ -8,3 +8,8 @@ The common process of combining AI is as follows:
 5. Implement the trading strategy on the golang side, prepare the feature request model to obtain the prediction results for trading decisions.
 
 banbot has provided a complete golang side [code example](https://github.com/banbox/banstrats/tree/main/rpc_ai) for the above process.
+
+## LLM API Integration
+In addition to traditional ML/DL workflows, banbot also has built-in LLM integration capabilities, allowing you to call large language model APIs in strategies or tools for tasks such as text analysis, report generation, and other auxiliary work.
+
+The LLM module provides unified model configuration and management capabilities (multi-model failover, concurrency control, statistics tracking, automatic disabling, etc.), making it easy to use stably in live trading environments.

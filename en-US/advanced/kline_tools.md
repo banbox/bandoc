@@ -1,7 +1,7 @@
 banbot supports rich candlestick processing tools including downloading, importing, exporting, deleting, and correcting.
 
 ## candlestick Storage Core
-banbot uses TimeScaledb time-series database for storing candlestick and other data to provide better performance in reading and downloading.
+banbot uses QuestDB time-series database for storing candlestick and other data to provide better performance in reading and downloading. banbot will automatically download and install QuestDB on startup, no manual configuration is required.
 
 To achieve a good balance between storage space and reading efficiency, only `1m,5m,15m,1h,1d` time periods are stored. However, you can use any time period like `3m` in your strategy. Unstored time periods will be automatically aggregated dynamically from smaller time period data.
 
@@ -24,7 +24,7 @@ You can execute the following command to actively download candlestick data:
 Where `timeframes` is a required parameter, and the rest will be parsed from the yaml configuration file if not specified.
 
 ## Exporting Candlesticks (protobuf)
-When you need to synchronize candlestick data to another banbot's TimeScaledb database, it's recommended to export in `protobuf` format, which is optimized for both storage space and execution speed.
+When you need to synchronize candlestick data to another banbot's database, it's recommended to export in `protobuf` format, which is optimized for both storage space and execution speed.
 
 You can execute the following command to export candlesticks:
 

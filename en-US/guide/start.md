@@ -15,8 +15,10 @@ We strongly recommend that you have basic golang programming knowledge and under
 * Event-driven: No lookahead and implement your strategy logic more freely
 * Scalability: A batch of strategies can be applied to multiple exchange accounts at the same time
 * Hyperparameter tuning: Support bayes/tpe/random/cmaes/ipop-cmaes/bipop-cmaes
+* Dynamic symbols: Add or remove trading symbols on the fly during strategy execution, no restart required
 * Websocket: Exchange transaction by transaction + order book data
 * Indicator library: Built-in [banta](https://github.com/banbox/banta) high-performance indicator library, you can quickly develop custom indicators based on it
+* LLM Integration: Built-in large language model invocation and management capabilities (multi-model failover, concurrency control, statistics tracking, etc.)
 
 ## WebUI
 For strategy research backtesting, it is recommended to start locally only, without a password.

@@ -10,21 +10,9 @@
 如果希望本地安装启动，您可按照下面步骤快速在本地配置并运行banbot：
 
 ## Step 1. 本地安装
-您需要安装TimeScaledb和Golang开发环境：
-* TimeScaleDB：基于postgresql的高性能时序数据库，用于存储K线等公开数据（订单等使用sqlite存储）。
-* golang：建议使用最新版本
+您需要安装Golang开发环境，建议使用最新版本。banbot使用QuestDB存储K线等公开数据，启动时会自动下载安装，无需您手动配置。
 
 您也可以查看B站的[安装教程视频](https://www.bilibili.com/video/BV1QuLozqEzg/)
-
-### 安装TimeScaleDB数据库
-从软件包安装TimeScaledb比较复杂耗时，强烈推荐您使用[runbanbot(docker)](https://gitee.com/banbox/runbanbot/)一键启动；
-
-您也可仅使用docker启动数据库，不启动banbot：
-```shell
-docker compose up -d timescaledb
-```
-
-banbot仅使用TimeScaledb用于存储K线或品种等公开数据，您回测或实盘时的订单等数据将通过`gob`或`sqlite`方式存储到文件。
 
 ### 安装golang
 请从golang的官网下载[安装](https://go.dev/doc/install)
@@ -99,7 +87,7 @@ BanStratDir=E:\quant\banstrats
 在策略项目下，只需执行`bot.exe init`即可在`BanDataDir`下自动初始化配置文件`config.yml`和`config.local.yml`
 <img style="width:780px;margin-top:10px" src="/img/init_config.jpg"/>
 
-然后编辑`config.local.yml`文件，设置数据库连接字符串、交易所密钥、单笔金额、交易策略和周期等。
+然后编辑`config.local.yml`文件，设置交易所密钥、单笔金额、交易策略和周期等。
 
 示例：
 ```yaml
@@ -118,8 +106,6 @@ accounts:
       prod:
         api_key: vvv
         api_secret: vvv
-database:
-  url: postgresql://postgres:123@127.0.0.1:5432/ban
 # 中国大陆不能直接访问币安api，请设置vpn代理，或设置HTTP_PROXY/HTTPS_PROXY，以及系统代理配置
 exchange:
   binance:

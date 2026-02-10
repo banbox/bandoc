@@ -18,11 +18,10 @@ features:
     details: 一个版本的策略，同时支持回测、模拟实时交易和实盘
   - title: 更灵活
     details: 自由组合不同的品种、策略和时间周期
-  - title: 事件驱动
-    details: 杜绝未来信息，更自由地实现您的策略逻辑
   - title: 规模化
     details: 可将一批策略同时应用到多个交易所账户
+  - title: LLM集成
+    details: 内置大模型调用与管理能力，支持多模型故障转移与并发控制
   - title: 超参数调优
     details: 支持bayes/tpe/random/cmaes/ipop-cmaes/bipop-cmaes
 ---
-

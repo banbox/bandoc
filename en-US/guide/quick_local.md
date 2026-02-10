@@ -11,23 +11,10 @@ If you are using runbanbot to start the service, you do not need to continue rea
 If you prefer to install and start it locally, you can follow the steps below to quickly configure and run banbot locally:
 
 ## Step 1. Local Installation
-You need to install TimeScaleDB and the Golang development environment:
-* TimeScaleDB: a high-performance time-series database based on PostgreSQL, used to store public data such as candlesticks (order data is stored using sqlite).
-* Golang: it is recommended to use the latest version.
+You need to install the Golang development environment, the latest version is recommended. banbot uses QuestDB to store public data such as candlesticks, which is automatically downloaded and installed on startup, no manual configuration required.
 
 You may also refer to the installation tutorial video on Bilibili:  
 https://www.bilibili.com/video/BV1QuLozqEzg/
-
-### Install TimeScaleDB
-Installing TimeScaleDB from packages is relatively complex and time-consuming, so it is strongly recommended to use [runbanbot (docker)](https://gitee.com/banbox/runbanbot/) for one-click startup.
-
-You can also start only the database using Docker without starting banbot:
-```shell
-docker compose up -d timescaledb
-```
-
-banbot uses TimeScaleDB only to store public data such as candlesticks or symbols.
-Your order data during backtesting or live trading will be stored in files using either `gob` or `sqlite`.
 
 ### Install Golang
 
@@ -107,7 +94,7 @@ Note that generally, you need to open a new terminal window for the changes to t
 In the strategy project, simply execute `bot.exe init` to automatically initialize the configuration files `config.yml` and `config.local.yml` in the `BanDataDir`.
 <img style="width:780px;margin-top:10px" src="/img/init_config.jpg"/>
 
-Then edit the `config.local.yml` file to set the database connection string, exchange keys, single transaction amount, trading strategy, and period, etc.
+Then edit the `config.local.yml` file to set the exchange keys, single transaction amount, trading strategy, and period, etc.
 
 Example:
 ```yaml
@@ -126,8 +113,6 @@ accounts:
       prod:
         api_key: vvv
         api_secret: vvv
-database:
-  url: postgresql://postgres:123@127.0.0.1:5432/ban
 # If the Binance API cannot be accessed in your region, please set the VPN proxy, HTTP_PROXY or system proxy
 exchange:
   binance:

@@ -55,8 +55,8 @@ Currently, after you change the configuration, you need to restart the robot for
 * Check whether the time zones of the backtest and real market orders are consistent
 * Check whether the configurations are consistent: market, leverage, strategy and time period, order amount, etc.
 
-## Error when starting: read tcp 127.0.0.1:xxx->host:5432: wsarecv: An existing connection was forcibly closed by the remote host.
-Please make sure that the TimeScaledb plugin has been correctly installed (you can see the TimeScaledb plugin by executing `\dx` in `psql`).
+## During backtesting, it shows "bulk down xx xxx pairs 2024-10-31 ..." and then hangs with no response
+The database connection pool size may be too small, preventing database sessions from being acquired during bulk downloads. Please set `database.max_pool_size` to 50 or larger and try again.
 
 ## ormo or ormu reports an error: constraint failed: NOT NULL constraint failed, the corresponding field is float64
 If a field type in golang is float64, and the value is nan or inf, it will be treated as null when written to sqlite. If this column is not null, the above error will occur. Solution: Replace utils.NanInfTo(v, 0) with 0 before writing
